@@ -24,20 +24,12 @@ class GravitationalForce: public InterParticleForce {
 		// Evaluation function
 		DerivativeData _evaluate(real t, ParticleData * data) {
 
-			cout << "ME: (" << data->getPosition().getX() << "," << data->getPosition().getY() << ")" << endl;
-
 			Vector3 dir = other->getData().getPosition() - data->getPosition();
-
-
-			cout << "DIR: (" << dir.getX() << "," << dir.getY() << ")" << endl;
 
 			real r = dir.magnitude();
 			dir.normalize();
 
-			cout << "r: " << r << endl;
-
 			Vector3 acc = dir * (GRAVITATIONAL_CONSTANT * data->getMass() * other->getData().getMass() * (1.0 / pow(r,2)));
-			acc = Vector3();
 
 			return DerivativeData(acc);
 		}
@@ -56,6 +48,6 @@ class GravitationalForce: public InterParticleForce {
 		}
 };
 
-real GravitationalForce::GRAVITATIONAL_CONSTANT = 6.67428 * pow(10, -11);
+real GravitationalForce::GRAVITATIONAL_CONSTANT = 6.67428 * pow(10, 1); // 10e-11 is real
 
 #endif /* GRAVITATIONALFORCE_H_ */

@@ -50,12 +50,13 @@ void ParticleWorld::addPerParticleInteraction(InterParticleForce * force) {
 	list<Particle *>::iterator itr;
 	list<Particle *>::iterator itr2;
 	for (itr = particles.begin(); itr != particles.end(); itr++)
-		for (itr2 = particles.begin(); itr2 != particles.end(); itr2++) {
-			InterParticleForce * f = force->getFunctionCopy();
-			f->setParticleData((*itr));
-			this->interactions.push_back(new ParticleInteraction((*itr),
-					(*itr2), f));
-		}
+		for (itr2 = particles.begin(); itr2 != particles.end(); itr2++)
+			if ((*itr) != (*itr2)) {
+				InterParticleForce * f = force->getFunctionCopy();
+				f->setParticleData(*itr2);
+				this->interactions.push_back(new ParticleInteraction((*itr),
+						(*itr2), f));
+			}
 }
 
 /*
@@ -72,10 +73,14 @@ void ParticleWorld::updateForces() {
  */
 void ParticleWorld::integrate() {
 	list<Particle *>::iterator itr;
+	bool integrating = true;
 
-	for (int i = 0; i < 4; i++)
+	// Finishes when every particle finishes (they all have the same step)
+	while (integrating) {
+		integrating = particles.empty() ? false : true;
 		for (itr = particles.begin(); itr != particles.end(); itr++)
-			(*itr)->integrate(time, precision);
+			integrating = !((*itr)->integrate(time, precision)) && integrating;
+	}
 }
 
 void ParticleWorld::resolveCollisions() {
@@ -90,10 +95,8 @@ void ParticleWorld::render() {
 	glColor3f(1.0, 1.0, 1.0);
 	for (i = particles.begin(); i != particles.end(); i++) {
 
-		glLineWidth(2);
+		glLineWidth(1);
 		glBegin(GL_POLYGON);
-
-	//	cout << (*i)->getData().getPosition().getX() << endl;
 
 		for (double angle = 0; angle < 2 * 3.14; angle += 0.2)
 			glVertex3f((*i)->getData().getPosition().getX() + cos(angle)
