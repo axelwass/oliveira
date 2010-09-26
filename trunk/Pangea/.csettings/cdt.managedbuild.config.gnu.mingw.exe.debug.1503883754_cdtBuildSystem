@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 5.0.0?>
+
+<cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage2">
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.mingw.exe.debug.1503883754" name="Debug" parent="cdt.managedbuild.config.gnu.mingw.exe.debug">
+			<folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.debug.1503883754." name="/" resourcePath="">
+				<toolChain id="cdt.managedbuild.toolchain.gnu.mingw.exe.debug.2129712745" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.exe.debug">
+					<targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.debug.1879675528" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.debug"/>
+					<builder buildPath="${workspace_loc:/Pangea/Debug}" id="cdt.managedbuild.tool.gnu.builder.mingw.base.1366882105" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
+					<tool id="cdt.managedbuild.tool.gnu.assembler.mingw.exe.debug.136694718" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.exe.debug">
+						<inputType id="cdt.managedbuild.tool.gnu.assembler.input.357791350" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+					</tool>
+					<tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.1383847189" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
+					<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug.854909697" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug">
+						<option id="gnu.cpp.compiler.mingw.exe.debug.option.optimization.level.870154031" name="Optimization Level" superClass="gnu.cpp.compiler.mingw.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
+						<option id="gnu.cpp.compiler.mingw.exe.debug.option.debugging.level.1764543570" name="Debug Level" superClass="gnu.cpp.compiler.mingw.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
+						<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1122047673" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
+					</tool>
+					<tool id="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.debug.1749608774" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.debug">
+						<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.mingw.exe.debug.option.optimization.level.896846183" name="Optimization Level" superClass="gnu.c.compiler.mingw.exe.debug.option.optimization.level" valueType="enumerated"/>
+						<option id="gnu.c.compiler.mingw.exe.debug.option.debugging.level.1587270317" name="Debug Level" superClass="gnu.c.compiler.mingw.exe.debug.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
+						<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1294644935" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+					</tool>
+					<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.debug.1416691888" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.debug"/>
+					<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug.1244861479" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug">
+						<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1973402310" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
+							<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+							<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+						</inputType>
+					</tool>
+				</toolChain>
+			</folderInfo>
+		</configuration>
+	</storageModule>
+</cproject>
