@@ -31,20 +31,23 @@ int main(int argc, char *argv[]) {
 
 	srand(time(NULL));
 
-	ParticleWorld world(0.05);
+	ParticleWorld world(0.08);
 
-	world.addParticle(1/2.0,Vector3(0,0,0));
+	for (double angle = 0; angle < 2 * 3.14; angle += 0.1)
+		world.addParticle(1 / 2.0, Vector3(-150 + cos(angle) * 50, sin(angle)
+				* 50, 0));
 
-	for(int i=0;i<100;i++)
-		world.addParticle(1/2.0,Vector3(-200 + rand()%400,-200 + rand()%400,0));
+	for (double angle = 0; angle < 2 * 3.14; angle += 0.1)
+		world.addParticle(1 / 2.0, Vector3(150 + cos(angle) * 50, sin(angle)
+				* 50, 0));
 
-	world.addWorldInteraction(new ConstantForce(9.81, Vector3(0,-1,0)));
+	//world.addWorldInteraction(new ConstantForce(9.81, Vector3(0,-1,0)));
 
-	//world.addPerParticleInteraction(new GravitationalForce());
+	world.addPerParticleInteraction(new GravitationalForce());
 
 	while (window.Refresh(1)) {
-		world.runPhysics();
 		world.render();
+		world.runPhysics();
 	}
 
 	return 1;
