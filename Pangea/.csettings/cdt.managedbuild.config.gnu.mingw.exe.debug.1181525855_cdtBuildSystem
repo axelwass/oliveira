@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 5.0.0?>
+
+<cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage2">
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.mingw.exe.debug.1181525855" name="Debug" parent="cdt.managedbuild.config.gnu.mingw.exe.debug">
+			<folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.debug.1181525855." name="/" resourcePath="">
+				<toolChain id="cdt.managedbuild.toolchain.gnu.mingw.exe.debug.193487559" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.exe.debug">
+					<targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.debug.410359657" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.debug"/>
+					<builder buildPath="${workspace_loc:/Pangea/Debug}" id="cdt.managedbuild.tool.gnu.builder.mingw.base.183057015" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
+					<tool id="cdt.managedbuild.tool.gnu.assembler.mingw.exe.debug.980280887" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.exe.debug">
+						<inputType id="cdt.managedbuild.tool.gnu.assembler.input.819927979" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+					</tool>
+					<tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.386688655" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
+					<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug.1886571107" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug">
+						<option id="gnu.cpp.compiler.mingw.exe.debug.option.optimization.level.860307873" name="Optimization Level" superClass="gnu.cpp.compiler.mingw.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
+						<option id="gnu.cpp.compiler.mingw.exe.debug.option.debugging.level.236504306" name="Debug Level" superClass="gnu.cpp.compiler.mingw.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
+						<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.2059804858" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
+					</tool>
+					<tool id="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.debug.401546132" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.debug">
+						<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.mingw.exe.debug.option.optimization.level.247118841" name="Optimization Level" superClass="gnu.c.compiler.mingw.exe.debug.option.optimization.level" valueType="enumerated"/>
+						<option id="gnu.c.compiler.mingw.exe.debug.option.debugging.level.711817449" name="Debug Level" superClass="gnu.c.compiler.mingw.exe.debug.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
+						<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1057602043" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+					</tool>
+					<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.debug.328507343" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.debug"/>
+					<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug.970435381" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug">
+						<option id="gnu.cpp.link.option.libs.518833477" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
+							<listOptionValue builtIn="false" value="mingw32"/>
+							<listOptionValue builtIn="false" value="SDLmain"/>
+							<listOptionValue builtIn="false" value="SDL"/>
+							<listOptionValue builtIn="false" value="opengl32"/>
+						</option>
+						<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1941226285" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
+							<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+							<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+						</inputType>
+					</tool>
+				</toolChain>
+			</folderInfo>
+		</configuration>
+	</storageModule>
+</cproject>
