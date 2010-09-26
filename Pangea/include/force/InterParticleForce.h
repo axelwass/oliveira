@@ -28,7 +28,7 @@ class InterParticleForce : public Force {
 			this->other = NULL;
 		}
 
-		 virtual ~InterParticleForce(){
+		virtual ~InterParticleForce(){
 
 		}
 

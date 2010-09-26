@@ -7,6 +7,7 @@
 
 #include "include/Vector3.h"
 #include "include/force/ConstantForce.h"
+#include "include/force/SpringForce.h"
 #include "include/force/GravitationalForce.h"
 #include "include/particle/ParticleData.h"
 #include "include/particle/Particle.h"
@@ -31,21 +32,30 @@ int main(int argc, char *argv[]) {
 
 	srand(time(NULL));
 
-	ParticleWorld world(0.08);
-
-	for (double angle = 0; angle < 2 * 3.14; angle += 0.1)
-		world.addParticle(1 / 2.0, Vector3(-150 + cos(angle) * 50, sin(angle)
-				* 50, 0));
-
-	for (double angle = 0; angle < 2 * 3.14; angle += 0.1)
-		world.addParticle(1 / 2.0, Vector3(150 + cos(angle) * 50, sin(angle)
-				* 50, 0));
-
+	ParticleWorld world(0.1);
+	/*
+	 for (int r = 1; r < 4; r++)
+	 for (double angle = 0; angle < 2 * 3.14; angle += 0.1)
+	 world.addParticle(1 / 2.0, Vector3(-150 + cos(angle) * 50 * r, sin(
+	 angle) * r * 50, 0));
+	 */
 	//world.addWorldInteraction(new ConstantForce(9.81, Vector3(0,-1,0)));
+
+	//world.addPerParticleInteraction(new GravitationalForce());
+
+	//	world.addSpring(Vector3(-100,0,0),Vector3(100,0,0),
+	//		1, 5, 100);
+
+	for (int i = 1; i < 3; i++)
+		world.addSpringCircle(Vector3(150, 0, 0), i * 50, 1, 50, i * 6);
+
+	for (int i = 1; i < 3; i++)
+			world.addSpringCircle(Vector3(-200, 0, 0), i * 50, 1, 50, i * 6);
+
 
 	world.addPerParticleInteraction(new GravitationalForce());
 
-	while (window.Refresh(1)) {
+	while (window.Refresh(0)) {
 		world.render();
 		world.runPhysics();
 	}

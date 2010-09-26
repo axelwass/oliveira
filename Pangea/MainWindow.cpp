@@ -28,7 +28,7 @@ int MainWindow::Refresh(int delay){
 
 
 	//Enable textures
-	glEnable( GL_TEXTURE_2D );
+	//glEnable( GL_TEXTURE_2D );
 
 	// Set background color
 	glClearColor( 35/255.0f, 35/255.0f, 35/255.0f, 1 );
