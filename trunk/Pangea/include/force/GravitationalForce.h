@@ -31,6 +31,11 @@ class GravitationalForce: public InterParticleForce {
 
 			Vector3 acc = dir * (GRAVITATIONAL_CONSTANT * data->getMass() * other->getData().getMass() * (1.0 / pow(r,2)));
 
+			acc *= data->getInverseMass();
+
+			// fix temporal!
+			if(dir.magnitude() == 0)
+				return DerivativeData();
 			return DerivativeData(acc);
 		}
 
@@ -48,6 +53,6 @@ class GravitationalForce: public InterParticleForce {
 		}
 };
 
-real GravitationalForce::GRAVITATIONAL_CONSTANT = 6.67428 * pow(10, 1); // 10e-11 is real
+real GravitationalForce::GRAVITATIONAL_CONSTANT = 6.67428 * pow(10,1); // 10e-11 is real
 
 #endif /* GRAVITATIONALFORCE_H_ */
