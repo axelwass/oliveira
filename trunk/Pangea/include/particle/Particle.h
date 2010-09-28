@@ -50,6 +50,8 @@ class Particle{
 
 		bool integrate(real t, real h);
 
+		void applyStep(real h);
+
 		void addForce(Force * force);
 
 		void clearForces();
