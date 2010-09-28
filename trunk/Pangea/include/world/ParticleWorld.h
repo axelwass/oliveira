@@ -40,6 +40,11 @@ class ParticleWorld {
 	public:
 		ParticleWorld(real precision = 0.5);
 
+		void printParticles(){
+			printf("Quantity: %d\n", this->particles.size());
+			printf("Interaction: %d\n", this->interactions.size());
+		}
+
 		void addParticle(real inverseMass = 1.0,
 				const Vector3& pos = Vector3(), const Vector3& velocity =
 						Vector3());
@@ -52,7 +57,7 @@ class ParticleWorld {
 				real k, real l);
 
 		void addSpringCircle(const Vector3& origin, real r, real inverseMass, real k,
-				real l);
+				int qty);
 
 		void runPhysics();
 

@@ -29,13 +29,8 @@ class GravitationalForce: public InterParticleForce {
 			real r = dir.magnitude();
 			dir.normalize();
 
-			Vector3 acc = dir * (GRAVITATIONAL_CONSTANT * data->getMass() * other->getData().getMass() * (1.0 / pow(r,2)));
+			Vector3 acc = dir * (GRAVITATIONAL_CONSTANT * other->getData().getMass() * (1.0 / pow(r,2)));
 
-			acc *= data->getInverseMass();
-
-			// fix temporal!
-			if(dir.magnitude() == 0)
-				return DerivativeData();
 			return DerivativeData(acc);
 		}
 

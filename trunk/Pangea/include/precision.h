@@ -9,6 +9,5 @@
 #define PRECISION_H_
 
 typedef double real;
-#define real_sqrt sqrt
 
 #endif /* PRECISION_H_ */

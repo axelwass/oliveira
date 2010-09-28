@@ -9,6 +9,8 @@
 #include <iostream>
 #include <GL/GL.h>
 
+//#include <GL/glew.h>
+
 ParticleWorld::ParticleWorld(real precision) {
 	this->precision = precision;
 	this->time = 0.0;
@@ -18,7 +20,6 @@ ParticleWorld::ParticleWorld(real precision) {
  * The main function of the engine
  */
 void ParticleWorld::runPhysics() {
-	updateForces();
 	integrate();
 	time += precision;
 }
@@ -59,16 +60,20 @@ void ParticleWorld::addSpring(const Vector3& v1, const Vector3& v2,
 }
 
 void ParticleWorld::addSpringCircle(const Vector3& origin, real r,
-		real inverseMass, real k, real l) {
+		real inverseMass, real k, int qty) {
+	real pi = 3.141592653589793238462643383279502884197169399375105820;
+
+	real distance = (real) 2* pi / qty;
+	real l = 0;
 
 	Particle * start = new Particle(origin + Vector3(r, 0, 0), inverseMass);
 
 	Particle * p1 = start;
 	Particle * p2;
 
-	this->particles.push_back(p1);
+	this->particles.push_back(start);
 
-	for (double angle = 0.1; angle < 2 * 3.14; angle += 0.1) {
+	for (double angle = distance; angle < 2 * pi; angle += distance) {
 
 		p2 = new Particle(
 				origin + (Vector3(r * cos(angle), r * sin(angle), 0)),
@@ -187,11 +192,29 @@ void ParticleWorld::render() {
 		glBegin(GL_POLYGON);
 
 		for (double angle = 0; angle < 2 * 3.14; angle += 0.2)
-			glVertex3f((*i)->getData().getPosition().getX() + cos(angle)
-					* (*i)->getData().getMass(),
-					(*i)->getData().getPosition().getY() + sin(angle)
-							* (*i)->getData().getMass(),
+			glVertex3f((*i)->getData().getPosition().getX() + 2* cos (angle),
+					(*i)->getData().getPosition().getY() + 2* sin (angle),
 					(*i)->getData().getPosition().getZ());
+
+		glEnd();
+
+	}
+
+	list<ParticleInteraction *>::iterator itr;
+
+	glColor3f(1.0, 1.0, 1.0);
+	for (itr = interactions.begin(); itr != interactions.end(); itr++) {
+
+		glLineWidth(2);
+		glBegin(GL_LINE);
+
+		ParticleData d1 = (*itr)->getParticleData();
+		ParticleData d2 = (*itr)->getOtherParticleData();
+
+		glVertex3f(d1.getPosition().getX(), d1.getPosition().getY(),
+				d1.getPosition().getZ());
+		glVertex3f(d2.getPosition().getX(), d2.getPosition().getY(),
+				d2.getPosition().getZ());
 
 		glEnd();
 
