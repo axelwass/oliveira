@@ -9,6 +9,7 @@
 
 #include <SDL/SDL.h>
 #include <GL/GL.h>
+//#include <GL/glew.h>
 
 
 class MainWindow{

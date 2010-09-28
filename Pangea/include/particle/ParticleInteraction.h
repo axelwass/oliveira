@@ -6,6 +6,7 @@
  */
 
 #include "Particle.h"
+#include "ParticleData.h"
 #include "../force/Force.h"
 
 #include <list>
@@ -23,7 +24,16 @@ class ParticleInteraction {
 		Force * force;
 
 	public:
-		ParticleInteraction(Particle * particle, Particle * other, Force * force);
+		ParticleInteraction(Particle * particle, Particle * other,
+				Force * force);
+
+		ParticleData getParticleData() {
+			return particle->getData();
+		}
+
+		ParticleData getOtherParticleData() {
+			return other->getData();
+		}
 
 		void resolve();
 

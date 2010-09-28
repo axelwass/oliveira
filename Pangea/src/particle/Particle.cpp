@@ -54,6 +54,5 @@ void Particle::clearForces(){
 
 bool Particle::integrate(real t, real h) {
 	bool out = integrator->integrate(this->forceAccum, &this->data, t, h);
-	this->clearForces();
 	return out;
 }

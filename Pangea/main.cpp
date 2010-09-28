@@ -32,7 +32,8 @@ int main(int argc, char *argv[]) {
 
 	srand(time(NULL));
 
-	ParticleWorld world(0.1);
+	ParticleWorld world(0.05);
+
 	/*
 	 for (int r = 1; r < 4; r++)
 	 for (double angle = 0; angle < 2 * 3.14; angle += 0.1)
@@ -46,14 +47,13 @@ int main(int argc, char *argv[]) {
 	//	world.addSpring(Vector3(-100,0,0),Vector3(100,0,0),
 	//		1, 5, 100);
 
-	for (int i = 1; i < 3; i++)
-		world.addSpringCircle(Vector3(150, 0, 0), i * 50, 1, 50, i * 6);
+	world.addSpringCircle(Vector3(0, 0, 0), 300, 1 / 50.0, 100, 5);
 
-	for (int i = 1; i < 3; i++)
-			world.addSpringCircle(Vector3(-200, 0, 0), i * 50, 1, 50, i * 6);
+	/*world.addPerParticleInteraction(new GravitationalForce());*/
 
+	world.updateForces();
 
-	world.addPerParticleInteraction(new GravitationalForce());
+	world.printParticles();
 
 	while (window.Refresh(0)) {
 		world.render();

@@ -59,7 +59,6 @@ Vector3 Vector3::operator*(const real value){
  *  Turns a non-zero vector into a vector of unit length
  */
 void Vector3::normalize() {
-
 	real l = magnitude();
 	if (l > 0) {
 		(*this) *= ((real) 1) / l;

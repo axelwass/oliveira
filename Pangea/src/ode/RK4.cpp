@@ -17,20 +17,20 @@ RK4::~RK4() {
 }
 
 bool RK4::integrate(Force * force, ParticleData * state, real t, real h) {
-
 	switch (this->step) {
 	case 1:
 		this->k1 = evaluate(force, state, t, 0, new DerivativeData());
+		//printf("Acceleration: t: %f \t (%.16f,%.16f,%.16f) \n", t, k1.dv.getX(),k1.dv.getY(),k1.dv.getZ() );
 		break;
 	case 2:
-		k2 = evaluate(force, state, t + (h * 0.5), h * 0.5, &k1);
+		k2 = evaluate(force, state, t, h * 0.5, &k1);
 		break;
 	case 3:
-		k3 = evaluate(force, state, t + (h * 0.5), h * 0.5, &k2);
+		k3 = evaluate(force, state, t, h * 0.5, &k2);
 		break;
 	case 4:
-		k4 = evaluate(force, state, t + h, h, &k3);
-		(*state) = (*state) + ((k1 + (k2 + k3) * 2.0 + k4) * (1.0 / 6.0)) * h;
+		k4 = evaluate(force, state, t, h, &k3);
+		(*state) = (*state) + ((k1 + (k2 + k3) * 2.0 + k4) * (h / 6.0));
 		break;
 	default:
 		break;
