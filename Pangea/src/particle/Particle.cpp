@@ -41,13 +41,13 @@ bool Particle::operator==(Particle& other) {
 	return data == other.data;
 }
 
-void Particle::addForce(Force * force){
-	if(force != NULL){
+void Particle::addForce(Force * force) {
+	if (force != NULL) {
 		*(this->forceAccum) += force;
 	}
 }
 
-void Particle::clearForces(){
+void Particle::clearForces() {
 	delete this->forceAccum;
 	this->forceAccum = new NullForce();
 }
@@ -55,4 +55,8 @@ void Particle::clearForces(){
 bool Particle::integrate(real t, real h) {
 	bool out = integrator->integrate(this->forceAccum, &this->data, t, h);
 	return out;
+}
+
+void Particle::applyStep(real h) {
+	integrator->applyStep(&this->data, h);
 }

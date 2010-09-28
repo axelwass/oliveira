@@ -22,13 +22,16 @@ class RK4 : public Integrator{
 		DerivativeData k3;
 		DerivativeData k4;
 
-		DerivativeData evaluate(Force * force, ParticleData * initial, real t, real h, DerivativeData * derivative);
+		ParticleData initialStepData;
 
 	public:
 		RK4();
 		virtual ~RK4();
 
 		bool integrate(Force * force, ParticleData * state, real t, real h);
+
+
+		void applyStep(ParticleData * state, real h);
 };
 
 #endif /* RK4_H_ */

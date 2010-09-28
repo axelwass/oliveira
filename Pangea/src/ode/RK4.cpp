@@ -16,43 +16,61 @@ RK4::RK4() {
 RK4::~RK4() {
 }
 
-bool RK4::integrate(Force * force, ParticleData * state, real t, real h) {
+void RK4::applyStep(ParticleData * state, real h) {
 	switch (this->step) {
 	case 1:
-		this->k1 = evaluate(force, state, t, 0, new DerivativeData());
-		//printf("Acceleration: t: %f \t (%.16f,%.16f,%.16f) \n", t, k1.dv.getX(),k1.dv.getY(),k1.dv.getZ() );
+		(*state) = initialStepData + (k1 * (h * .5));
+		this->step++;
 		break;
 	case 2:
-		k2 = evaluate(force, state, t, h * 0.5, &k1);
+		(*state) = initialStepData + (k2 * (h * .5));
+		this->step++;
 		break;
 	case 3:
-		k3 = evaluate(force, state, t, h * 0.5, &k2);
+		(*state) = initialStepData + (k3 * h);
+		this->step++;
 		break;
 	case 4:
-		k4 = evaluate(force, state, t, h, &k3);
-		(*state) = (*state) + ((k1 + (k2 + k3) * 2.0 + k4) * (h / 6.0));
+		(*state) = initialStepData + ((k1 + (k2 + k3) * 2.0 + k4) * (h / 6.0));
+		this->step = 1;
+		break;
+	default:
+		break;
+	}
+}
+
+bool RK4::integrate(Force * force, ParticleData * state, real t, real h) {
+
+	ParticleData tmp;
+
+	switch (this->step) {
+	case 1:
+		initialStepData = (*state);
+		k1 = force->evaluate(t, &initialStepData);
+		k1.dx = initialStepData.getVelocity();
+		break;
+	case 2:
+		tmp = initialStepData + k1 * (h / 2.0);
+		k2 = force->evaluate(t + h / 2.0, &tmp);
+		k2.dx = tmp.getVelocity();
+		break;
+	case 3:
+		tmp = initialStepData + k2 * (h / 2.0);
+		k3 = force->evaluate(t + h / 2.0, &tmp);
+		k3.dx = tmp.getVelocity();
+		break;
+	case 4:
+		tmp = initialStepData + k3 * h;
+		k4 = force->evaluate(t + h, &tmp);
+		k4.dx = tmp.getVelocity();
 		break;
 	default:
 		break;
 	}
 
 	if (this->step < 4) {
-		this->step++;
 		return false;
 	} else {
-		this->step = 1;
 		return true;
 	}
-}
-
-/*
- * Basically performs Euler to predict next derivatives (used by RK4)
- */
-DerivativeData RK4::evaluate(Force * force, ParticleData * initial, real t,
-		real h, DerivativeData * derivative) {
-	ParticleData data = (*initial) + ((*derivative) * h);
-
-	DerivativeData out = force->evaluate(t + h, &data);
-	out.dx = data.getVelocity();
-	return out;
 }

@@ -143,8 +143,14 @@ void ParticleWorld::integrate() {
 
 	// Finishes when every particle finishes (they all have the same step)
 	while (integrating) {
+
+		// Integrate step
 		for (itr = particles.begin(); itr != particles.end(); itr++)
 			integrating = !((*itr)->integrate(time, precision)) && integrating;
+
+		// Apply step
+		for (itr = particles.begin(); itr != particles.end(); itr++)
+			(*itr)->applyStep(precision);
 	}
 }
 
@@ -206,7 +212,7 @@ void ParticleWorld::render() {
 	for (itr = interactions.begin(); itr != interactions.end(); itr++) {
 
 		glLineWidth(2);
-		glBegin(GL_LINE);
+		glBegin(GL_LINES);
 
 		ParticleData d1 = (*itr)->getParticleData();
 		ParticleData d2 = (*itr)->getOtherParticleData();
