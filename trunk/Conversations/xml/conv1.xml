@@ -1,0 +1,35 @@
+<!DOCTYPE xml SYSTEM "conv.dtd">
+<conversacion>
+	<PNJ>
+		<lineas>
+			<temas>
+				<tema idRef="saludo">
+					<texto>hola</texto></tema>
+				<tema idRef="saludo">
+					<texto>buenas tardes</texto>
+				</tema>
+			</temas>
+			<respuestas id="saludo">
+				<respuesta idRef="saludo">
+					<texto>hola</texto>
+				</respuesta>
+				<respuesta idRef="saludo">
+					<texto>buenas tardes</texto>
+				</respuesta>
+			</respuestas>
+		</lineas>
+	</PNJ>
+	<PJ>
+		<lineas>
+			<temas></temas>
+			<respuestas id="saludo">
+				<respuesta idRef="saludo">
+					<texto>hola</texto>
+				</respuesta>
+				<respuesta idRef="saludo">
+					<texto>buenas nochas</texto>
+				</respuesta>
+			</respuestas>
+		</lineas>
+	</PJ>
+</conversacion>
