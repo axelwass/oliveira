@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!ELEMENT conversacion (herencia?,PNJ,PJ)>
+<!ELEMENT conversacion (herencia?,PNJ+,PJ)>
 <!ELEMENT PJ (lineas?)>
-<!ELEMENT PNJ (lineas?,muletillas?)>
+<!ELEMENT PNJ (lineas?,reacciones?)>
 <!ELEMENT lineas (temas,respuestas+)>
 <!ELEMENT temas (tema)*>
 <!ELEMENT tema (texto)>
 <!ATTLIST tema idRef CDATA "">
 <!ELEMENT respuestas (respuesta)+>
 <!ATTLIST respuestas id CDATA "">
-<!ELEMENT respuesta (condicion?,texto,accion?)>
-<!ATTLIST respuesta idRef CDATA "">
+<!ELEMENT respuesta (condicion?,texto)>
+<!ATTLIST respuesta idRef CDATA ""  tipo CDATA "enojo">
 <!ELEMENT condicion (#PCDATA)>
 <!ELEMENT texto (#PCDATA)>
-<!ELEMENT accion (#PCDATA)>
 <!ELEMENT herencia (#PCDATA)>
-<!ELEMENT muletillas (muletilla)+>
-<!ELEMENT muletilla (#PCDATA)>
-<!ATTLIST muletilla tipo (enojo|broma|confundido) "enojo">
+<!ELEMENT reacciones (reaccion)+>
+<!ELEMENT reaccion (texto?,accion?)>
+<!ATTLIST reaccion tipo CDATA "enojo">
+<!ELEMENT accion (#PCDATA)>
