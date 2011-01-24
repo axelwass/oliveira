@@ -1,0 +1,6 @@
+#summary Pasos para compilar el proyecto en Eclipse
+
+= Details =
+Primero instalar SDL (sdl-devel), y despues cambiar las propiedades del proyecto, tocando el boton de + para agregar librerias.
+
+http://i.imgur.com/Ggptr.png
