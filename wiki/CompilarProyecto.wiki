@@ -7,8 +7,8 @@ g++ (Compilador C++)
 sdl-devel (SDL)
 libglut3-dev o freeglut3-dev (GLUT)
 
-Cambiar las propiedades del proyecto, tocando el boton de + para agregar las siguientes librerias:
+Cambiar las propiedades del proyecto, tocando el boton de + para incluir las siguientes librerias al proyecto:
 
--SDLmain -SDL -glut -GLU
+SDLmain, SDL, glut y GLU.
 
 http://i.imgur.com/nSWBv.png
