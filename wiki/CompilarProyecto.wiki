@@ -1,6 +1,14 @@
 #summary Pasos para compilar el proyecto en Eclipse
 
-= Details =
-Primero instalar SDL (sdl-devel), y despues cambiar las propiedades del proyecto, tocando el boton de + para agregar librerias.
+= Detalles =
 
-http://i.imgur.com/Ggptr.png
+Librerias necesarias:
+g++ (Compilador C++)
+sdl-devel (SDL)
+libglut3-dev o freeglut3-dev (GLUT)
+
+Cambiar las propiedades del proyecto, tocando el boton de + para agregar las siguientes librerias:
+
+-SDLmain -SDL -glut -GLU
+
+http://i.imgur.com/nSWBv.png
