@@ -8,16 +8,16 @@
 #include <stdio.h>
 #include <list>
 #include "../Vector3.h"
+#include "../Positionable.h"
 #include "ParticleData.h"
 #include "../ode/RK4.h"
 #include "../force/Force.h"
 #include "../force/NullForce.h"
 
-
 #ifndef PARTICLE_H_
 #define PARTICLE_H_
 
-class Particle{
+class Particle: public Positionable<Particle> {
 
 	private:
 
@@ -34,7 +34,12 @@ class Particle{
 
 	public:
 
-		list<Vector3> getPath(){
+		// From positionable
+		Vector3 getPosition() {
+			return data.getPosition();
+		}
+
+		list<Vector3> getPath() {
 			return path;
 		}
 
@@ -53,7 +58,7 @@ class Particle{
 		// Change particle data
 		void setData(const ParticleData& data);
 
-	    // Check if two particles are equal
+		// Check if two particles are equal
 		bool operator==(Particle& other);
 
 		bool integrate(real t, real h);

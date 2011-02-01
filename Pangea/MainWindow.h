@@ -8,8 +8,6 @@
 #define MAINWINDOW_H_
 
 #include <SDL/SDL.h>
-#include <GL/glew.h>
-//#include <GL/glew.h>
 
 
 class MainWindow {

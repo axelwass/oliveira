@@ -6,9 +6,10 @@
  */
 
 #include "MainWindow.h"
+#include <GL/glut.h>
 
 /* Updates screen and also pops events */
-int MainWindow::Refresh(int delay){
+int MainWindow::Refresh(int delay) {
 
 	/* Update screen */
 	glFlush();
@@ -16,45 +17,46 @@ int MainWindow::Refresh(int delay){
 	SDL_GL_SwapBuffers();
 
 	/* Pop an event, check for exit */
-	SDL_PollEvent( &event );
+	SDL_PollEvent(&event);
 
 	// Enable blending
-	glEnable (GL_BLEND | GL_ALPHA_TEST);
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND | GL_ALPHA_TEST);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// AA
-//	glEnable(GL_LINE_SMOOTH);
-  //  glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
+	//	glEnable(GL_LINE_SMOOTH);
+	//  glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
 
 
 	//Enable textures
 	//glEnable( GL_TEXTURE_2D );
 
 	// Set background color
-	glClearColor( 35/255.0f, 35/255.0f, 35/255.0f, 1 );
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	glClearColor(35 / 255.0f, 35 / 255.0f, 35 / 255.0f, 1);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// Set 2D view (orthographic)
-	glViewport( 0,0, width,height );
-
-	glMatrixMode( GL_PROJECTION );
-	glLoadIdentity();
-	glOrtho(-width/2,width/2,height/2,-height/2,-500.0f, 500.0f);
-
-	glMatrixMode( GL_MODELVIEW );
+	glMatrixMode( GL_PROJECTION);
 	glLoadIdentity();
 
-    //gluLookAt (width/2, height/2, -870, width/2, height/2, 0.0, 0.0,-1.0, 0.0); //set the view
+	// Set 2D view
+	glViewport(0, 0, width, height);
+
+	double ratio = 1.0 * width / height;
+	gluPerspective(45, ratio, 1, 10000);
+	glMatrixMode( GL_MODELVIEW);
+	glLoadIdentity();
+
+	gluLookAt(500, 1, 0, 0, 0, 0, 0, 1, 0);
 
 	/* See if user presses ESC or quits */
-	if(event.type == SDL_QUIT || (event.type == SDL_KEYDOWN &&
-	   event.key.keysym.sym == SDLK_ESCAPE)){
-			SDL_FreeSurface(screen);
-			SDL_Quit();
+	if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN
+			&& event.key.keysym.sym == SDLK_ESCAPE)) {
+		SDL_FreeSurface(screen);
+		SDL_Quit();
 		return 0;
-	} else return 1;
+	} else
+		return 1;
 }
-
 
 MainWindow::MainWindow(int width, int height) {
 	this->width = width;

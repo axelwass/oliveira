@@ -15,6 +15,8 @@ class ParticleData {
 
 	private:
 
+		Vector3 prevPosition;
+
 		Vector3 position;
 		Vector3 velocity;
 
@@ -46,6 +48,9 @@ class ParticleData {
 		// Returns the position of the particle
 		Vector3 getPosition();
 
+		// Returns the previous position of the particle
+		Vector3 getPrevPosition();
+
 		// Check if two particles are equal
 		bool operator==(ParticleData& other);
 
@@ -53,6 +58,7 @@ class ParticleData {
 		ParticleData operator*(const real value) {
 			ParticleData out;
 			out.velocity = this->velocity * value;
+			out.prevPosition = this->position;
 			out.position = this->position * value;
 			out.inverseMass = this->inverseMass;
 			return out;
@@ -62,6 +68,7 @@ class ParticleData {
 		ParticleData operator+(const DerivativeData& derivative) {
 			ParticleData out;
 			out.velocity = this->velocity + derivative.dv;
+			out.prevPosition = this->position;
 			out.position = this->position + derivative.dx;
 			out.inverseMass = this->inverseMass;
 			return out;
@@ -71,6 +78,7 @@ class ParticleData {
 		ParticleData operator+(const ParticleData& other) {
 			ParticleData out;
 			out.velocity = this->velocity + other.velocity;
+			out.prevPosition = this->position;
 			out.position = this->position + other.position;
 			out.inverseMass = this->inverseMass;
 			return out;
@@ -80,12 +88,11 @@ class ParticleData {
 		ParticleData operator-(const ParticleData& other) {
 			ParticleData out;
 			out.velocity = this->velocity - other.velocity;
-			out.position= this->position - other.position;
+			out.prevPosition = this->position;
+			out.position = this->position - other.position;
 			out.inverseMass = this->inverseMass;
 			return out;
 		}
-
-	public:
 
 		// Uninitialized particle data
 		ParticleData() {

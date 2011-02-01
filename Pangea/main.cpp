@@ -7,6 +7,12 @@
 
 #include "include/Vector3.h"
 
+#include "include/shape/Shape.h"
+#include "include/shape/FinitePlane.h"
+#include "include/shape/NullShape.h"
+#include "include/shape/Sphere.h"
+#include "include/shape/Cube.h"
+
 #include "include/force/ConstantForce.h"
 #include "include/force/SpringForce.h"
 #include "include/force/GravitationalForce.h"
@@ -22,6 +28,7 @@
 #include "include/world/ParticleWorld.h"
 #include "include/ode/RK4.h"
 #include "include/precision.h"
+#include "include/Matrix.h"
 #include "MainWindow.h"
 
 #include <stdio.h>
@@ -30,6 +37,11 @@
 #include <time.h>
 #include <math.h>
 #include <SDL/SDL.h>
+
+#include <GL/glut.h>
+
+#include "include/octree/Octree.h"
+
 using namespace std;
 
 /* ME QUEDE EN: emisores, particle groups y fields
@@ -43,21 +55,300 @@ using namespace std;
  * n!) decorator de decorators, game object
  */
 
+// Testeo de interseccion plano - esfera interactivo
+
+/*
+ * Esto lo hago asi porque no tenemos un frontend armado todavia
+ * tal vez pierda tiempo haciendolo asi, pero pierdo mas tiempo
+ * armando lo de arriba sino
+ */
+void testPlaneSphereCollision(MainWindow * window) {
+
+	FinitePlane plane(20, 100);
+	Sphere sphere(20);
+	Shape * collide;
+
+	Cube c(50);
+
+	//plane.translate(Vector3(0,200,-100));
+
+	Uint8 * keystate;
+
+	//plane.setRotation(Vector3(0, 3.1415 / 2, 0));
+
+	//	printf("%s(%p)\n", s2 ? "Colisiona" : "No colisiona", s2);
+
+	real rv = 0;
+
+	while (window->Refresh(0)) {
+
+		// Move sphere
+		keystate = SDL_GetKeyState(NULL);
+		real vel = 1;
+		if (keystate[SDLK_w])
+			sphere.translate(Vector3(0, vel, 0));
+		if (keystate[SDLK_s])
+			sphere.translate(Vector3(0, -vel, 0));
+		if (keystate[SDLK_d])
+			sphere.translate(Vector3(0, 0, -vel));
+		if (keystate[SDLK_a])
+			sphere.translate(Vector3(0, 0, vel));
+		if (keystate[SDLK_q]) {
+			plane.setRotation(Vector3(rv, 0, 0));
+			rv += 0.1;
+		}
+
+		// Check collision
+		collide = plane.intersection(&sphere);
+
+		// Color feedback for collision
+		if (collide)
+			glColor3f(1, 0, 0);
+		else
+			glColor3f(1, 1, 1);
+
+		// Draw sphere
+		Vector3 p = sphere.getPosition();
+		glTranslatef(p.getX(), p.getY(), p.getZ());
+		//glutWireSphere(2, 5, 5);
+		glutWireSphere(sphere.getRadius(), 20, 20);
+		glTranslatef(-p.getX(), -p.getY(), -p.getZ());
+
+		// Draw plane (que paja!)
+		Vector3 pp = plane.getPosition();
+		glTranslatef(pp.getX(), pp.getY(), pp.getZ());
+		glutWireSphere(2, 5, 5); // Centro
+		glTranslatef(-pp.getX(), -pp.getY(), -pp.getZ());
+
+		Vector3 u, v;
+		real w, h;
+
+		u = plane.getU();
+		v = plane.getV();
+
+		// Just halves
+		w = plane.getWidth() / 2;
+		h = plane.getHeight() / 2;
+
+		Vector3 p1 = pp + (u * w + v * h);
+		Vector3 p2 = pp + (u * w - v * h);
+		Vector3 p3 = pp - (u * w + v * h);
+		Vector3 p4 = pp - (u * w - v * h);
+
+		glBegin(GL_LINE_LOOP);
+
+		glVertex3f(p1.getX(), p1.getY(), p1.getZ());
+		glVertex3f(p2.getX(), p2.getY(), p2.getZ());
+		glVertex3f(p3.getX(), p3.getY(), p3.getZ());
+		glVertex3f(p4.getX(), p4.getY(), p4.getZ());
+
+		glEnd();
+
+	}
+
+}
+
+void testMatrixClass() {
+
+	Matrix a(5, 20);
+
+	a.set(3, 10, 5);
+	printf("%g, %g\n", a.get(3, 10), a[3][10]);
+
+	a[3][10] = 3;
+	printf("%g, %g\n", a.get(3, 10), a[3][10]);
+
+	Matrix b(3, 2), c(2, 3);
+
+	b[0][0] = 3;
+	b[0][1] = 2;
+	b[1][0] = 1;
+	b[1][1] = 0;
+	b[2][0] = 1;
+	b[2][1] = 2;
+
+	c[0][0] = 3;
+	c[0][1] = 2;
+	c[0][2] = 1;
+	c[1][0] = 0;
+	c[1][1] = 1;
+	c[1][2] = 2;
+
+	b.print();
+	printf("\n");
+	c.print();
+	printf("\n");
+
+	//	(b * c).print();
+
+	Matrix tmp(3, 3);
+	Vector3 v(-2, -1, 0);
+
+	tmp[0][0] = 1;
+	tmp[0][1] = 2;
+	tmp[0][2] = 3;
+
+	tmp[1][0] = 4;
+	tmp[1][1] = 5;
+	tmp[1][2] = 6;
+
+	tmp[2][0] = 7;
+	tmp[2][1] = 8;
+	tmp[2][2] = 9;
+
+	Vector3 result = tmp * v;
+
+	printf("\n%.2f,%.2f,%.2f\n", result.get(0), result.get(1), result.get(2));
+
+	Matrix::getIdentity(5).print();
+
+}
+
+void testCubeSphereCollision(MainWindow * window) {
+
+	Cube cube(50);
+	Sphere sphere(20);
+	Shape * collide;
+
+	cube.setPosition(Vector3(0, 0, 10));
+
+	Uint8 * keystate;
+
+	real rv = 0;
+
+	while (window->Refresh(0)) {
+
+		// Move sphere
+		keystate = SDL_GetKeyState(NULL);
+		real vel = 1;
+		if (keystate[SDLK_s])
+			sphere.translate(Vector3(vel, 0, 0));
+		if (keystate[SDLK_w])
+			sphere.translate(Vector3(-vel, 0, 0));
+		if (keystate[SDLK_d])
+			sphere.translate(Vector3(0, 0, -vel));
+		if (keystate[SDLK_a])
+			sphere.translate(Vector3(0, 0, vel));
+		if (keystate[SDLK_q]) {
+			cube.setRotation(Vector3(0, rv, 0));
+			rv += 0.1;
+		}
+
+		// Check collision
+		collide = cube.intersection(&sphere);
+
+		// Color feedback for collision
+		if (collide)
+			glColor3f(1, 0, 0);
+		else
+			glColor3f(1, 1, 1);
+
+		// Draw sphere
+		Vector3 p = sphere.getPosition();
+		glTranslatef(p.getX(), p.getY(), p.getZ());
+		//glutWireSphere(2, 5, 5);
+		glutWireSphere(sphere.getRadius(), 20, 20);
+		glTranslatef(-p.getX(), -p.getY(), -p.getZ());
+
+		// Draw Cube (esta es mas facil jaja)
+		Vector3 pp = cube.getPosition();
+		Vector3 rotation = cube.getRotation();
+		real degrees = rotation.magnitude() * 180 / 3.1415;
+		glTranslatef(pp.getX(), pp.getY(), pp.getZ());
+		glRotatef(degrees, rotation.getX(), rotation.getY(), rotation.getZ());
+		glutWireSphere(2, 5, 5); // Centro
+		glutWireCube(cube.getLength()); // Centro
+		glTranslatef(-pp.getX(), -pp.getY(), -pp.getZ());
+	}
+}
+
+void testOctreeIntersection(MainWindow * window) {
+
+	ParticleWorld world(.05);
+
+	Octree<Particle> octree(Vector3(0, 0, 0), 3, 200);
+
+	Sphere sphere(50);
+
+	Uint8 * keystate;
+
+	//world.addField(new ConstantForce(.5, Vector3(0, 1, 0)));
+
+	list<Particle *> particles;
+
+	int mx, my;
+
+	while (window->Refresh(0)) {
+
+		// Move sphere
+		keystate = SDL_GetKeyState(NULL);
+		real vel = 5;
+		if (keystate[SDLK_w])
+			sphere.translate(Vector3(0, vel, 0));
+		if (keystate[SDLK_s])
+			sphere.translate(Vector3(0, -vel, 0));
+		if (keystate[SDLK_d])
+			sphere.translate(Vector3(0, 0, -vel));
+		if (keystate[SDLK_a])
+			sphere.translate(Vector3(0, 0, vel));
+
+		Uint8 ms = SDL_GetMouseState(&mx, &my);
+		if (ms & SDL_BUTTON(SDL_BUTTON_LEFT)) {
+
+			Particle * p = world.addParticle(1, Vector3((rand() % 200) - 110,
+					(rand() % 200) - 110, (rand() % 200) - 110));
+
+			octree.addElement(p);
+			particles.push_back(p);
+		}
+
+		Vector3 p = sphere.getPosition();
+		glTranslatef(p.getX(), p.getY(), p.getZ());
+		glutWireSphere(sphere.getRadius(), 20, 20);
+		glTranslatef(-p.getX(), -p.getY(), -p.getZ());
+
+		// PROBAR TRUE O FALSE, MUESTRA LO DEMAS O NO
+		octree.render(&sphere, true);
+
+		list<Particle *>::iterator itr;
+		for (itr = particles.begin(); itr != particles.end(); itr++)
+			octree.updateElement(*itr, (*itr)->getData().getPrevPosition());
+
+		//printf("Elements: %d Nodes:%d \n", octree.size(), octree.nodeCount());
+
+		world.runPhysics();
+	}
+}
+
 int main(int argc, char *argv[]) {
 
 	MainWindow window(1200, 600);
+	glutInit(&argc, (char**) argv);
 	srand(time(NULL));
+
+	//testMatrixClass();
+	//return 0;
+
+	testOctreeIntersection(&window);
+	return 0;
+
+	testCubeSphereCollision(&window);
+	return 0;
+
+	testPlaneSphereCollision(&window);
+	return 0;
 
 	ParticleWorld world(.08);
 
-	DirectionalEmitter e1 = DirectionalEmitter(&world, Vector3(-100, 0, 0),
-			Vector3(0, -1, 0), .4, 0, 10, 1);
-
-	world.addEmitter(&e1);
-
-	world.addField(new ConstantForce(.5, Vector3(0, 1, 0)));
-
 	/*
+	 DirectionalEmitter e1 = DirectionalEmitter(&world, Vector3(-100, 0, 0),
+	 Vector3(0, -1, 0), .4, 0, 10, 1);
+
+	 world.addEmitter(&e1);
+
+	 world.addField(new ConstantForce(.5, Vector3(0, 1, 0)));
+
+	 /*
 	 ParticleBridge bridge(&world, Vector3(-500, 0, 0), Vector3(-100, 0, 0),
 	 100, .015, 50);
 
@@ -102,14 +393,45 @@ int main(int argc, char *argv[]) {
 
 	world.printParticles();
 
+	Octree<Particle> octree(Vector3(0, 0, 0), 7, 500);
+
+	world.addField(new ConstantForce(.5, Vector3(0, 1, 0)));
+
+	list<Particle *> particles;
+
+	double angle = 0;
+	int mx, my;
+
 	while (window.Refresh(0)) {
+
+		Uint8 ms = SDL_GetMouseState(&mx, &my);
+		if (ms & SDL_BUTTON(SDL_BUTTON_LEFT)) {
+
+			Particle * p = world.addParticle(1, Vector3((rand() % 200) - 110,
+					(rand() % 200) - 110, (rand() % 200) - 110));
+
+			octree.addElement(p);
+			particles.push_back(p);
+		}
+
+		glRotatef(angle++, 0, 1, 0);
+		glutWireCube(510);
+		//		octree.render();
+
+		list<Particle *>::iterator itr;
+		for (itr = particles.begin(); itr != particles.end(); itr++)
+			octree.updateElement(*itr, (*itr)->getData().getPrevPosition());
+
+		//printf("Elements: %d Nodes:%d \n", octree.size(), octree.nodeCount());
+
 		/*
 		 data.setPosition(Vector3(data.getPosition().getX(),
 		 sin(world.getTime()*4)*150, data.getPosition().getZ()));
 		 ropeBase->setData(data);
 		 */
-		world.render();
+		//world.render();
 		world.runPhysics();
+
 	}
 
 	return 1;
