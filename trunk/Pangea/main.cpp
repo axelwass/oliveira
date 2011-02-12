@@ -7,6 +7,8 @@
 
 #include "include/Vector3.h"
 
+#include <GL/glut.h>
+
 #include "include/shape/Shape.h"
 #include "include/shape/FinitePlane.h"
 #include "include/shape/NullShape.h"
@@ -37,8 +39,7 @@
 #include <time.h>
 #include <math.h>
 #include <SDL/SDL.h>
-
-#include <GL/glut.h>
+#include <sys/time.h>
 
 #include "include/octree/Octree.h"
 
@@ -262,11 +263,80 @@ void testCubeSphereCollision(MainWindow * window) {
 	}
 }
 
+void testOctreeDynamic(MainWindow * window) {
+
+	ParticleWorld world(.15);
+
+	Octree<Particle> octree(Vector3(0, 0, 0), 1, 300, false);
+
+	ParticleRope rope(&world, Vector3(10, 10, 250), Vector3(10, 10, -250), .05,
+			7.5);
+
+	world.updateForces();
+
+	list<Particle *> particles = rope.getRope();
+
+	list<Particle *>::iterator p;
+	for (p = particles.begin(); p != particles.end(); p++)
+		octree.put(*p);
+
+	timeval elapsed;
+	long miliseconds;
+	int qty = 0, avg = 0;
+
+	while (window->Refresh(0)) {
+
+		gettimeofday(&elapsed, NULL);
+		miliseconds = elapsed.tv_sec * 1000 + elapsed.tv_usec / 1000.0;
+
+		world.runPhysics();
+
+		octree.update();
+		octree.render(NULL, true);
+
+		world.render();
+
+		gettimeofday(&elapsed, NULL);
+		miliseconds = elapsed.tv_sec * 1000 + elapsed.tv_usec / 1000
+				- miliseconds;
+		avg += miliseconds;
+		qty++;
+
+		if (miliseconds > 50)
+			printf("EPA\n");
+		//	printf("%ld, avg: %f\n", miliseconds, avg/(double)qty);
+
+	}
+
+	// avg: 12.417417 CON OCTREE DINAMICO ACTIVADO Y RENDERIZANDO JAJAJA FAIL
+	// igual todo bien, nunca va a hacer falta mostrar el octree.
+
+	// avg: 0.860000  CON OCTREE DINAMICO ACTIVADO PERO SIN RENDERIZAR
+	// avg: 0.719403 SIN OCTREE DINAMICO (PERO CREADO). GENIAL! , EL APORTE DEL OCTREE ES BAJO! =D
+
+
+	// avg: 0.449023 sin octree renderizado + centrado
+	// avg: 1.143808
+	// avg: 1.167192
+
+
+	// avg: 20.908555 renderizado + centrado
+	// avg: 22.356190
+
+	// avg: 19.341158 renderizado + sin centrar
+
+	// avg: 0.442927 sin octree rederizado + sin centrar
+	// avg: 1.062865
+
+
+	printf("avg: %f\n", avg / (double) qty);
+}
+
 void testOctreeIntersection(MainWindow * window) {
 
 	ParticleWorld world(.05);
 
-	Octree<Particle> octree(Vector3(0, 0, 0), 3, 200);
+	Octree<Particle> octree(Vector3(0, 0, 0), 1, 200);
 
 	Sphere sphere(50);
 
@@ -298,7 +368,7 @@ void testOctreeIntersection(MainWindow * window) {
 			Particle * p = world.addParticle(1, Vector3((rand() % 200) - 110,
 					(rand() % 200) - 110, (rand() % 200) - 110));
 
-			octree.addElement(p);
+			octree.put(p);
 			particles.push_back(p);
 		}
 
@@ -308,11 +378,7 @@ void testOctreeIntersection(MainWindow * window) {
 		glTranslatef(-p.getX(), -p.getY(), -p.getZ());
 
 		// PROBAR TRUE O FALSE, MUESTRA LO DEMAS O NO
-		octree.render(&sphere, true);
-
-		list<Particle *>::iterator itr;
-		for (itr = particles.begin(); itr != particles.end(); itr++)
-			octree.updateElement(*itr, (*itr)->getData().getPrevPosition());
+		octree.render(NULL, true);
 
 		//printf("Elements: %d Nodes:%d \n", octree.size(), octree.nodeCount());
 
@@ -329,18 +395,22 @@ int main(int argc, char *argv[]) {
 	//testMatrixClass();
 	//return 0;
 
-	testOctreeIntersection(&window);
-	return 0;
 
-	testCubeSphereCollision(&window);
+	testOctreeDynamic(&window);
 	return 0;
-
-	testPlaneSphereCollision(&window);
-	return 0;
-
-	ParticleWorld world(.08);
 
 	/*
+	 testOctreeIntersection(&window);
+	 return 0;
+
+	 testCubeSphereCollision(&window);
+	 return 0;
+
+	 testPlaneSphereCollision(&window);
+	 return 0;
+
+	 ParticleWorld world(.08);
+
 	 DirectionalEmitter e1 = DirectionalEmitter(&world, Vector3(-100, 0, 0),
 	 Vector3(0, -1, 0), .4, 0, 10, 1);
 
@@ -377,62 +447,58 @@ int main(int argc, char *argv[]) {
 	 for (double angle = 0; angle < 2 * 3.14; angle += 0.1)
 	 world.addParticle(1 / 2.0, Vector3(-150 + cos(angle) * 50 * r, sin(
 	 angle) * r * 50, 0));
-	 */
-	//world.addWorldInteraction(new ConstantForce(9.81, Vector3(0,-1,0)));
+	 *
+	 //world.addWorldInteraction(new ConstantForce(9.81, Vector3(0,-1,0)));
 
-	//		world.addPerParticleInteraction(new GravitationalForce());
+	 //		world.addPerParticleInteraction(new GravitationalForce());
 
-	//	world.addSpring(Vector3(-100,0,0),Vector3(100,0,0),
-	//		1, 5, 100);
+	 //	world.addSpring(Vector3(-100,0,0),Vector3(100,0,0),
+	 //		1, 5, 100);
 
-	//world.addSpringCircle(Vector3(0, 0, 0), 300, 1 / 50.0, 100, 50);
+	 //world.addSpringCircle(Vector3(0, 0, 0), 300, 1 / 50.0, 100, 50);
 
-	//world.addPerParticleInteraction(new FlashGravityForce());
+	 //world.addPerParticleInteraction(new FlashGravityForce());
 
-	world.updateForces();
+	 world.updateForces();
 
-	world.printParticles();
+	 world.printParticles();
 
-	Octree<Particle> octree(Vector3(0, 0, 0), 7, 500);
+	 Octree<Particle> octree(Vector3(0, 0, 0), 7, 500);
 
-	world.addField(new ConstantForce(.5, Vector3(0, 1, 0)));
+	 world.addField(new ConstantForce(.5, Vector3(0, 1, 0)));
 
-	list<Particle *> particles;
+	 list<Particle *> particles;
 
-	double angle = 0;
-	int mx, my;
+	 double angle = 0;
+	 int mx, my;
 
-	while (window.Refresh(0)) {
+	 while (window.Refresh(0)) {
 
-		Uint8 ms = SDL_GetMouseState(&mx, &my);
-		if (ms & SDL_BUTTON(SDL_BUTTON_LEFT)) {
+	 Uint8 ms = SDL_GetMouseState(&mx, &my);
+	 if (ms & SDL_BUTTON(SDL_BUTTON_LEFT)) {
 
-			Particle * p = world.addParticle(1, Vector3((rand() % 200) - 110,
-					(rand() % 200) - 110, (rand() % 200) - 110));
+	 Particle * p = world.addParticle(1, Vector3((rand() % 200) - 110,
+	 (rand() % 200) - 110, (rand() % 200) - 110));
 
-			octree.addElement(p);
-			particles.push_back(p);
-		}
+	 octree.put(p);
+	 particles.push_back(p);
+	 }
 
-		glRotatef(angle++, 0, 1, 0);
-		glutWireCube(510);
-		//		octree.render();
+	 glRotatef(angle++, 0, 1, 0);
+	 glutWireCube(510);
+	 //		octree.render();
 
-		list<Particle *>::iterator itr;
-		for (itr = particles.begin(); itr != particles.end(); itr++)
-			octree.updateElement(*itr, (*itr)->getData().getPrevPosition());
+	 //printf("Elements: %d Nodes:%d \n", octree.size(), octree.nodeCount());
 
-		//printf("Elements: %d Nodes:%d \n", octree.size(), octree.nodeCount());
+	 /*
+	 data.setPosition(Vector3(data.getPosition().getX(),
+	 sin(world.getTime()*4)*150, data.getPosition().getZ()));
+	 ropeBase->setData(data);
+	 *
+	 //world.render();
+	 world.runPhysics();
 
-		/*
-		 data.setPosition(Vector3(data.getPosition().getX(),
-		 sin(world.getTime()*4)*150, data.getPosition().getZ()));
-		 ropeBase->setData(data);
-		 */
-		//world.render();
-		world.runPhysics();
-
-	}
+	 }*/
 
 	return 1;
 }

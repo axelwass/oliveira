@@ -35,18 +35,12 @@ void ParticleData::setVelocity(const Vector3& velocity) {
 
 // Sets position of particle
 void ParticleData::setPosition(const Vector3& position) {
-	this->prevPosition = this->position;
 	this->position = position;
 }
 
 // Returns the velocity of the particle
 Vector3 ParticleData::getVelocity() {
 	return velocity;
-}
-
-// Returns the position of the particle
-Vector3 ParticleData::getPrevPosition() {
-	return prevPosition;
 }
 
 // Returns the position of the particle
@@ -62,7 +56,6 @@ bool ParticleData::operator==(ParticleData& other) {
 
 // Creates a particle with a defined position and mass
 ParticleData::ParticleData(const Vector3& position, real inverseMass) {
-	this->prevPosition = position;
 	this->position = position;
 	this->velocity = Vector3();
 	this->inverseMass = inverseMass;

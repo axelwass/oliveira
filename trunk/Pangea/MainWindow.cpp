@@ -35,7 +35,7 @@ int MainWindow::Refresh(int delay) {
 	glClearColor(35 / 255.0f, 35 / 255.0f, 35 / 255.0f, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glMatrixMode( GL_PROJECTION);
+	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
 	// Set 2D view
@@ -43,10 +43,10 @@ int MainWindow::Refresh(int delay) {
 
 	double ratio = 1.0 * width / height;
 	gluPerspective(45, ratio, 1, 10000);
-	glMatrixMode( GL_MODELVIEW);
+	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	gluLookAt(500, 1, 0, 0, 0, 0, 0, 1, 0);
+	gluLookAt(740, -250, 0, 0, -250, 0, 0, 1, 0);
 
 	/* See if user presses ESC or quits */
 	if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN
