@@ -34,24 +34,22 @@ class ParticleWorld {
 
 		int particlesPerThread;
 
-
 		/*
 		 * Returns the last particle, at position v2
 		 */
-		Particle * addInternalSpring(const Vector3& v1, const Vector3& v2, real inverseMass,
-				real k, real l);
+		Particle * addInternalSpring(const Vector3& v1, const Vector3& v2,
+				real inverseMass, real k, real l);
 
 	public:
 		ParticleWorld(real precision = 0.5);
 
-		void printParticles(){
+		void printParticles() {
 			printf("Quantity: %d\n", this->particles.size());
 			printf("Interaction: %d\n", this->interactions.size());
 		}
 
-		Particle * addParticle(real inverseMass = 1.0,
-				const Vector3& pos = Vector3(), const Vector3& velocity =
-						Vector3());
+		Particle * addParticle(real inverseMass = 1.0, const Vector3& pos =
+				Vector3(), const Vector3& velocity = Vector3());
 
 		void particleEmission();
 
@@ -63,14 +61,13 @@ class ParticleWorld {
 
 		void addPerParticleInteraction(InterParticleForce * force);
 
-
 		void addParticleInteraction(Particle * p1, Particle * p2, Force * f);
 
 		void addSpring(const Vector3& v1, const Vector3& v2, real inverseMass,
 				real k, real l);
 
-		void addSpringCircle(const Vector3& origin, real r, real inverseMass, real k,
-				int qty);
+		void addSpringCircle(const Vector3& origin, real r, real inverseMass,
+				real k, int qty);
 
 		void runPhysics();
 

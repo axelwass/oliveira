@@ -229,6 +229,8 @@ void ParticleWorld::render() {
 	list<Particle *>::iterator i;
 	list<Particle *>::iterator k;
 
+	/*
+
 	glColor3f(1.0, 1.0, 1.0);
 	for (i = particles.begin(); i != particles.end(); i++) {
 
@@ -267,24 +269,24 @@ void ParticleWorld::render() {
 
 	 glEnd();
 	 }
-	 /*
-	 list<ParticleInteraction *>::iterator itr;
-
-	 glLineWidth(2);
-	 glColor3f(1.0, 1.0, 1.0);
-	 for (itr = interactions.begin(); itr != interactions.end(); itr++)
-	 if ((*itr)->isDual()) {
-	 ParticleData d1 = (*itr)->getParticleData();
-	 ParticleData d2 = (*itr)->getOtherParticleData();
-
-	 glBegin(GL_LINES);
-	 glVertex3f(d1.getPosition().getX(), d1.getPosition().getY(),
-	 d1.getPosition().getZ());
-	 glVertex3f(d2.getPosition().getX(), d2.getPosition().getY(),
-	 d2.getPosition().getZ());
-	 glEnd();
-	 }
 	 */
+	list<ParticleInteraction *>::iterator itr;
+
+	glLineWidth(2);
+	glColor3f(1.0, 1.0, 1.0);
+	for (itr = interactions.begin(); itr != interactions.end(); itr++)
+		if ((*itr)->isDual()) {
+			ParticleData d1 = (*itr)->getParticleData();
+			ParticleData d2 = (*itr)->getOtherParticleData();
+
+			glBegin(GL_LINES);
+			glVertex3f(d1.getPosition().getX(), d1.getPosition().getY(),
+					d1.getPosition().getZ());
+			glVertex3f(d2.getPosition().getX(), d2.getPosition().getY(),
+					d2.getPosition().getZ());
+			glEnd();
+		}
+
 }
 
 real ParticleWorld::getTime() {

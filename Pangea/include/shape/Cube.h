@@ -91,9 +91,12 @@ class Cube: public Shape {
 
 			Vector3 totalDistance(uDist, vDist, nDist);
 
-			if (totalDistance.magnitude() <= s->getRadius())
+			if (totalDistance.magnitude() <= s->getRadius()) {
+
+				// return totalDistance NORMALIZED. That will return the normal of the surface at the point of collision
+
 				return this;
-			else
+			} else
 				return NULL;
 		}
 };
