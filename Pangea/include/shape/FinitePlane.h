@@ -7,7 +7,6 @@
 
 #include "../precision.h"
 #include "../Matrix.h"
-#include "NullShape.h"
 #include "Sphere.h"
 
 #ifndef FINITEPLANE_H_
@@ -65,10 +64,10 @@ class FinitePlane: public Shape {
 
 		// Test intersection between this shape and other
 		// and return the shape of its intersection (point, line, circle, etc)
-		Shape * intersection(const Shape * s) {
+		IntersectionData intersection(const Shape * s) {
 			printf("otra\n");
 
-			return NULL;
+			return IntersectionData();
 		}
 
 		real getWidth() const {
@@ -88,7 +87,7 @@ class FinitePlane: public Shape {
 		}
 
 		// For now, just return center of intersection (ignore circle)
-		Shape * intersection(const Sphere *s) {
+		IntersectionData intersection(const Sphere *s) {
 
 			// Sphere position
 			Vector3 sPos = s->getPosition();
@@ -141,11 +140,14 @@ class FinitePlane: public Shape {
 
 				//printf("u:%g, v:%g, n:%g\n", uDist, vDist, d);
 
-				if (totalDistance.magnitude() <= r)
-					return this;
+				if (totalDistance.magnitude() <= r) {
+					// Return normal of intersection
+					totalDistance.normalize();
+					return IntersectionData(p, totalDistance);
+				}
 			}
 
-			return NULL;
+			return IntersectionData();
 		}
 };
 

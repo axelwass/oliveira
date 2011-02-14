@@ -6,11 +6,18 @@
  */
 
 #include "../Vector3.h"
+#include "IntersectionData.h"
 #include <vector>
 #include <stdio.h>
+#include <tr1/memory>
+using namespace std;
 
 #ifndef SHAPE_H_
 #define SHAPE_H_
+
+class Shape;
+
+typedef tr1::shared_ptr<Shape> ShapePtr;
 
 class Shape {
 
@@ -35,7 +42,7 @@ class Shape {
 
 		// Test intersection between this shape and other
 		// and return the shape of its intersection (point, line, circle, etc)
-		virtual Shape * intersection(const Shape * s) = 0;
+		virtual IntersectionData intersection(const Shape * s) = 0;
 
 		virtual shapeType getType() const = 0;
 

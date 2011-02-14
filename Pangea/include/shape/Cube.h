@@ -9,6 +9,8 @@
 #define CUBE_H_
 
 #include "Shape.h"
+#include "Sphere.h"
+#include "../Matrix.h"
 
 // For now just a cube. its very easy to extend it to a box with depth,width and height
 class Cube: public Shape {
@@ -53,21 +55,21 @@ class Cube: public Shape {
 
 		// Test intersection between this shape and other
 		// and return the shape of its intersection (point, line, circle, etc)
-		Shape * intersection(const Shape * s) {
+		IntersectionData intersection(const Shape * s) {
 			switch (s->getType()) {
 			case SPHERE:
 				return intersection((Sphere*) s);
 			case CUBE:
-				return NULL;
+				return IntersectionData();
 			case PLANE:
-				return NULL;
+				return IntersectionData();
 			case NULLSHAPE:
-				return NULL;
+				return IntersectionData();
 			}
 		}
 
 		// Cube-Sphere
-		Shape * intersection(const Sphere * s) {
+		IntersectionData intersection(const Sphere * s) {
 
 			Vector3 distance = s->getPosition() - this->getPosition();
 
@@ -93,11 +95,12 @@ class Cube: public Shape {
 
 			if (totalDistance.magnitude() <= s->getRadius()) {
 
-				// return totalDistance NORMALIZED. That will return the normal of the surface at the point of collision
+				totalDistance.normalize();
 
-				return this;
+				// dont know point yet..
+				return IntersectionData(Vector3(), totalDistance);
 			} else
-				return NULL;
+				return IntersectionData();
 		}
 };
 

@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include <list>
 
+#include <GL/glut.h>
+
 #include <tr1/memory>
 
 using namespace std;
@@ -27,6 +29,8 @@ using namespace std;
 
 // OPTIMIZACION!
 // TODO: Pasar todos los metodos al octree, hacer al nodo liviano!
+
+
 template<class T>
 class Octree {
 
@@ -251,6 +255,8 @@ class Octree {
 		// For rapid access to elements
 		list<Positionable<T> *> octreeElements;
 
+		// ESTO ES UNA VILLA PARA TESTEAR
+
 		void renderNode(NodePtr node) {
 
 			glTranslatef(node->getCenter().getX(), node->getCenter().getY(),
@@ -413,7 +419,7 @@ class Octree {
 			Cube cube(node->getSize());
 			cube.setPosition(node->getCenter());
 
-			if (cube.intersection(s) != NULL) {
+			if (cube.intersection(s).hasIntersected()) {
 				if (node->isLeaf()) {
 					out.push_back(node);
 					return out;
@@ -548,6 +554,7 @@ class Octree {
 		}
 
 		// JUST DEBUGGING
+
 		void render(Shape * s, bool visible) {
 
 			// Base rendering
@@ -583,23 +590,24 @@ class Octree {
 		}
 
 		int getElementCount() const {
-			return getElementCount(root);
+			return octreeElements.size();
 		}
 
 		int nodeCount() const {
 			return childCount(root);
 		}
 
-		list<Positionable<T> > getIntersectionElements(Shape *s) {
-			list<Node *> nodes = getIntersectionLeaves(root, s);
+		list<Positionable<T> *> getIntersectionElements(Shape *s) {
+			list<NodePtr> nodes = getIntersectionLeaves(root, s);
 
-			list<Positionable<T> > out;
+			list<Positionable<T> *> out;
 
 			NodeIterator itr;
 			ElementIterator elemItr;
 
 			for (itr = nodes.begin(); itr != nodes.end(); itr++)
-				for (elemItr = (*itr).begin(); elemItr != (*itr).end(); elemItr++) {
+				for (elemItr = (*itr)->getLeafElements()->begin(); elemItr
+						!= (*itr)->getLeafElements()->end(); elemItr++) {
 					out.push_back(*elemItr);
 				}
 

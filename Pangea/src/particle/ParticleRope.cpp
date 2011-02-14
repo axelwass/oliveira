@@ -30,7 +30,7 @@ void ParticleRope::initialize() {
 			world->addParticleInteraction(next, last, new SpringForce(k,
 					length.magnitude(), last));
 
-			world->addParticleInteraction(next, NULL, new ConstantForce(5,
+			world->addParticleInteraction(next, NULL, new ConstantForce(25,
 					Vector3(0, -1, 0)));
 		}
 

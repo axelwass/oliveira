@@ -9,7 +9,6 @@
 #define SPHERE_H_
 
 #include "Shape.h"
-#include "NullShape.h"
 #include "../precision.h"
 
 class Sphere: public Shape {
@@ -30,29 +29,31 @@ class Sphere: public Shape {
 
 		// Test intersection between this shape and other
 		// and return the shape of its intersection (point, line, circle, etc)
-		virtual Shape * intersection(const Shape * s) {
+		virtual IntersectionData intersection(const Shape * s) {
 			switch (s->getType()) {
 			case SPHERE:
 				return intersection((Sphere*) s);
 			case CUBE:
-				return NULL;
+				return IntersectionData();
 			case PLANE:
-				return NULL;
+				return IntersectionData();
 			case NULLSHAPE:
-				return NULL;
+				return IntersectionData();
 			}
-			return NullShape::getInstance();
+			return IntersectionData();
 		}
 
-		Shape * intersection(const Sphere * s) {
+		IntersectionData intersection(const Sphere * s) {
 
 			Vector3 distance = s->position - this->position;
 
 			if (distance.magnitude() - this->radius - s->radius < 0) {
+				Vector3 n = distance;
+				n.normalize();
 				// Return distance normalized... normal of collision
-				return this;
+				return IntersectionData(this->position + (n * this->radius), n);
 			} else
-				return NULL;
+				return IntersectionData();
 		}
 };
 
