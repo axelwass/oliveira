@@ -11,6 +11,7 @@
 #include "../Vector3.h"
 #include "../force/SpringForce.h"
 #include "../precision.h"
+#include "../octree/Octree.h"
 #include <list>
 #include <vector>
 using namespace std;
@@ -20,8 +21,16 @@ class Emitter;
 #ifndef PARTICLEWORLD_H_
 #define PARTICLEWORLD_H_
 
+
+// Useful for all particle related
+typedef tr1::shared_ptr<Octree<Particle> > OctreePtr;
+
 class ParticleWorld {
-	private:
+	protected:
+
+		// For now, just one octree, no groups yet (todo: groups)
+		OctreePtr particleOctree;
+
 		list<Particle*> particles;
 		list<Emitter *> emitters;
 		list<ParticleInteraction *> interactions;
@@ -80,6 +89,8 @@ class ParticleWorld {
 		void integrateNParticlesThread(void * lowerBound);
 
 		void resolveCollisions();
+
+		void repositionCollided(Particle * p1, Particle * p2);
 
 		// PARA TESTEAR NOMAS
 		void render();

@@ -1,0 +1,68 @@
+********************************************
+FISICO
+********************************************
+
+-------------------------------
+Cosas a fixear, revisar, etc. CORTO PLAZO
+-------------------------------
+
+1) Grupos de particulas. Octree propio, fuerzas internas propias, integracion propia. Colisiones internas(y que pueda deshabilitarse).
+2) Particulas infinitas y su consideracion en las colisiones (semi critico, segfault a la vista sino)
+3) Arreglar interacciones de particulas
+4)* Investigar sobre mejores metodos para resolver las colisiones (path tracing y eso, por si hay mega fuerzas jodiendo)
+5) Ver como enganchar a los emisores con todo esto.
+6) Interacciones internas con octree (como gravedad)
+7) Analizar parametros optimos de octree dinamico para reducir fps (threshold en particular)
+
+* Nota: El metodo actual de colisiones, si bien el octree optimiza un monton, tiene problemas con fuerzas muy potentes, porque pueden 
+ llegar a integrar pasos muy grandes y puede saltearse una colision o incluso caer dentro de otra particula (en cuyo caso, la gravedad
+ explota). El path tracing es ver si la recta de la direccion de cada particula puede llegar a intersectar de antemano; habria que 
+ investigar como implementarlo.
+
+-------------------------------
+Cosas a fixear, revisar, etc. LARGO PLAZO
+-------------------------------
+
+1) Usar punteros mas seguros 
+2) Destruccion de particulas y fuerzas (va de la mano con ptrs)
+3) Analizar RK4 vs otros metodos mas livianos
+4) Optimizacion temporal de los algoritmos
+5) Testear intervalos temporales y valores de fuerzas en los que ande bien y rapido
+
+-------------------------------
+Cosas a agregar CORTO PLAZO
+-------------------------------
+
+1) Planos y cubos colisionables de masa infinita
+2) Cuerpos rigidos basicos (primitivas, esfera plano cubo). Esto incluye agregar rotacion, lo cual es un bardo por ahora
+3) Hard constraints (de la mano de rigidos)
+
+-------------------------------
+Cosas a agregar LARGO PLAZO
+-------------------------------
+
+1) Cuerpos rigidos complejos (objetos)
+2) Cuerpos suaves complejos (objetos)
+3) Más fuerzas
+
+
+
+********************************************
+GENERAL
+********************************************
+
+1) Modificar la estructura del proyecto. Wrappear el engine fisico en carpeta physics, preparar el esqueleto para los demas engines.
+2) Asimismo, limpiar la estructura de physics, sacar cosas generales que se vayan a compartir, como el octree 
+3) Mergear lo que tengo del engine grafico y modificarlo para que enganche
+
+
+
+
+
+
+
+
+
+
+
+n!) Nadie sabe que deparara el futuro jajaja

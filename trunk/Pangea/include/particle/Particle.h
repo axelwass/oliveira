@@ -13,11 +13,12 @@
 #include "../ode/RK4.h"
 #include "../force/Force.h"
 #include "../force/NullForce.h"
+#include "Collisionable.h"
 
 #ifndef PARTICLE_H_
 #define PARTICLE_H_
 
-class Particle: public Positionable<Particle> {
+class Particle: public Positionable<Particle> , public Collisionable {
 
 	private:
 
@@ -33,6 +34,10 @@ class Particle: public Positionable<Particle> {
 		Force * forceAccum;
 
 	public:
+
+		Particle * getThis() {
+			return this;
+		}
 
 		// From positionable
 		Vector3 getPosition() {
@@ -68,6 +73,13 @@ class Particle: public Positionable<Particle> {
 		void addForce(Force * force);
 
 		void clearForces();
+
+		IntersectionData checkCollision(Collisionable& other);
+
+		bool resolveCollision(Collisionable& other, IntersectionData& data);
+
+		ShapePtr getCollisionShape();
+
 };
 
 #endif /* PARTICLE_H_ */

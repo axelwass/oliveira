@@ -20,9 +20,7 @@ class Positionable {
 		virtual Vector3 getPosition() = 0;
 
 		// I hate this
-		T * getThis() {
-			return this;
-		}
+		virtual T * getThis() = 0;
 };
 
 #endif /* POSITIONABLE_H_ */

@@ -11,7 +11,6 @@
 
 #include "include/shape/Shape.h"
 #include "include/shape/FinitePlane.h"
-#include "include/shape/NullShape.h"
 #include "include/shape/Sphere.h"
 #include "include/shape/Cube.h"
 
@@ -47,16 +46,8 @@
 
 using namespace std;
 
-/* ME QUEDE EN: emisores, particle groups y fields
- * 0) Analizar la utilidad de tener particleGroups.
- * 1) repensar las interacciones. DIF. entre interaccion VS campo de fuerza (fields)
- * 2) colisiones
- * 3) octree!
- * 4) apl. octree a colisiones y interacciones
- * 5) colisiones entre pasos
- * 6) cuando ande todo esto, usar punteros mas seguros (shared_ptr)
- * n!) decorator de decorators, game object
- */
+// LEER todo.txt
+
 
 // Testeo de interseccion plano - esfera interactivo
 
@@ -69,7 +60,7 @@ void testPlaneSphereCollision(MainWindow * window) {
 
 	FinitePlane plane(20, 100);
 	Sphere sphere(20);
-	Shape * collide;
+	bool collide;
 
 	Cube c(50);
 
@@ -102,7 +93,7 @@ void testPlaneSphereCollision(MainWindow * window) {
 		}
 
 		// Check collision
-		collide = plane.intersection(&sphere);
+		collide = plane.intersection(&sphere).hasIntersected();
 
 		// Color feedback for collision
 		if (collide)
@@ -211,7 +202,7 @@ void testCubeSphereCollision(MainWindow * window) {
 
 	Cube cube(50);
 	Sphere sphere(20);
-	Shape * collide;
+	bool collide;
 
 	cube.setPosition(Vector3(0, 0, 10));
 
@@ -238,7 +229,7 @@ void testCubeSphereCollision(MainWindow * window) {
 		}
 
 		// Check collision
-		collide = cube.intersection(&sphere);
+		collide = cube.intersection(&sphere).hasIntersected();
 
 		// Color feedback for collision
 		if (collide)
@@ -296,7 +287,7 @@ void testOctreeDynamic(MainWindow * window) {
 		world.runPhysics();
 
 		octree.update();
-		octree.render(NULL, true);
+		//octree.render(NULL, true);
 
 		world.render();
 
@@ -389,7 +380,7 @@ void testOctreeIntersection(MainWindow * window) {
 		glTranslatef(-p.getX(), -p.getY(), -p.getZ());
 
 		// PROBAR TRUE O FALSE, MUESTRA LO DEMAS O NO
-		octree.render(NULL, true);
+		//octree.render(NULL, true);
 
 		//printf("Elements: %d Nodes:%d \n", octree.size(), octree.nodeCount());
 
@@ -432,6 +423,68 @@ void testSafePointers() {
 
 }
 
+void testParticleCollision(MainWindow * window) {
+
+	ParticleWorld world(.25);
+
+	srand(time(NULL));
+	int qty = 100;
+	real outerRadius = 300;
+	real innerRadius = 245;
+	Vector3 center = Vector3(0, 0, 0);
+
+	for (int i = 0; i < qty; i++) {
+		real r = innerRadius + (fabs(outerRadius - innerRadius) * (rand()
+				/ (double) RAND_MAX));
+		real theta = 2 * 3.1415 * (rand() / (double) RAND_MAX);
+		real phi = 3.1415 * (rand() / (double) RAND_MAX);
+
+		Vector3 position(r * cos(theta), r * sin(theta), 0);
+		position += center;
+
+		world.addParticle(1, position);
+
+	}
+
+	world.addParticle(1.0 / 5, Vector3());
+
+	world.addPerParticleInteraction(new GravitationalForce());
+	world.updateForces();
+
+	int time = SDL_GetTicks();
+	int nextTime;
+	int qtyFrames = 0;
+	real avg = 0;
+
+	while (window->Refresh(0)) {
+
+		world.runPhysics();
+		world.render();
+
+		nextTime = SDL_GetTicks() - time;
+		time = time + nextTime;
+
+		// Pareciera que las colisiones solo afectan en 5-7 fps
+		//printf("FPS: %.2f\n", 1000.0 / nextTime);
+
+		avg += 1000.0 / nextTime;
+		qtyFrames++;
+
+	}
+
+	printf("Average framerate: %f\n", avg / qtyFrames);
+
+	// El octree hace efecto solo en las colisiones, OJO
+
+	// Average framerate: 25.377089 con gravedad + colisiones con octree, 50 particulas
+	// Average framerate: 15.646843 con gravedad + colisiones SIN octree, 50 particulas
+
+	// Average framerate: 5.709004 con gravedad + colisiones SIN octree, 100 particulas
+	// Average framerate: 12.892283 con gravedad + colisiones con octree, 100 particulas
+
+	// Buena onda, el octree es mucho mejor =D
+}
+
 int main(int argc, char *argv[]) {
 
 	MainWindow window(1200, 600);
@@ -444,10 +497,13 @@ int main(int argc, char *argv[]) {
 	//testSafePointers();
 	//return 0;
 
-	testOctreeDynamic(&window);
-		return 0;
-
+	testParticleCollision(&window);
+	return 0;
 	/*
+	 testOctreeDynamic(&window);
+	 return 0;
+
+	 /*
 	 testOctreeIntersection(&window);
 	 return 0;
 
