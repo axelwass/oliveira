@@ -43,6 +43,8 @@
 
 #include "include/octree/Octree.h"
 
+#include <tr1/memory>
+
 using namespace std;
 
 /* ME QUEDE EN: emisores, particle groups y fields
@@ -267,10 +269,10 @@ void testOctreeDynamic(MainWindow * window) {
 
 	ParticleWorld world(.15);
 
-	Octree<Particle> octree(Vector3(0, 0, 0), 1, 300, false);
+	Octree<Particle> octree(Vector3(0, 0, 0), 1, 500, true);
 
-	ParticleRope rope(&world, Vector3(10, 10, 250), Vector3(10, 10, -250), .05,
-			7.5);
+	ParticleRope rope(&world, Vector3(10, 10, 250), Vector3(10, 10, -250), .1,
+			15);
 
 	world.updateForces();
 
@@ -283,6 +285,8 @@ void testOctreeDynamic(MainWindow * window) {
 	timeval elapsed;
 	long miliseconds;
 	int qty = 0, avg = 0;
+
+	//octree.resize(500);
 
 	while (window->Refresh(0)) {
 
@@ -302,8 +306,6 @@ void testOctreeDynamic(MainWindow * window) {
 		avg += miliseconds;
 		qty++;
 
-		if (miliseconds > 50)
-			printf("EPA\n");
 		//	printf("%ld, avg: %f\n", miliseconds, avg/(double)qty);
 
 	}
@@ -314,11 +316,9 @@ void testOctreeDynamic(MainWindow * window) {
 	// avg: 0.860000  CON OCTREE DINAMICO ACTIVADO PERO SIN RENDERIZAR
 	// avg: 0.719403 SIN OCTREE DINAMICO (PERO CREADO). GENIAL! , EL APORTE DEL OCTREE ES BAJO! =D
 
-
 	// avg: 0.449023 sin octree renderizado + centrado
 	// avg: 1.143808
 	// avg: 1.167192
-
 
 	// avg: 20.908555 renderizado + centrado
 	// avg: 22.356190
@@ -328,6 +328,17 @@ void testOctreeDynamic(MainWindow * window) {
 	// avg: 0.442927 sin octree rederizado + sin centrar
 	// avg: 1.062865
 
+	// avg: 9.336614 renderizado con size adapt
+	// avg: 9.638686
+
+	// avg: 0.395604 sin renderizad con size adapt
+	// avg: 0.365103
+
+	// avg: 0.333333 sin renderizar sin size adapt
+	// avg: 0.389172
+
+	// avg: 7.136000 renderizado sin size adapt
+	// avg: 7.295318
 
 	printf("avg: %f\n", avg / (double) qty);
 }
@@ -386,6 +397,41 @@ void testOctreeIntersection(MainWindow * window) {
 	}
 }
 
+class testNode: public tr1::enable_shared_from_this<testNode> {
+
+	public:
+		tr1::shared_ptr<testNode> getThisPtr() {
+			tr1::shared_ptr<testNode> out = shared_from_this();
+			cout << "Al existir ambos, el count es: " << out.use_count()
+					<< endl;
+			return out;
+		}
+
+};
+
+void testSafePointers() {
+
+	int * ip1 = new int(1);
+
+	// ESTO TIENE QUE PINCHAR:
+	// porque apuntan al mismo lugar sin conocerse entre si
+	// por lo que cuando termina, un shared se destruye
+	// y el otro tiene basura, y SEGFAULT!!
+	tr1::shared_ptr<int> i1(ip1);
+	cout << i1.use_count() << endl;
+	//tr1::shared_ptr<int> i2(ip1);
+
+	//cout << i2.use_count() << endl;
+	cout << i1.use_count() << endl;
+
+	tr1::shared_ptr<testNode> node1(new testNode());
+
+	cout << node1.get() << " Y this: " << node1->getThisPtr().get() << endl;
+	if (node1.get() == node1->getThisPtr().get())
+		cout << "Son iguales !! yay" << endl;
+
+}
+
 int main(int argc, char *argv[]) {
 
 	MainWindow window(1200, 600);
@@ -395,9 +441,11 @@ int main(int argc, char *argv[]) {
 	//testMatrixClass();
 	//return 0;
 
+	//testSafePointers();
+	//return 0;
 
 	testOctreeDynamic(&window);
-	return 0;
+		return 0;
 
 	/*
 	 testOctreeIntersection(&window);
