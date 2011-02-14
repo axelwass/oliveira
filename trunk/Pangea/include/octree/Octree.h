@@ -12,66 +12,79 @@
 #include <stdio.h>
 #include <list>
 
+#include <tr1/memory>
+
 using namespace std;
 
 #ifndef OCTREE_H_
 #define OCTREE_H_
 
+// safe
+// 2:31am, 8.9mb., 2:55am, 8.9mb 3:35am 8.9mb (wow) NO MEMORY LEAKS!!! =D
+
+// unsafe
+// 2:26 am 11.7mb, 2:30am, 18.5mb LEAKS MEMORY!
+
 // OPTIMIZACION!
-// TODO: Usar punteros mas seguros (boost::sharedptr) para evitar problemas!
-// TODO: Destruccion de nodos bien hecha
 // TODO: Pasar todos los metodos al octree, hacer al nodo liviano!
 template<class T>
 class Octree {
 
 	protected:
 
-		class Node {
+		// Forward declaration so typedef works on inner class
+		class Node;
+
+		// To clarify code
+		typedef tr1::shared_ptr<Node> NodePtr;
+		typedef tr1::weak_ptr<Node> ParentNodePtr; // Weak ptr to avoid cyclic reference
+		typedef typename list<NodePtr>::iterator NodeIterator;
+		typedef typename list<Positionable<T> *>::iterator ElementIterator;
+
+		// Enable shared from this works to pass "this" ptr to children with no problem =D
+		class Node: public tr1::enable_shared_from_this<Node> {
 
 			private:
 
-				// To clarify code
-				typedef typename list<Node *>::iterator NodeIterator;
-				typedef typename list<Positionable<T> *>::iterator
-						ElementIterator;
-
-				Node * parent;
 				Vector3 center;
 				double size;
 
+				ParentNodePtr parent;
 				// 8 in this case
-				list<Node *> children;
+				list<NodePtr> children;
 
 				// Elements if this is leaf
 				list<Positionable<T> *> elements;
 
-				// Inner node is private
-				Node(Node * parent, const Vector3 center) {
+				// Inner node is private to prevent disasters
+				Node(NodePtr parent, const Vector3 center) {
+					this->parent.reset();
 					this->parent = parent;
 					this->center = center;
-					this->size = this->parent->size / 2.0;
+					this->size = this->parent.lock()->size / 2.0;
 				}
 
 			public:
 
-				// TODO: Al eliminar un nodo, borrar tambien el subarbol abajo
 				~Node() {
-					printf("Mori\n");
+					// Dont do anything. Lists' destructors are called,
+					// which in turn call their elements'(nodes) destructors,
+					// which in turn destroy themselves (because parent ptrs are weak)
+					// and so on.
 				}
 
 				// Root node is public
 				Node(const Vector3 center, double size) {
-					this->parent = NULL;
 					this->center = center;
 					this->size = size;
 				}
 
-				list<Node *> * getChildren() {
+				list<NodePtr> * getChildren() {
 					return &children;
 				}
 
-				Node * getParent() {
-					return parent;
+				NodePtr getParent() {
+					return parent.lock();
 				}
 
 				Vector3 getCenter() {
@@ -185,8 +198,6 @@ class Octree {
 					// Half of half node
 					double halfSize = this->size / 4.0;
 
-					Node * child;
-
 					for (int i = 0; i < 8; i++) {
 
 						// Use a movement array to get a direction vector
@@ -198,7 +209,8 @@ class Octree {
 						Vector3 childCenter = this->center + dir;
 
 						// Create child
-						child = new Node(this, childCenter);
+						NodePtr child(new Node(this->shared_from_this(),
+								childCenter));
 
 						// And add elements if possible
 						ElementIterator itr;
@@ -217,23 +229,20 @@ class Octree {
 								elements.size());
 
 						if (containsPoint(elements.front()->getPosition()))
-							printf("CARAJO, HAY ALGO FUNDAMENTALMENTE MAL \n");
+							printf(
+									"CARAJO, HAY ALGO FUNDAMENTALMENTE MAL (INCONSISTENCIA EN LAS FUNCIONES)\n");
 					}
 				}
 		};
 
 		// OCTREE WRAPPER STARTS HERE
 
-		// To clarify code, on Octree
-		typedef typename list<Node *>::iterator NodeIterator;
-		typedef typename list<Positionable<T> *>::iterator ElementIterator;
-
-		Node * root; // root node
+		NodePtr root; // root node
 		bool sizeAdaptive; // resizable cube
 		int threshold;
 
 		// For access of lost elements in update (out of root range elements)
-		list<Positionable<T> *> lostElements;
+		list<Positionable<T> *> outOfRangeElements;
 
 		// For access of elements that need to be updated
 		// A hashmap would be excelent here, element <-> parent, element as key
@@ -242,7 +251,7 @@ class Octree {
 		// For rapid access to elements
 		list<Positionable<T> *> octreeElements;
 
-		void renderNode(Node * node) {
+		void renderNode(NodePtr node) {
 
 			glTranslatef(node->getCenter().getX(), node->getCenter().getY(),
 					node->getCenter().getZ());
@@ -281,7 +290,7 @@ class Octree {
 			glColor3f(1.0, 1.0, 1.0);
 		}
 
-		int getElementCount(Node * node) {
+		int getElementCount(NodePtr node) {
 
 			if (node->isLeaf()) {
 				return node->getLeafElements()->size();
@@ -315,7 +324,7 @@ class Octree {
 		}
 
 		// Check if child nodes are useless
-		void checkThreshold(Node * node) {
+		void checkThreshold(NodePtr node) {
 
 			// If it is under threshold, remove children
 			if (getElementCount(node) <= threshold) {
@@ -344,17 +353,17 @@ class Octree {
 		 * Note: it must be recursive despite not using a map, because
 		 * it checks if element fell outside root recursively.
 		 */
-		bool repositionElement(Node * node, Positionable<T> * elem) {
+		bool repositionElement(NodePtr node, Positionable<T> * elem) {
 
 			if (node == NULL || elem == NULL)
 				return false;
 
-			Node * parent = node->getParent();
+			NodePtr parent = node->getParent();
 
 			// If element falls outside root, store it to add it later.
-			if (parent == NULL) {
+			if (!parent) {
 				// Add this element to out of range list
-				lostElements.push_back(elem);
+				outOfRangeElements.push_back(elem);
 				return true;
 			}
 
@@ -369,7 +378,7 @@ class Octree {
 		}
 
 		// This method updates the subtree below the given node
-		void updateNode(Node * node) {
+		void updateNode(NodePtr node) {
 			if (node == NULL)
 				return;
 
@@ -398,8 +407,8 @@ class Octree {
 			}
 		}
 
-		list<Node *> getIntersectionLeaves(Node * node, Shape * s) {
-			list<Node *> out;
+		list<NodePtr> getIntersectionLeaves(NodePtr node, Shape * s) {
+			list<NodePtr> out;
 
 			Cube cube(node->getSize());
 			cube.setPosition(node->getCenter());
@@ -414,7 +423,7 @@ class Octree {
 					for (itr = node->getChildren()->begin(); itr
 							!= node->getChildren()->end(); itr++) {
 
-						list<Node *> tmp = getIntersectionLeaves(*itr, s);
+						list<NodePtr> tmp = getIntersectionLeaves(*itr, s);
 
 						// Add those nodes to this list
 						NodeIterator tmpItr;
@@ -467,53 +476,53 @@ class Octree {
 		void recoverLostNodes() {
 			//printf("%d\n", lostElements.size());
 			ElementIterator elem;
-			for (elem = lostElements.begin(); elem != lostElements.end(); elem++)
+			for (elem = outOfRangeElements.begin(); elem
+					!= outOfRangeElements.end(); elem++)
 				// Add element to root and erase it from lostElements if successful
 				if (root->addElement(*elem, threshold)) {
-					elem = lostElements.erase(elem);
+					elem = outOfRangeElements.erase(elem);
 					elem--;
 				}
 		}
 
 		// Resize subtree!
 		// Note: MUST resize whole octree, CANNOT be used on independent nodes or it will return earlier
-		void resizeNode(Node * node, double size) {
+		void resizeNode(NodePtr node, double size) {
 			if (node == NULL)
 				return;
 
 			// If node is not root and its parent has adequate size
-			if (node->getParent() != NULL && ((node->getParent()->getSize()
-					/ 2.0) - size > EPSILON))
+			if (node->getParent() && ((node->getParent()->getSize() / 2.0)
+					- size > EPSILON))
 				return;
 
 			// Resize node over its own position
 			node->setSize(size);
 
+			// x,y,z
+			int movArray[8][3] = { { 1, 1, -1 }, { 1, -1, -1 }, { -1, 1, -1 },
+					{ -1, -1, -1 }, { 1, 1, 1 }, { 1, -1, 1 }, { -1, 1, 1 }, {
+							-1, -1, 1 } };
+
+			int i = 0;
+
 			// If it has children, resize them too
 			NodeIterator itr;
 			for (itr = node->getChildren()->begin(); itr
-					!= node->getChildren()->end(); itr++) {
+					!= node->getChildren()->end(); itr++, i++) {
 
-				// But! calculate their new positions first
-				real childHalfSize = size / 4.0;
+				// Use a movement array to get a direction vector
+				Vector3 dir(movArray[i][0], movArray[i][1], movArray[i][2]);
 
-				// Calculate vector towards parent so it scales it on that direction
-				Vector3 distToParent = (*itr)->getCenter() - node->getCenter();
-
-				// Get displacement magnitude and vector needed. sqrt(3) is because of cube hypotenuse
-				real displ = distToParent.magnitude() - (childHalfSize
-						* sqrt(3));
-
-				Vector3 displVector = distToParent;
-				displVector.normalize();
-				displVector *= displ;
+				real childSize = size / 2.0;
+				Vector3 distToChild = dir * childSize;
 
 				// Set new center, actual center plus displacement
-				Vector3 childCenter = (*itr)->getCenter() + displVector;
+				Vector3 childCenter = (*itr)->getCenter() + distToChild;
 				(*itr)->setCenter(childCenter);
 
 				// And resize child with half of this size
-				resizeNode((*itr), size / 2.0);
+				resizeNode((*itr), childSize);
 			}
 		}
 
@@ -521,7 +530,7 @@ class Octree {
 
 		Octree(Vector3 center, int threshold, double size, bool sizeAdaptive =
 				false) {
-			root = new Node(center, size);
+			root = NodePtr(new Node(center, size));
 
 			this->threshold = threshold;
 			this->sizeAdaptive = sizeAdaptive;
@@ -530,11 +539,11 @@ class Octree {
 		~Octree() {
 			printf("Octree destruido\n");
 
-			delete root;
 		}
 
 		void put(Positionable<T> * e) {
-			root->addElement(e, threshold);
+			if (!root->addElement(e, threshold))
+				outOfRangeElements.push_back(e);
 			octreeElements.push_back(e);
 		}
 
@@ -546,7 +555,7 @@ class Octree {
 				this->renderNode(root);
 			} else {
 
-				list<Node *> nodes = getIntersectionLeaves(root, s);
+				list<NodePtr> nodes = getIntersectionLeaves(root, s);
 
 				// Print those nodes!
 				NodeIterator itr;
@@ -607,9 +616,12 @@ class Octree {
 			if (sizeAdaptive)
 				return;
 
+			printf("Resizing\n");
+
 			resizeNode(this->root, size);
 
 			updateNode(this->root);
+
 			restoreOutdatedElements();
 			recoverLostNodes(); // in case it expands
 
@@ -617,31 +629,30 @@ class Octree {
 		}
 
 		// This method will take the farthest out of range element and
-		// resize octree so it will contain it
+		// resize octree so it will contain it.
+		// Note: some of the outOfRangeElements may be now in range,
+		// because tree has not been updated yet.
 		void adaptSize(real maxDisplacement) {
 
 			// If no need to resize, return
-			if (lostElements.empty())
+			if (outOfRangeElements.empty())
 				return;
 
+			// Distance to center. Size would be max*2
 			Vector3 maximumDistance(0, 0, 0);
 
 			// Plain maximum element search
 			ElementIterator elem;
-			for (elem = lostElements.begin(); elem != lostElements.end(); elem++) {
+			for (elem = outOfRangeElements.begin(); elem
+					!= outOfRangeElements.end(); elem++) {
 				Vector3 dist = (*elem)->getPosition() - this->root->getCenter();
 
 				if (dist.magnitude() > maximumDistance.magnitude())
 					maximumDistance = dist;
 			}
 
-			if (maximumDistance.magnitude() < this->root->getSize() / 2.0)
-				printf("FAIL!\n");
-
-			printf("Max: %f\n", maximumDistance.magnitude());
-
 			// For now, just update size as if it was a sphere
-			resizeNode(this->root, maximumDistance.magnitude()
+			resizeNode(this->root, 2 * maximumDistance.magnitude()
 					+ maxDisplacement);
 		}
 
@@ -650,28 +661,30 @@ class Octree {
 		 * must have moved from their original position. This
 		 * means there are nodes containing elements that do not belong there.
 		 * So we first resize all nodes if octree is adaptive,
-		 * and then re position every element in each node.
+		 * and then re position every element in each node. (first deleting, then restoring)
 		 * Resizing must be done first to prevent double updating.
 		 * Besides, resizing just considers out of range elements, for optimization.
+		 * -----------------------------------------------
+		 * Order: O(e) ( n is proportional to e )
+		 * -----------------------------------------------
 		 */
 		void update() {
 
 			// First, resize all nodes
-			//	if (sizeAdaptive)
-			//	adaptSize(1);
-
+			if (sizeAdaptive)
+				adaptSize(50); // O(n+e), n = nodes, m = lost elements, usually less than whole
 
 			// Order of function calls is CRITICAL.
 
 			// Delete first
-			updateNode(this->root);
+			updateNode(this->root); // O(2n + e), n  = nodes, e = elements
 
 			// Add later
-			restoreOutdatedElements();
-			recoverLostNodes();
+			restoreOutdatedElements(); // O(e), e = elements
+			recoverLostNodes(); // O(e), e = lost elements, usually less than whole
 
 			// Then re check all thresholds
-			checkThreshold(this->root);
+			checkThreshold(this->root); // O(e), e = elements in worst case ( root changed threshold )
 		}
 
 };
