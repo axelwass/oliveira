@@ -14,7 +14,7 @@ bool ParticleData::hasFiniteMass() {
 
 // Returns the mass of the particle
 real ParticleData::getMass() {
-	return hasFiniteMass() ? 1.0 / inverseMass : -1.0;
+	return hasFiniteMass() ? 1.0 / inverseMass : INFINITE_MASS;
 }
 
 // Returns the mass of the particle

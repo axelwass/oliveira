@@ -23,8 +23,10 @@
 
 #include "include/particle/ParticleGroup.h"
 #include "include/particle/Particle.h"
-#include "include/particle/ParticleRope.h"
-#include "include/particle/ParticleBridge.h"
+#include "include/particle/constructs/ParticleRope.h"
+#include "include/particle/constructs/ParticleBridge.h"
+
+#include "include/particle/constructs/ParticlePlane.h"
 
 #include "include/emitter/Emitter.h"
 #include "include/emitter/DirectionalEmitter.h"
@@ -267,7 +269,7 @@ void testOctreeDynamic(MainWindow * window) {
 	Octree<Particle> octree(Vector3(0, 0, 0), 1, 500, true);
 
 	ParticleRope rope(&world, Vector3(10, 10, 250), Vector3(10, 10, -250), .1,
-			15);
+			15, 1);
 
 	//list<Particle *> particles = rope.getRope();
 
@@ -304,7 +306,7 @@ void testOctreeDynamic(MainWindow * window) {
 	}
 
 	// avg: 12.417417 CON OCTREE DINAMICO ACTIVADO Y RENDERIZANDO JAJAJA FAIL
-	// igual todo bien, nunca va a hacer falta mostrar el octree.
+	// igual bien, nunca va a hacer falta mostrar el octree.
 
 	// avg: 0.860000  CON OCTREE DINAMICO ACTIVADO PERO SIN RENDERIZAR
 	// avg: 0.719403 SIN OCTREE DINAMICO (PERO CREADO). GENIAL! , EL APORTE DEL OCTREE ES BAJO! =D
@@ -422,13 +424,27 @@ void testSafePointers() {
 
 void testParticleCollision(MainWindow * window) {
 
-	ParticleWorld world(.2);
+	ParticleWorld world(.3);
 
-	world.addEmitter(new DirectionalEmitter(&world, Vector3(0, 200, 0),
-			Vector3(0, -1, 0), 450, 1, 25, 1));
+	/*
+	 Emitter * emitter = new DirectionalEmitter(&world, Vector3(0, 200, 0),
+	 Vector3(0, -1, 0), 450, 1, 5, .1);
 
-	ParticleRope rope(&world, Vector3(-150, 0, 0), Vector3(150, 0, 0), .15,
-			30);
+	 world.addEmitter(emitter);
+
+	 emitter->getParticleGroup()->addField(new ConstantForce(1,
+	 Vector3(0, -1, 0)));
+	 */
+
+	ParticleGroupPtr g = ParticleGroupPtr(new ParticleGroup(Vector3(0, 100, 0),
+			false));
+
+	g->addParticle(.01, Vector3(0, 200, 0));
+	g->addField(new ConstantForce(300, Vector3(0, -1, 0)));
+
+	world.addParticleGroup(g);
+
+	ParticlePlane plane(&world, Vector3(0, 0, 0), 500, 500, 15, 15, 60);
 
 	int time = SDL_GetTicks();
 	int nextTime;
@@ -466,19 +482,13 @@ int main(int argc, char *argv[]) {
 	glutInit(&argc, (char**) argv);
 	srand(time(NULL));
 
-	//testMatrixClass();
-	//return 0;
-
-	//testSafePointers();
-	//return 0;
-
 	testParticleCollision(&window);
 	return 0;
+
 	/*
 	 testOctreeDynamic(&window);
 	 return 0;
 
-	 /*
 	 testOctreeIntersection(&window);
 	 return 0;
 
@@ -488,96 +498,11 @@ int main(int argc, char *argv[]) {
 	 testPlaneSphereCollision(&window);
 	 return 0;
 
-	 ParticleWorld world(.08);
+	 testMatrixClass();
+	 return 0;
 
-	 DirectionalEmitter e1 = DirectionalEmitter(&world, Vector3(-100, 0, 0),
-	 Vector3(0, -1, 0), .4, 0, 10, 1);
-
-	 world.addEmitter(&e1);
-
-	 world.addField(new ConstantForce(.5, Vector3(0, 1, 0)));
-
-	 /*
-	 ParticleBridge bridge(&world, Vector3(-500, 0, 0), Vector3(-100, 0, 0),
-	 100, .015, 50);
-
-	 ParticleBridge bridge2(&world, Vector3(-500, -300, 0),
-	 Vector3(500, -300, 0), 50, .15, 120);
-
-	 /*
-	 Particle * ropeBase = (rope.getRope().front());
-	 ParticleData data = ropeBase->getData();
-
-	 //	Particle * p =	world.addParticle(1, Vector3(0, 50, 0), Vector3(10,-40,0));
-
-	 //world.addParticleInteraction(p, NULL, new ConstantForce(10, Vector3(0,1,0)));
-
-
-	 /*world.addParticle(1 / (double) 80000, Vector3(150, 0, 0),
-	 Vector3(150, 0, 0));
-	 /*
-	 for (int i = 0; i < 100; i++) {
-	 world.addParticle(1 / 5.0, Vector3(-50 + rand() % 100, -50 + rand()
-	 % 100, 0), Vector3(-5 + rand() % 10, -5 + rand() % 10, 0));
-	 }
-
-	 /*
-	 for (int r = 1; r < 4; r++)
-	 for (double angle = 0; angle < 2 * 3.14; angle += 0.1)
-	 world.addParticle(1 / 2.0, Vector3(-150 + cos(angle) * 50 * r, sin(
-	 angle) * r * 50, 0));
-	 *
-	 //world.addWorldInteraction(new ConstantForce(9.81, Vector3(0,-1,0)));
-
-	 //		world.addPerParticleInteraction(new GravitationalForce());
-
-	 //	world.addSpring(Vector3(-100,0,0),Vector3(100,0,0),
-	 //		1, 5, 100);
-
-	 //world.addSpringCircle(Vector3(0, 0, 0), 300, 1 / 50.0, 100, 50);
-
-	 //world.addPerParticleInteraction(new FlashGravityForce());
-
-	 world.updateForces();
-
-	 world.printParticles();
-
-	 Octree<Particle> octree(Vector3(0, 0, 0), 7, 500);
-
-	 world.addField(new ConstantForce(.5, Vector3(0, 1, 0)));
-
-	 list<Particle *> particles;
-
-	 double angle = 0;
-	 int mx, my;
-
-	 while (window.Refresh(0)) {
-
-	 Uint8 ms = SDL_GetMouseState(&mx, &my);
-	 if (ms & SDL_BUTTON(SDL_BUTTON_LEFT)) {
-
-	 Particle * p = world.addParticle(1, Vector3((rand() % 200) - 110,
-	 (rand() % 200) - 110, (rand() % 200) - 110));
-
-	 octree.put(p);
-	 particles.push_back(p);
-	 }
-
-	 glRotatef(angle++, 0, 1, 0);
-	 glutWireCube(510);
-	 //		octree.render();
-
-	 //printf("Elements: %d Nodes:%d \n", octree.size(), octree.nodeCount());
-
-	 /*
-	 data.setPosition(Vector3(data.getPosition().getX(),
-	 sin(world.getTime()*4)*150, data.getPosition().getZ()));
-	 ropeBase->setData(data);
-	 *
-	 //world.render();
-	 world.runPhysics();
-
-	 }*/
-
+	 testSafePointers();
+	 return 0;
+	 */
 	return 1;
 }

@@ -9,10 +9,15 @@
 #include "../precision.h"
 #include <iostream>
 #include <list>
+#include <tr1/memory>
 using namespace std;
 
 #ifndef FORCE_H_
 #define FORCE_H_
+
+class Force;
+
+typedef tr1::shared_ptr<Force> ForcePtr;
 
 class Force {
 
@@ -22,23 +27,24 @@ class Force {
 		list<Force *> forces;
 
 	public:
-		Force(){}
-		virtual ~Force(){
-		/*	cout << "Eliminando funcion..." << forces.size() <<endl;
-			list<Force *>::iterator itr;
-			for(itr=forces.begin();itr!=forces.end();itr++){
-				Force * del = (*itr);
-				delete del;
-			}*/
+		Force() {
+		}
+		virtual ~Force() {
+			/*	cout << "Eliminando funcion..." << forces.size() <<endl;
+			 list<Force *>::iterator itr;
+			 for(itr=forces.begin();itr!=forces.end();itr++){
+			 Force * del = (*itr);
+			 delete del;
+			 }*/
 		}
 
 		// Evaluation function
-		DerivativeData evaluate(real t, ParticleData * data){
-			DerivativeData out = this->_evaluate(t,data);
+		DerivativeData evaluate(real t, ParticleData * data) {
+			DerivativeData out = this->_evaluate(t, data);
 
 			list<Force *>::iterator itr;
-			for(itr=forces.begin();itr!=forces.end();itr++){
-				out = out + (*itr)->_evaluate(t,data);
+			for (itr = forces.begin(); itr != forces.end(); itr++) {
+				out = out + (*itr)->_evaluate(t, data);
 			}
 			return out;
 		}

@@ -8,6 +8,8 @@
 #include "../Vector3.h"
 #include "DerivativeData.h"
 
+#define INFINITE_MASS -1
+
 #ifndef PARTICLEDATA_H_
 #define PARTICLEDATA_H_
 

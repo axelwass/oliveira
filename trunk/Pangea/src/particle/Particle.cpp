@@ -69,7 +69,7 @@ void Particle::applyStep(real h) {
 
 ShapePtr Particle::getCollisionShape() {
 	// Assume radius for now..
-	ShapePtr out(new Sphere(5));
+	ShapePtr out(new Sphere(fabs(data.getMass())));
 	out->setPosition(this->data.getPosition());
 	return out;
 }
@@ -82,28 +82,37 @@ bool Particle::resolveCollision(Collisionable& other,
 
 	if (other.getCollisionableType() == C_Particle) {
 
-		// Assume other is particle for now.
 		Particle& p = (Particle&) other;
 
-		real ma = data.getInverseMass();
-		real mb = p.data.getInverseMass();
+		real ma = data.getMass();
+		real mb = p.data.getMass();
+
+		// Perfectly elastic
+		real coeff;
+		if (ma == INFINITE_MASS && mb == INFINITE_MASS)
+			return true;
+		else if (ma == INFINITE_MASS)
+			coeff = mb;
+		else if (mb == INFINITE_MASS)
+			coeff = ma;
+		else
+			coeff = (2 * ma * mb) / (ma + mb);
 
 		Vector3 va = data.getVelocity();
 		Vector3 vb = p.data.getVelocity();
 
-		// Perfectly elastic
-		real coeff = (2 * ma * mb) / (ma + mb);
-
 		Vector3 impulse = impulseNormal * (coeff * ((va - vb) * impulseNormal));
 
-		Vector3 finalVela = impulse * (-1.0 / this->data.getMass());
-		Vector3 finalVelb = impulse * (1.0 / p.data.getMass());
+		Vector3 finalVela = impulse * -1 * this->data.getInverseMass();
+		Vector3 finalVelb = impulse * p.data.getInverseMass();
 
 		this->data.setVelocity(va + finalVela);
 		p.data.setVelocity(vb + finalVelb);
 
 		return true;
 	}
+
+	// Estaria bueno armar un collisionListener aca para avisar que colisiono, avisar ambas particulas
 
 	return false;
 }

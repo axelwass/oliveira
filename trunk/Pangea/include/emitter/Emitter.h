@@ -39,17 +39,12 @@ class Emitter {
 		}
 
 		void emit() {
-
 			real timePassed = world->getTime() - timeCounter;
 
-			//cout << world->getTime() << "," << SDL_GetTicks() << endl;
-
-			// longer than 2 secs for now
 			if (timePassed > 1.0 / ratePerSecond) {
 				timeCounter = world->getTime();
 				emitFunction();
 			}
-
 		}
 };
 

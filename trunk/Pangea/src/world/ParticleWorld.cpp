@@ -43,17 +43,15 @@ void ParticleWorld::addEmitter(Emitter * emitter) {
 	this->emitters.push_back(emitter);
 }
 
-void ParticleWorld::addField(Force * field) {
-	this->fields.push_back(field);
-
-	list<Particle *>::iterator itr;
-	//for (itr = particles.begin(); itr != particles.end(); itr++)
-	//	(*itr)->addForce(field);
-}
-
 void ParticleWorld::addParticleGroup(ParticleGroupPtr group) {
 	this->groups.push_back(group);
-	this->groupsOctree->put(group.get());
+	if (!this->groupsOctree->put(group.get()))
+		printf("Group octree failed\n");
+}
+
+void ParticleWorld::removeParticleGroup(ParticleGroupPtr group) {
+	this->groups.remove(group);
+	this->groupsOctree->remove(group.get());
 }
 
 void ParticleWorld::resolveGroupCollisions() {
@@ -68,7 +66,6 @@ void ParticleWorld::resolveGroupCollisions() {
 		list<Positionable<ParticleGroup> *>::iterator closeGroup;
 		for (closeGroup = closestGroups.begin(); closeGroup
 				!= closestGroups.end(); closeGroup++) {
-
 			ParticleGroup * other = (*closeGroup)->getThis();
 
 			if (other != (*g).get()) {
@@ -108,12 +105,13 @@ void ParticleWorld::integrate() {
 // PARA TESTEAR!!!
 void ParticleWorld::render() {
 
-	//groupsOctree->render(NULL, false);
+//	groupsOctree->render(NULL, false);
 
 	// Draw Particles
 	list<ParticleGroupPtr>::iterator group;
 	for (group = groups.begin(); group != groups.end(); group++)
 		(*group)->render();
+
 }
 
 real ParticleWorld::getTime() {

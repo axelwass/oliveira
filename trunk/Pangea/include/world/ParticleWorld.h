@@ -29,7 +29,6 @@ class ParticleWorld {
 	protected:
 
 		list<Emitter *> emitters;
-		list<Force *> fields;
 
 		list<ParticleGroupPtr> groups;
 		OctreePtr groupsOctree;
@@ -48,6 +47,8 @@ class ParticleWorld {
 		ParticleWorld(real precision = 0.5);
 
 		void addParticleGroup(ParticleGroupPtr group);
+
+		void removeParticleGroup(ParticleGroupPtr group);
 
 		void particleEmission();
 

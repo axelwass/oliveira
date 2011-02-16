@@ -11,6 +11,7 @@
 #include "../Positionable.h"
 #include <stdio.h>
 #include <list>
+#include <algorithm>
 
 #include <GL/glut.h>
 
@@ -532,6 +533,24 @@ class Octree {
 			}
 		}
 
+		bool removeElement(NodePtr node, Positionable<T> * elem) {
+			if (!node->containsPoint(elem->getPosition()))
+				return false;
+
+			if (node->isLeaf()) {
+				node->getLeafElements()->remove(elem);
+				return true;
+			} else {
+				// If it has children, move them too
+				NodeIterator itr;
+				for (itr = node->getChildren()->begin(); itr
+						!= node->getChildren()->end(); itr++)
+					if (removeElement(*itr, elem))
+						return true;
+			}
+			return false;
+		}
+
 	public:
 
 		Octree(Vector3 center, int threshold, double size, bool sizeAdaptive =
@@ -543,23 +562,34 @@ class Octree {
 		}
 
 		~Octree() {
-			printf("Octree destruido\n");
+			//printf("Octree destruido\n");
 
 		}
 
-		void put(Positionable<T> * e) {
+		// Returns false if element is not found
+		void remove(Positionable<T> * e) {
+
+			octreeElements.remove(e);
+			outOfRangeElements.remove(e);
+			outdatedElements.remove(e);
+
+			removeElement(this->root, e);
+		}
+
+		bool put(Positionable<T> * e) {
 
 			// There cannot be objects with same position! Save it for later then
 			ElementIterator elem;
 			for (elem = octreeElements.begin(); elem != octreeElements.end(); elem++)
 				if (e->getPosition() == (*elem)->getPosition()) {
-					printf("hola\n");
-					return;
+					printf("Error en octree: put\n");
+					return false;
 				}
 
 			if (!root->addElement(e, threshold))
 				outOfRangeElements.push_back(e);
 			octreeElements.push_back(e);
+			return true;
 		}
 
 		// JUST DEBUGGING

@@ -8,12 +8,14 @@ FISICO
 Cosas a fixear, revisar, etc. CORTO PLAZO
 -------------------------------
 
-Particulas infinitas y su consideracion en las colisiones (semi critico, segfault a la vista sino)
-* Investigar sobre mejores metodos para resolver las colisiones (path tracing y eso, por si hay mega fuerzas jodiendo)
-Interacciones internas con octree (como gravedad)
-Analizar parametros optimos de octree dinamico para reducir fps (threshold en particular)
-Ver si hace falta usar shapes en vez de puntos en el octree y tener punteros en cada leaf. No se si es necesario por ahora,
-	porque la busqeuda por shape ya resuelve el problema.
+-* Investigar sobre mejores metodos para resolver las colisiones (path tracing y eso, por si hay mega fuerzas jodiendo)
+-Interacciones n^2 con octree (como gravedad)
+-Analizar parametros optimos de octree dinamico para reducir fps (threshold en particular)
+-Ver si hace falta usar shapes en vez de puntos en el octree y tener punteros en cada leaf. No se si es necesario por ahora,
+	porque la busqeuda por shape ya resuelve el problema. Esto resolveria el problema de dos objetos con el mismo punto?
+-Punteros seguros para fuerzas y particulas. Esto es importante, en particular para los emisores
+-Eliminacion de elementos de grupos
+-Pasar mas cosas por referencia, en particular las listas.
 	
 
 * Nota: El metodo actual de colisiones, si bien el octree optimiza un monton, tiene problemas con fuerzas muy potentes, porque pueden 
@@ -37,7 +39,7 @@ Cosas a fixear, revisar, etc. LARGO PLAZO
 
 1) Usar punteros mas seguros 
 2) Destruccion de particulas y fuerzas (va de la mano con ptrs)
-3) Analizar RK4 vs otros metodos mas livianos
+3) Analizar RK4 vs otros metodos mas livianos temp.
 4) Optimizacion temporal de los algoritmos
 5) Testear intervalos temporales y valores de fuerzas y mundo en los que ande bien y rapido ( y sync. con sdl )
 
@@ -54,8 +56,9 @@ Cosas a agregar LARGO PLAZO
 GENERAL
 ********************************************
 
-1) Modificar la estructura del proyecto. Wrappear el engine fisico en carpeta physics, preparar el esqueleto para los demas engines.
-2) Asimismo, limpiar la estructura de physics, sacar cosas generales que se vayan a compartir, como el octree 
+1) Modificar la estructura del proyecto. Wrappear el engine fisico en carpeta physics, preparar el esqueleto para los demas
+ engines.
+2) Asimismo, limpiar la estructura de physics, sacar cosas generales que se vayan a compartir, como el octree, matrix y vector
 3) Mergear lo que tengo del engine grafico y modificarlo para que enganche
 
 
