@@ -31,8 +31,8 @@ void ParticleBridge::initialize() {
 	upperBridge = new ParticleRope(world, uppFrom, uppTo, density, k);
 
 	// Prepare particle list
-	list<Particle *> upperParticles = upperBridge->getRope();
-	list<Particle *> lowerParticles = lowerBridge->getRope();
+	list<Particle *> upperParticles;// = upperBridge->getRope();
+	list<Particle *> lowerParticles;// = lowerBridge->getRope();
 	bridge.push_back(lowerParticles);
 	bridge.push_back(upperParticles);
 
@@ -40,43 +40,43 @@ void ParticleBridge::initialize() {
 	list<Particle*>::iterator upper = upperParticles.begin();
 	list<Particle*>::iterator lower = lowerParticles.begin();
 	for (unsigned i = 0; i < upperParticles.size(); upper++, lower++, i++) {
-
-		// Connect i-eth particle
-		world->addParticleInteraction((*upper), (*lower), new SpringForce(k,
-				height, (*lower)));
-		world->addParticleInteraction((*lower), (*upper), new SpringForce(k,
-				height, (*upper)));
-
-
-		// Cross connect i-eth particle /
-		if (i != upperParticles.size() - 1) {
-			lower++;
-
-			real distance = ((*lower)->getData().getPosition() - (*upper)->getData().getPosition()).magnitude();
-			if (i != 0)
-				world->addParticleInteraction((*upper), (*lower),
-						new SpringForce(k, distance, (*lower)));
-
-			if (i != upperParticles.size() - 2)
-				world->addParticleInteraction((*lower), (*upper),
-						new SpringForce(k, distance, (*upper)));
-			lower--;
-		}
+		/*
+		 // Connect i-eth particle
+		 world->addParticleInteraction((*upper), (*lower), new SpringForce(k,
+		 height, (*lower)));
+		 world->addParticleInteraction((*lower), (*upper), new SpringForce(k,
+		 height, (*upper)));
 
 
-		// Cross connect i-eth particle /
-		if (i != upperParticles.size() - 1) {
-			upper++;
-			real distance = ((*lower)->getData().getPosition() - (*upper)->getData().getPosition()).magnitude();
-			if (i != upperParticles.size() - 2)
-				world->addParticleInteraction((*upper), (*lower),
-						new SpringForce(k, distance, (*lower)));
+		 // Cross connect i-eth particle /
+		 if (i != upperParticles.size() - 1) {
+		 lower++;
 
-			if (i != 0)
-				world->addParticleInteraction((*lower), (*upper),
-						new SpringForce(k, distance, (*upper)));
-			upper--;
-		}
+		 real distance = ((*lower)->getData().getPosition() - (*upper)->getData().getPosition()).magnitude();
+		 if (i != 0)
+		 world->addParticleInteraction((*upper), (*lower),
+		 new SpringForce(k, distance, (*lower)));
+
+		 if (i != upperParticles.size() - 2)
+		 world->addParticleInteraction((*lower), (*upper),
+		 new SpringForce(k, distance, (*upper)));
+		 lower--;
+		 }
+
+
+		 // Cross connect i-eth particle /
+		 if (i != upperParticles.size() - 1) {
+		 upper++;
+		 real distance = ((*lower)->getData().getPosition() - (*upper)->getData().getPosition()).magnitude();
+		 if (i != upperParticles.size() - 2)
+		 world->addParticleInteraction((*upper), (*lower),
+		 new SpringForce(k, distance, (*lower)));
+
+		 if (i != 0)
+		 world->addParticleInteraction((*lower), (*upper),
+		 new SpringForce(k, distance, (*upper)));
+		 upper--;
+		 }*/
 	}
 }
 

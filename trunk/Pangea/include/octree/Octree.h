@@ -548,6 +548,15 @@ class Octree {
 		}
 
 		void put(Positionable<T> * e) {
+
+			// There cannot be objects with same position! Save it for later then
+			ElementIterator elem;
+			for (elem = octreeElements.begin(); elem != octreeElements.end(); elem++)
+				if (e->getPosition() == (*elem)->getPosition()) {
+					printf("hola\n");
+					return;
+				}
+
 			if (!root->addElement(e, threshold))
 				outOfRangeElements.push_back(e);
 			octreeElements.push_back(e);

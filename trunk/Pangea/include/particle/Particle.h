@@ -48,6 +48,10 @@ class Particle: public Positionable<Particle> , public Collisionable {
 			return path;
 		}
 
+		CollisionableType getCollisionableType() {
+			return C_Particle;
+		}
+
 		// Construct particle in origin with mass 1
 		Particle();
 
@@ -73,8 +77,6 @@ class Particle: public Positionable<Particle> , public Collisionable {
 		void addForce(Force * force);
 
 		void clearForces();
-
-		IntersectionData checkCollision(Collisionable& other);
 
 		bool resolveCollision(Collisionable& other, IntersectionData& data);
 

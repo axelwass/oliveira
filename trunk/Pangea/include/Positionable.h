@@ -19,6 +19,7 @@ class Positionable {
 
 		virtual Vector3 getPosition() = 0;
 
+		// ESTO DEBERIA SER UN SHARED_PTR
 		// I hate this
 		virtual T * getThis() = 0;
 };

@@ -20,6 +20,8 @@
 #include "include/force/FlashGravityForce.h"
 
 #include "include/particle/ParticleData.h"
+
+#include "include/particle/ParticleGroup.h"
 #include "include/particle/Particle.h"
 #include "include/particle/ParticleRope.h"
 #include "include/particle/ParticleBridge.h"
@@ -47,6 +49,8 @@
 using namespace std;
 
 // LEER todo.txt
+
+// SE QUE ES UNA PAJA ESTE ARCHIVO, ES PARA TESTEAR!
 
 
 // Testeo de interseccion plano - esfera interactivo
@@ -265,13 +269,11 @@ void testOctreeDynamic(MainWindow * window) {
 	ParticleRope rope(&world, Vector3(10, 10, 250), Vector3(10, 10, -250), .1,
 			15);
 
-	world.updateForces();
-
-	list<Particle *> particles = rope.getRope();
+	//list<Particle *> particles = rope.getRope();
 
 	list<Particle *>::iterator p;
-	for (p = particles.begin(); p != particles.end(); p++)
-		octree.put(*p);
+	//	for (p = particles.begin(); p != particles.end(); p++)
+	//		octree.put(*p);
 
 	timeval elapsed;
 	long miliseconds;
@@ -367,11 +369,6 @@ void testOctreeIntersection(MainWindow * window) {
 		Uint8 ms = SDL_GetMouseState(&mx, &my);
 		if (ms & SDL_BUTTON(SDL_BUTTON_LEFT)) {
 
-			Particle * p = world.addParticle(1, Vector3((rand() % 200) - 110,
-					(rand() % 200) - 110, (rand() % 200) - 110));
-
-			octree.put(p);
-			particles.push_back(p);
 		}
 
 		Vector3 p = sphere.getPosition();
@@ -425,31 +422,13 @@ void testSafePointers() {
 
 void testParticleCollision(MainWindow * window) {
 
-	ParticleWorld world(.25);
+	ParticleWorld world(.2);
 
-	srand(time(NULL));
-	int qty = 100;
-	real outerRadius = 300;
-	real innerRadius = 245;
-	Vector3 center = Vector3(0, 0, 0);
+	world.addEmitter(new DirectionalEmitter(&world, Vector3(0, 200, 0),
+			Vector3(0, -1, 0), 450, 1, 25, 1));
 
-	for (int i = 0; i < qty; i++) {
-		real r = innerRadius + (fabs(outerRadius - innerRadius) * (rand()
-				/ (double) RAND_MAX));
-		real theta = 2 * 3.1415 * (rand() / (double) RAND_MAX);
-		real phi = 3.1415 * (rand() / (double) RAND_MAX);
-
-		Vector3 position(r * cos(theta), r * sin(theta), 0);
-		position += center;
-
-		world.addParticle(1, position);
-
-	}
-
-	world.addParticle(1.0 / 5, Vector3());
-
-	world.addPerParticleInteraction(new GravitationalForce());
-	world.updateForces();
+	ParticleRope rope(&world, Vector3(-150, 0, 0), Vector3(150, 0, 0), .15,
+			30);
 
 	int time = SDL_GetTicks();
 	int nextTime;
@@ -464,12 +443,8 @@ void testParticleCollision(MainWindow * window) {
 		nextTime = SDL_GetTicks() - time;
 		time = time + nextTime;
 
-		// Pareciera que las colisiones solo afectan en 5-7 fps
-		//printf("FPS: %.2f\n", 1000.0 / nextTime);
-
 		avg += 1000.0 / nextTime;
 		qtyFrames++;
-
 	}
 
 	printf("Average framerate: %f\n", avg / qtyFrames);

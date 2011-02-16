@@ -7,6 +7,8 @@
 
 #include "../Vector3.h"
 #include "Particle.h"
+
+#include "ParticleGroup.h"
 #include "../world/ParticleWorld.h"
 #include <list>
 
@@ -19,16 +21,17 @@ class ParticleRope {
 		Vector3 from, to;
 		real density;
 		real k;
-		list<Particle *> rope;
+		ParticleGroupPtr rope;
 		ParticleWorld * world;
 
 		void initialize();
 
 	public:
 
-		ParticleRope(ParticleWorld * world, Vector3 from, Vector3 to, real density, real k);
+		ParticleRope(ParticleWorld * world, Vector3 from, Vector3 to,
+				real density, real k);
 
-		list<Particle *> getRope();
+		ParticleGroupPtr getRope();
 };
 
 #endif /* PARTICLEROPE_H_ */
