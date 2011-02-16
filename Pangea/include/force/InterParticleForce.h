@@ -32,7 +32,7 @@ class InterParticleForce : public Force {
 
 		}
 
-		void setParticleData(Particle * other){
+		void setOtherParticle(Particle * other){
 			this->other = other;
 		}
 		virtual InterParticleForce * getFunctionCopy() = 0;

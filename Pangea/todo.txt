@@ -1,3 +1,5 @@
+0) Sin importar que cosa se este haciendo, checkear la memoria del programa, e impedir leaks de memoria!
+
 ********************************************
 FISICO
 ********************************************
@@ -6,18 +8,28 @@ FISICO
 Cosas a fixear, revisar, etc. CORTO PLAZO
 -------------------------------
 
-1) Grupos de particulas. Octree propio, fuerzas internas propias, integracion propia. Colisiones internas(y que pueda deshabilitarse).
-2) Particulas infinitas y su consideracion en las colisiones (semi critico, segfault a la vista sino)
-3) Arreglar interacciones de particulas
-4)* Investigar sobre mejores metodos para resolver las colisiones (path tracing y eso, por si hay mega fuerzas jodiendo)
-5) Ver como enganchar a los emisores con todo esto.
-6) Interacciones internas con octree (como gravedad)
-7) Analizar parametros optimos de octree dinamico para reducir fps (threshold en particular)
+Particulas infinitas y su consideracion en las colisiones (semi critico, segfault a la vista sino)
+* Investigar sobre mejores metodos para resolver las colisiones (path tracing y eso, por si hay mega fuerzas jodiendo)
+Interacciones internas con octree (como gravedad)
+Analizar parametros optimos de octree dinamico para reducir fps (threshold en particular)
+Ver si hace falta usar shapes en vez de puntos en el octree y tener punteros en cada leaf. No se si es necesario por ahora,
+	porque la busqeuda por shape ya resuelve el problema.
+	
 
 * Nota: El metodo actual de colisiones, si bien el octree optimiza un monton, tiene problemas con fuerzas muy potentes, porque pueden 
  llegar a integrar pasos muy grandes y puede saltearse una colision o incluso caer dentro de otra particula (en cuyo caso, la gravedad
  explota). El path tracing es ver si la recta de la direccion de cada particula puede llegar a intersectar de antemano; habria que 
  investigar como implementarlo.
+ 
+-------------------------------
+Cosas a agregar CORTO PLAZO
+-------------------------------
+
+1) Planos y cubos colisionables de masa infinita (dale que es divertidoo)
+2) Intersecciones Cubo-Cubo, Plano-Cubo, Plano-Plano
+3) Hard constraints (de la mano de rigidos)
+4) Cuerpos rigidos basicos (primitivas, esfera plano cubo). Esto incluye agregar rotacion, lo cual es un bardo por ahora
+
 
 -------------------------------
 Cosas a fixear, revisar, etc. LARGO PLAZO
@@ -27,23 +39,14 @@ Cosas a fixear, revisar, etc. LARGO PLAZO
 2) Destruccion de particulas y fuerzas (va de la mano con ptrs)
 3) Analizar RK4 vs otros metodos mas livianos
 4) Optimizacion temporal de los algoritmos
-5) Testear intervalos temporales y valores de fuerzas en los que ande bien y rapido
-
--------------------------------
-Cosas a agregar CORTO PLAZO
--------------------------------
-
-1) Planos y cubos colisionables de masa infinita
-2) Cuerpos rigidos basicos (primitivas, esfera plano cubo). Esto incluye agregar rotacion, lo cual es un bardo por ahora
-3) Hard constraints (de la mano de rigidos)
+5) Testear intervalos temporales y valores de fuerzas y mundo en los que ande bien y rapido ( y sync. con sdl )
 
 -------------------------------
 Cosas a agregar LARGO PLAZO
 -------------------------------
 
 1) Cuerpos rigidos complejos (objetos)
-2) Cuerpos suaves complejos (objetos)
-3) Más fuerzas
+2) Fuerzas entre grupos (considerar un grupo como un cuerpo entero)
 
 
 

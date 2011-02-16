@@ -11,6 +11,12 @@
 #include "Shape.h"
 #include "Sphere.h"
 #include "../Matrix.h"
+#include <tr1/memory>
+using namespace std;
+
+class Cube;
+
+typedef tr1::shared_ptr<Cube> CubePtr;
 
 // For now just a cube. its very easy to extend it to a box with depth,width and height
 class Cube: public Shape {
@@ -28,6 +34,10 @@ class Cube: public Shape {
 
 		real getLength() const {
 			return length;
+		}
+
+		void setLength(const real& length){
+			this->length = length;
 		}
 
 		shapeType getType() const {

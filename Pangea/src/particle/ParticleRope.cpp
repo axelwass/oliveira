@@ -9,35 +9,33 @@
 #include "../../include/particle/ParticleRope.h"
 
 void ParticleRope::initialize() {
-	real qty = (to - from).magnitude() * density;
 
-	Vector3 length = (to - from) * (1 / qty);
+	rope = ParticleGroupPtr(new ParticleGroup((from + to) * .5, false));
 
-	Particle * anchor = world->addParticle(1, from);
-	rope.push_back(anchor);
+	world->addParticleGroup(rope);
 
-	Particle * next;
-	Particle * last = anchor;
+	 real qty = (to - from).magnitude() * density;
 
-	for (int i = 1; i < qty; i++) {
-		next = world->addParticle(1, from + (length * i));
+	 Vector3 length = (to - from) * (1 / qty);
 
-		if (i != 1)
-			world->addParticleInteraction(last, next, new SpringForce(k,
-					length.magnitude(), next));
+	 Particle * anchor = rope->addParticle(1, from);
 
-		if (i != qty - 1) {
-			world->addParticleInteraction(next, last, new SpringForce(k,
-					length.magnitude(), last));
+	 Particle * next;
+	 Particle * last = anchor;
 
-			world->addParticleInteraction(next, NULL, new ConstantForce(25,
-					Vector3(0, -1, 0)));
-		}
+	 for (int i = 1; i < qty; i++) {
+	 next = rope->addParticle(1, from + (length * i));
 
-		rope.push_back(next);
-		last = next;
-	}
+	 if (i != 1)
+	 last->addForce(new SpringForce(k, length.magnitude(), next));
 
+	 if (i != qty - 1) {
+	 next->addForce(new SpringForce(k, length.magnitude(), last));
+
+	 next->addForce(new ConstantForce(5, Vector3(0, -1, 0)));
+	 }
+	 last = next;
+	 }
 }
 
 ParticleRope::ParticleRope(ParticleWorld * world, Vector3 from, Vector3 to,
@@ -51,6 +49,6 @@ ParticleRope::ParticleRope(ParticleWorld * world, Vector3 from, Vector3 to,
 	initialize();
 }
 
-list<Particle *> ParticleRope::getRope() {
+ParticleGroupPtr ParticleRope::getRope() {
 	return rope;
 }

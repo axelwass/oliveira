@@ -11,6 +11,12 @@
 #include "Shape.h"
 #include "../precision.h"
 
+#include <tr1/memory>
+
+class Sphere;
+
+typedef tr1::shared_ptr<Sphere> SpherePtr;
+
 class Sphere: public Shape {
 	private:
 		real radius;
@@ -25,6 +31,10 @@ class Sphere: public Shape {
 
 		real getRadius() const {
 			return this->radius;
+		}
+
+		void setRadius(real r) {
+			this->radius = r;
 		}
 
 		// Test intersection between this shape and other

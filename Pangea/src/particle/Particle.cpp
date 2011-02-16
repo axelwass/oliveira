@@ -73,19 +73,6 @@ ShapePtr Particle::getCollisionShape() {
 	out->setPosition(this->data.getPosition());
 	return out;
 }
-IntersectionData Particle::checkCollision(Collisionable& other) {
-
-	Vector3 mine = getCollisionShape()->getPosition();
-	Vector3 otherV = other.getCollisionShape()->getPosition();
-
-	//printf("\n Check collisions...\n");
-
-	//printf("(%f,%f,%f)\n", mine.getX(), mine.getY(), mine.getZ());
-
-	//printf("(%f,%f,%f)\n", otherV.getX(), otherV.getY(), otherV.getZ());
-
-	return getCollisionShape()->intersection(other.getCollisionShape().get());
-}
 
 // Must resolve BOTH particles!
 bool Particle::resolveCollision(Collisionable& other,
@@ -93,25 +80,30 @@ bool Particle::resolveCollision(Collisionable& other,
 
 	Vector3 impulseNormal = intersectionData.getNormal();
 
-	// Assume other is particle for now.
-	Particle& p = (Particle&) other;
+	if (other.getCollisionableType() == C_Particle) {
 
-	real ma = data.getInverseMass();
-	real mb = p.data.getInverseMass();
+		// Assume other is particle for now.
+		Particle& p = (Particle&) other;
 
-	Vector3 va = data.getVelocity();
-	Vector3 vb = p.data.getVelocity();
+		real ma = data.getInverseMass();
+		real mb = p.data.getInverseMass();
 
-	// Perfectly elastic
-	real coeff = (2 * ma * mb) / (ma + mb);
+		Vector3 va = data.getVelocity();
+		Vector3 vb = p.data.getVelocity();
 
-	Vector3 impulse = impulseNormal * (coeff * ((va - vb) * impulseNormal));
+		// Perfectly elastic
+		real coeff = (2 * ma * mb) / (ma + mb);
 
-	Vector3 finalVela = impulse * (-1.0 / this->data.getMass());
-	Vector3 finalVelb = impulse * (1.0 / p.data.getMass());
+		Vector3 impulse = impulseNormal * (coeff * ((va - vb) * impulseNormal));
 
-	this->data.setVelocity(va+finalVela);
-	p.data.setVelocity(vb+finalVelb);
+		Vector3 finalVela = impulse * (-1.0 / this->data.getMass());
+		Vector3 finalVelb = impulse * (1.0 / p.data.getMass());
 
-	return true;
+		this->data.setVelocity(va + finalVela);
+		p.data.setVelocity(vb + finalVelb);
+
+		return true;
+	}
+
+	return false;
 }
