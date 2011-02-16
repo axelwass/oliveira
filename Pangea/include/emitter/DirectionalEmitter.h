@@ -24,7 +24,7 @@ class DirectionalEmitter: public Emitter {
 		// Prueba de emit..
 		void emitFunction() {
 			// Create and add particle
-			particles->addParticle(1, position, direction * speed);
+			particles->addParticle(.01, position, direction * speed);
 		}
 
 	public:

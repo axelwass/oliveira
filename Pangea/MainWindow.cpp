@@ -46,7 +46,7 @@ int MainWindow::Refresh(int delay) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	gluLookAt(0, 0, 700, 0, 0, 0, 0, 1, 0);
+	gluLookAt(0, 100, 750, 0, 0, 0, 0, 1, 0);
 
 	/* See if user presses ESC or quits */
 	if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN
