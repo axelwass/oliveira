@@ -1,5 +1,11 @@
 0) Sin importar que cosa se este haciendo, checkear la memoria del programa, e impedir leaks de memoria!
 
+
+NOTA: El framerate esta determinado por la cantidad de imagenes por segundo que se muestran en la pantalla. Hay que tener en cuenta
+que el engine grafico no esta ni empezado, y que mucho del rendering es jodidamente INEFICIENTE, por lo que no hay que asustarse si
+hay cosas que andan muy lentas, con bajar la cantidad de complejidad grafica va a mejorar mucho. Por ej, con el ejemplo del plano deformable
+y la esfera, cambia mucho si las particulas del plano tienen 2 o 5 subdivisiones (se pierden muchos fps)
+
 ********************************************
 FISICO
 ********************************************
@@ -15,20 +21,20 @@ Cosas a fixear, revisar, etc. CORTO PLAZO
 	porque la busqeuda por shape ya resuelve el problema. Esto resolveria el problema de dos objetos con el mismo punto?
 -Punteros seguros para fuerzas y particulas. Esto es importante, en particular para los emisores
 -Eliminacion de elementos de grupos
--Pasar mas cosas por referencia, en particular las listas.
+-Pasar mas cosas por referencia, en particular las listas. Analizar overhead de datos y minimizarlo
 	
 
 * Nota: El metodo actual de colisiones, si bien el octree optimiza un monton, tiene problemas con fuerzas muy potentes, porque pueden 
  llegar a integrar pasos muy grandes y puede saltearse una colision o incluso caer dentro de otra particula (en cuyo caso, la gravedad
  explota). El path tracing es ver si la recta de la direccion de cada particula puede llegar a intersectar de antemano; habria que 
- investigar como implementarlo.
+ investigar como implementarlo. Tambien hay que revisar el algoritmo de superficie de contacto, creo que hay casos en los que mueve mal las cosas.
  
 -------------------------------
 Cosas a agregar CORTO PLAZO
 -------------------------------
 
-1) Planos y cubos colisionables de masa infinita (dale que es divertidoo)
-2) Intersecciones Cubo-Cubo, Plano-Cubo, Plano-Plano
+1) Planos y cubos colisionables de masa infinita (principio de rigid bodies)
+2) Intersecciones Cubo-Cubo, Plano-Cubo, Plano-Plano. Tambien, revisar Plano-Esfera y optimizarlo
 3) Hard constraints (de la mano de rigidos)
 4) Cuerpos rigidos basicos (primitivas, esfera plano cubo). Esto incluye agregar rotacion, lo cual es un bardo por ahora
 
@@ -47,7 +53,7 @@ Cosas a fixear, revisar, etc. LARGO PLAZO
 Cosas a agregar LARGO PLAZO
 -------------------------------
 
-1) Cuerpos rigidos complejos (objetos)
+1) Cuerpos rigidos y deformables complejos (objetos)
 2) Fuerzas entre grupos (considerar un grupo como un cuerpo entero)
 
 
