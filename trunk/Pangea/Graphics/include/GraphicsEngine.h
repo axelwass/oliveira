@@ -6,6 +6,8 @@
  */
 
 #include "MainWindow.h"
+#include "Camera.h"
+#include "../../Events/Events.h"
 
 #ifndef ENGINEMAIN_H_
 #define ENGINEMAIN_H_
@@ -15,14 +17,16 @@ class GraphicsEngine {
 private:
 
 	MainWindow * mainWindow;
-	//Camera mainCamera;
+	Camera *  mainCamera;
+
+	MouseManager * observer;
 
 public:
 	GraphicsEngine();
 
 	void render();
 
-	void update();
+	bool update();
 };
 
 #endif /* ENGINEMAIN_H_ */

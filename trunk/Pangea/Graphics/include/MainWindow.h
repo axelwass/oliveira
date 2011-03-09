@@ -7,22 +7,28 @@
 #ifndef MAINWINDOW_H_
 #define MAINWINDOW_H_
 
+#include "../../Events/Events.h"
+
 #include <SDL/SDL.h>
 
-class MainWindow {
+class MainWindow: public KeyListener {
 
-	private:
+private:
 
-		SDL_Surface * screen;
-		int width, height;
+	SDL_Surface * screen;
+	int width, height;
 
-	public:
+	bool running;
 
-		SDL_Event event;
-		int Refresh(int delay);
-		MainWindow(int width, int height);
-		virtual ~MainWindow();
-		void End();
+public:
+
+	SDL_Event event;
+	int Refresh(int delay);
+	MainWindow(int width, int height);
+	virtual ~MainWindow();
+	void End();
+
+	void onKeyPress(int key);
 };
 
 #endif /* MAINWINDOW_H_ */

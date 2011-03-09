@@ -5,16 +5,15 @@
  *      Author: mmerchan
  */
 
-
 #include "Physics/Physics.h"
 #include "Graphics/Graphics.h"
+#include "Events/Events.h"
 
 #include <GL/glut.h>
 
-
 // LEER todo.txt
 
-void testParticleCollision(MainWindow * window) {
+void testParticleCollision() {
 
 	ParticleWorld world(.3);
 
@@ -43,7 +42,14 @@ void testParticleCollision(MainWindow * window) {
 	int qtyFrames = 0;
 	real avg = 0;
 
-	while (window->Refresh(0)) {
+	GraphicsEngine gEngine;
+	EventsManager events;
+
+	while (gEngine.update()) {
+
+		events.update();
+
+		gEngine.render();
 
 		world.runPhysics();
 		world.render();
@@ -70,12 +76,11 @@ void testParticleCollision(MainWindow * window) {
 
 int main(int argc, char *argv[]) {
 
-	MainWindow window(1200, 600);
 	srand(time(NULL));
 
 	// initialize glut!
 	glutInit(&argc, (char**) argv);
 
-	testParticleCollision(&window);
+	testParticleCollision();
 	return 0;
 }
