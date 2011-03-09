@@ -5,7 +5,7 @@
  *      Author: mmerchan
  */
 
-#include "Vector3.h"
+#include "../../Generic/Generic.h"
 
 #ifndef POSITIONABLE_H_
 #define POSITIONABLE_H_

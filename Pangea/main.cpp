@@ -7,6 +7,10 @@
 
 
 #include "Physics/Physics.h"
+#include "Graphics/Graphics.h"
+
+#include <GL/glut.h>
+
 
 // LEER todo.txt
 
@@ -67,8 +71,10 @@ void testParticleCollision(MainWindow * window) {
 int main(int argc, char *argv[]) {
 
 	MainWindow window(1200, 600);
-	glutInit(&argc, (char**) argv);
 	srand(time(NULL));
+
+	// initialize glut!
+	glutInit(&argc, (char**) argv);
 
 	testParticleCollision(&window);
 	return 0;

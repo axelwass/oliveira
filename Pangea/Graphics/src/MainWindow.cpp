@@ -5,7 +5,7 @@
  *      Author: Mariano
  */
 
-#include "MainWindow.h"
+#include "../include/MainWindow.h"
 #include <GL/glut.h>
 
 /* Updates screen and also pops events */
@@ -74,7 +74,6 @@ MainWindow::MainWindow(int width, int height) {
 	screen = SDL_SetVideoMode(width, height, 32, SDL_OPENGL);
 
 	SDL_WM_SetCaption("Simple physics engine", NULL);
-
 }
 
 void MainWindow::End() {

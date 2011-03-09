@@ -9,7 +9,7 @@
 #define PHYSICS_H_
 
 
-#include "include/Vector3.h"
+#include "../Generic/Generic.h"
 
 #include <GL/glut.h>
 
@@ -36,9 +36,6 @@
 #include "include/emitter/DirectionalEmitter.h"
 #include "include/world/ParticleWorld.h"
 #include "include/ode/RK4.h"
-#include "include/precision.h"
-#include "include/Matrix.h"
-#include "MainWindow.h"
 
 #include <stdio.h>
 #include <iostream>

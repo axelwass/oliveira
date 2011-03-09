@@ -5,8 +5,7 @@
  *      Author: mmerchan
  */
 
-#include "../precision.h"
-#include "../Matrix.h"
+#include "../../../Generic/Generic.h"
 #include "Sphere.h"
 
 #ifndef FINITEPLANE_H_

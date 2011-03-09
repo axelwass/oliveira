@@ -6,7 +6,7 @@
  */
 #include "../particle/ParticleData.h"
 #include "../particle/DerivativeData.h"
-#include "../precision.h"
+#include "../../../Generic/Generic.h"
 #include <iostream>
 #include <list>
 #include <tr1/memory>

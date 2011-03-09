@@ -4,14 +4,13 @@
  *  Created on: 25/09/2010
  *      Author: Mariano
  */
+#include "../../../Generic/Generic.h"
 
 #include "../particle/Particle.h"
 #include "../particle/ParticleGroup.h"
 #include "../particle/ParticleInteraction.h"
 #include "../force/InterParticleForce.h"
-#include "../Vector3.h"
 #include "../force/SpringForce.h"
-#include "../precision.h"
 #include "../octree/Octree.h"
 #include <list>
 #include <vector>
