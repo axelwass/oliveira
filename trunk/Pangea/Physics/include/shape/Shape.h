@@ -5,7 +5,7 @@
  *      Author: mmerchan
  */
 
-#include "../Vector3.h"
+#include "../../../Generic/Generic.h"
 #include "IntersectionData.h"
 #include <vector>
 #include <stdio.h>

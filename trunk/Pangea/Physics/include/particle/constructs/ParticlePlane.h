@@ -5,7 +5,7 @@
  *      Author: mmerchan
  */
 
-#include "../../Vector3.h"
+#include "../../../../Generic/Generic.h"
 #include "../Particle.h"
 
 #include "../ParticleGroup.h"

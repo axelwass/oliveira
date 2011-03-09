@@ -9,7 +9,6 @@
 
 #include <SDL/SDL.h>
 
-
 class MainWindow {
 
 	private:

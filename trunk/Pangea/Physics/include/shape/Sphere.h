@@ -9,7 +9,6 @@
 #define SPHERE_H_
 
 #include "Shape.h"
-#include "../precision.h"
 
 #include <tr1/memory>
 

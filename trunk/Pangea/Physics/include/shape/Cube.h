@@ -8,9 +8,8 @@
 #ifndef CUBE_H_
 #define CUBE_H_
 
-#include "Shape.h"
+#include "../../../Generic/Generic.h"
 #include "Sphere.h"
-#include "../Matrix.h"
 #include <tr1/memory>
 using namespace std;
 

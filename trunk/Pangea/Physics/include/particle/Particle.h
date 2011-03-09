@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 #include <list>
-#include "../Vector3.h"
+#include "../../../Generic/Generic.h"
 #include "../Positionable.h"
 #include "ParticleData.h"
 #include "../ode/RK4.h"
