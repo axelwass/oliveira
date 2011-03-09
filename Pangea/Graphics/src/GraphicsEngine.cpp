@@ -6,18 +6,22 @@
  */
 
 #include "../include/GraphicsEngine.h"
+#include <SDL/SDL.h>
 
 GraphicsEngine::GraphicsEngine() {
 
 	mainWindow = new MainWindow(1200, 600);
 
+	mainCamera = new Camera(700, Vector3(), 35);
+
+	observer = MouseManager::getInstance();
 }
 
 void GraphicsEngine::render() {
-
+	mainCamera->render();
 }
 
-void GraphicsEngine::update() {
-	mainWindow->Refresh(0);
+bool GraphicsEngine::update() {
+	return mainWindow->Refresh(0);
 }
 

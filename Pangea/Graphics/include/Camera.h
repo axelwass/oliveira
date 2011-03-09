@@ -9,13 +9,14 @@
 #define CAMERA_H_
 
 #include <SDL/SDL.h>
-#include "../Generic/Generic.h"
+#include "../../Generic/Generic.h"
+#include "../../Events/Events.h"
 #include <GL/glut.h>
 
 /**
  * Simple orbit camera with aim and up
  */
-class Camera {
+class Camera : public MouseListener {
 
 private:
 
@@ -29,13 +30,14 @@ private:
 
 public:
 
-	Camera(const float& distance, const Vector3& interestPoint, const Vector3& direction, float angle) {
+	Camera(const float& distance, const Vector3& interestPoint, float angle) {
 		this->distance = distance;
 		this->interestPoint = interestPoint;
 		this->angle = angle;
 		this->active = true;
+
 		upVector = Vector3(0, 1, 0);
-		zoomSensitivity = 1;
+		zoomSensitivity = 5;
 	}
 
 	void reshape(int w, int h) {
@@ -57,7 +59,7 @@ public:
 				phi = 3.14;
 
 			position = interestPoint + Vector3(
-					distance * cos(theta) * sin(phi), distance * cos(phi),
+					distance * cos(theta) * sin(phi), -distance * cos(phi),
 					distance * sin(theta) * sin(phi));
 		}
 	}
@@ -66,11 +68,11 @@ public:
 		this->zoomSensitivity = s;
 	}
 
-	void onWheelDown() {
+	void onMouseWheelDown() {
 		distance += zoomSensitivity;
 	}
 
-	void onWheelUp() {
+	void onMouseWheelUp() {
 		distance -= zoomSensitivity;
 	}
 

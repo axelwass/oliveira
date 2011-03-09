@@ -16,9 +16,6 @@ int MainWindow::Refresh(int delay) {
 	glFinish();
 	SDL_GL_SwapBuffers();
 
-	/* Pop an event, check for exit */
-	SDL_PollEvent(&event);
-
 	// Enable blending
 	glEnable(GL_BLEND | GL_ALPHA_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -41,28 +38,17 @@ int MainWindow::Refresh(int delay) {
 	// Set 2D view
 	glViewport(0, 0, width, height);
 
-	double ratio = 1.0 * width / height;
-	gluPerspective(45, ratio, 1, 10000);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	gluLookAt(0, 100, 750, 0, 0, 0, 0, 1, 0);
-
-	/* See if user presses ESC or quits */
-	if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN
-			&& event.key.keysym.sym == SDLK_ESCAPE)) {
-		SDL_FreeSurface(screen);
-		SDL_Quit();
-		return 0;
-	} else
-		return 1;
+	return running;
 }
 
 MainWindow::MainWindow(int width, int height) {
 	this->width = width;
 	this->height = height;
+	this->running = true;
 
 	SDL_Init(SDL_INIT_EVERYTHING);
+
+	SDL_EnableUNICODE(1);
 
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
@@ -79,6 +65,13 @@ MainWindow::MainWindow(int width, int height) {
 void MainWindow::End() {
 	SDL_FreeSurface(screen);
 	SDL_Quit();
+}
+
+void MainWindow::onKeyPress(int key) {
+	if (key == 'q' || key == 27) {
+		this->End();
+		running = false;
+	}
 }
 
 MainWindow::~MainWindow() {
