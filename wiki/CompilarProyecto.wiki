@@ -4,7 +4,9 @@
 
 Librerias necesarias:
 g++ (Compilador C++)
-sdl-devel (SDL)
+libsdl1.2-dev (SDL base)
+libsdl-image1.2-dev (SDL_image)
+libsdl-ttf2.0-dev (SDL_ttf)
 libglut3-dev o freeglut3-dev (GLUT)
 
 Cambiar las propiedades del proyecto, tocando el boton de + para incluir las siguientes librerias al proyecto:
