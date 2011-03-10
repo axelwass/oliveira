@@ -5,6 +5,10 @@
  *      Author: Mariano
  */
 
+#include "Color.h"
+#include "Texture.h"
+#include "ImageTexture.h"
+#include "TextTexture.h"
 #include "MainWindow.h"
 #include "Camera.h"
 #include "../../Events/Events.h"

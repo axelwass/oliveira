@@ -6,7 +6,8 @@
  */
 
 #include "../include/MainWindow.h"
-#include <GL/glut.h>
+#include <GL/gl.h>
+#include <SDL/SDL_ttf.h>
 
 /* Updates screen and also pops events */
 int MainWindow::Refresh(int delay) {
@@ -16,17 +17,10 @@ int MainWindow::Refresh(int delay) {
 	glFinish();
 	SDL_GL_SwapBuffers();
 
-	// Enable blending
-	glEnable(GL_BLEND | GL_ALPHA_TEST);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 	// AA
 	//	glEnable(GL_LINE_SMOOTH);
 	//  glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
 
-
-	//Enable textures
-	//glEnable( GL_TEXTURE_2D );
 
 	// Set background color
 	glClearColor(35 / 255.0f, 35 / 255.0f, 35 / 255.0f, 1);
@@ -48,6 +42,8 @@ MainWindow::MainWindow(int width, int height) {
 
 	SDL_Init(SDL_INIT_EVERYTHING);
 
+	TTF_Init();
+
 	SDL_EnableUNICODE(1);
 
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
@@ -60,6 +56,13 @@ MainWindow::MainWindow(int width, int height) {
 	screen = SDL_SetVideoMode(width, height, 32, SDL_OPENGL);
 
 	SDL_WM_SetCaption("Simple physics engine", NULL);
+
+	// Enable blending
+	glEnable(GL_BLEND | GL_ALPHA_TEST);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	//Enable textures
+	glEnable(GL_TEXTURE_2D);
 }
 
 void MainWindow::End() {
