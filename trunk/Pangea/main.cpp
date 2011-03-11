@@ -84,7 +84,8 @@ void testText() {
 	y = 0;
 	z = 0;
 
-	Texture * texture = new TextTexture("Yayy! probando", 60, Color(255, 255, 255));
+	Texture * texture = new TextTexture("Yayy! probando", 60, Color(255, 255,
+			255));
 	texture->LoadTexture();
 
 	w = texture->getWidth();
@@ -95,6 +96,10 @@ void testText() {
 		events.update();
 
 		gEngine.render();
+
+		glDisable(GL_DEPTH_TEST);
+		glDepthMask(GL_FALSE);
+		// 2D OpenGL UI
 
 		texture->BindTexture();
 
@@ -117,6 +122,10 @@ void testText() {
 
 		texture->UnbindTexture();
 
+		glEnable(GL_DEPTH_TEST);
+		glDepthMask(GL_TRUE);
+		// 3D OpenGL stuff
+
 	}
 }
 
@@ -127,8 +136,8 @@ int main(int argc, char *argv[]) {
 	// initialize glut!
 	glutInit(&argc, (char**) argv);
 
-	testText();
-	return 0;
+	//testText();
+	//return 0;
 
 	testParticleCollision();
 	return 0;

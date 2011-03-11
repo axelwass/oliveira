@@ -5,9 +5,9 @@
  *      Author: mmerchan
  */
 
-#include "../include/Camera.h"
+#include "../../include/Camera/PerspectiveCamera.h"
 
-void Camera::render() {
+void PerspectiveCamera::render() {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(angle, 2, .1, 5000);

@@ -10,7 +10,8 @@
 #include "ImageTexture.h"
 #include "TextTexture.h"
 #include "MainWindow.h"
-#include "Camera.h"
+#include "Camera/PerspectiveCamera.h"
+#include "Camera/Camera.h"
 #include "../../Events/Events.h"
 
 #ifndef ENGINEMAIN_H_
