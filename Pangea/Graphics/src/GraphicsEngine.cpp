@@ -12,7 +12,7 @@ GraphicsEngine::GraphicsEngine() {
 
 	mainWindow = new MainWindow(1200, 600);
 
-	mainCamera = new Camera(700, Vector3(), 35);
+	mainCamera = new PerspectiveCamera(700, Vector3(), 35);
 
 	observer = MouseManager::getInstance();
 }

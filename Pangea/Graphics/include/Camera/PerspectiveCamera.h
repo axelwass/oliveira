@@ -5,18 +5,19 @@
  *      Author: mmerchan
  */
 
-#ifndef CAMERA_H_
-#define CAMERA_H_
+#ifndef PERSPECTIVECAMERA_H_
+#define PERSPECTIVECAMERA_H_
 
 #include <SDL/SDL.h>
-#include "../../Generic/Generic.h"
-#include "../../Events/Events.h"
+#include "Camera.h"
+#include "../../../Generic/Generic.h"
+#include "../../../Events/Events.h"
 #include <GL/glut.h>
 
 /**
  * Simple orbit camera with aim and up
  */
-class Camera : public MouseListener {
+class PerspectiveCamera: public MouseListener, public Camera {
 
 private:
 
@@ -30,14 +31,14 @@ private:
 
 public:
 
-	Camera(const float& distance, const Vector3& interestPoint, float angle) {
+	PerspectiveCamera(const float& distance, const Vector3& interestPoint, float angle) {
 		this->distance = distance;
 		this->interestPoint = interestPoint;
 		this->angle = angle;
 		this->active = true;
 
 		upVector = Vector3(0, 1, 0);
-		zoomSensitivity = 5;
+		zoomSensitivity = 15;
 	}
 
 	void reshape(int w, int h) {
@@ -69,13 +70,23 @@ public:
 	}
 
 	void onMouseWheelDown() {
-		distance += zoomSensitivity;
+
+		Vector3 dir = interestPoint - position;
+		dir.normalize();
+
+		distance -= zoomSensitivity;
+		position += dir * zoomSensitivity;
+
 	}
 
 	void onMouseWheelUp() {
-		distance -= zoomSensitivity;
+		Vector3 dir = interestPoint - position;
+		dir.normalize();
+
+		distance += zoomSensitivity;
+		position -= dir * zoomSensitivity;
 	}
 
 };
 
-#endif /* CAMERA_H_ */
+#endif /* PERSPECTIVECAMERA_H_ */

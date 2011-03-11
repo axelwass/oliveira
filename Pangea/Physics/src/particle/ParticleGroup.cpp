@@ -263,7 +263,7 @@ void ParticleGroup::render() {
 		real m = fabs((*i)->getData().getMass());
 
 		glTranslatef(kPos.getX(), kPos.getY(), kPos.getZ());
-		glutWireSphere(m,sqrt(m),sqrt(m));
+		glutSolidSphere(m,1+sqrt(m),1+sqrt(m));
 		glTranslatef(-kPos.getX(), -kPos.getY(), -kPos.getZ());
 	}
 }
