@@ -10,15 +10,16 @@
 #ifndef KEYLISTENER_H_
 #define KEYLISTENER_H_
 
-
 class KeyListener {
-public:
-	KeyListener(){
-		KeyManager::getInstance()->registerListener(this);
-	}
+	public:
+		KeyListener() {
+			KeyManager::getInstance()->registerListener(this);
+		}
 
-	// should be key event ...
-	virtual void onKeyPress(int key) = 0;
+		// should be key event ...
+		virtual void onKeyDown(int key) = 0;
+
+		virtual void onKeyUp(int key) = 0;
 };
 
 #endif /* KEYLISTENER_H_ */

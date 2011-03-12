@@ -11,20 +11,25 @@
 #define MOUSELISTENER_H_
 
 class MouseListener {
-public:
-	MouseListener() {
-		MouseManager::getInstance()->registerListener(this);
-	}
+	public:
+		MouseListener() {
+			MouseManager::getInstance()->registerListener(this);
+		}
 
-	void registerListener(){
-		MouseManager::getInstance()->registerListener(this);
-	}
+		void registerListener() {
+			MouseManager::getInstance()->registerListener(this);
+		}
 
-	// for now... just x,y
-	virtual void onMouseMotion(int x, int y) = 0;
+		// for now... just x,y
+		virtual void onMouseMotion(int x, int y) = 0;
+		virtual void onMouseRelativeMotion(int x, int y) = 0;
 
-	virtual void onMouseWheelDown() = 0;
-	virtual void onMouseWheelUp() = 0;
+		virtual void onMouseWheelDown() = 0;
+		virtual void onMouseWheelUp() = 0;
+
+		virtual void onMouseLeftClickDown() = 0;
+		virtual void onMouseLeftClickUp() = 0;
+
 };
 
 #endif /* MOUSELISTENER_H_ */

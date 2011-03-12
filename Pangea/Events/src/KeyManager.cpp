@@ -21,9 +21,12 @@ void KeyManager::update(SDL_Event * event) {
 	switch (event->type) {
 	case SDL_KEYDOWN:
 		for (elem = listeners.begin(); elem != listeners.end(); elem++)
-			(*elem)->onKeyPress(event->key.keysym.unicode);
+			(*elem)->onKeyDown(event->key.keysym.sym);
 		break;
 	case SDL_KEYUP:
+		for (elem = listeners.begin(); elem != listeners.end(); elem++)
+			(*elem)->onKeyUp(event->key.keysym.sym);
+		break;
 	default:
 		break;
 	}

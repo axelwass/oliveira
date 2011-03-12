@@ -40,10 +40,10 @@ class TextTexture: public Texture {
 
 			font = TTF_OpenFont("verdana.ttf", size);
 
-			TTF_SetFontStyle(font, TTF_STYLE_BOLD);
+			//TTF_SetFontStyle(font, TTF_STYLE_BOLD);
 
 			//White text. To change it, use Color.Set_GLColor
-			SDL_Color tmp = { 255, 255, 255 };
+			SDL_Color tmp = this->color.getSDL_Color();
 			SDL_Surface * initial;
 
 			initial = TTF_RenderText_Solid(font, name.c_str(), tmp);
