@@ -9,8 +9,16 @@
 #include <GL/gl.h>
 #include <SDL/SDL_ttf.h>
 
+MainWindow * MainWindow::instance = NULL;
+
 /* Updates screen and also pops events */
 int MainWindow::Refresh(int delay) {
+
+	real passedTime = SDL_GetTicks() - time;
+
+	fps = 1000.0 / passedTime;
+
+	time = SDL_GetTicks();
 
 	/* Update screen */
 	glFlush();
@@ -55,7 +63,7 @@ MainWindow::MainWindow(int width, int height) {
 
 	screen = SDL_SetVideoMode(width, height, 32, SDL_OPENGL);
 
-	SDL_WM_SetCaption("Simple physics engine", NULL);
+	SDL_WM_SetCaption("Pangea Engine", NULL);
 
 	// Enable blending
 	glEnable(GL_BLEND | GL_ALPHA_TEST);
@@ -63,6 +71,8 @@ MainWindow::MainWindow(int width, int height) {
 
 	//Enable textures
 	glEnable(GL_TEXTURE_2D);
+
+	time = SDL_GetTicks();
 }
 
 void MainWindow::End() {
@@ -70,7 +80,23 @@ void MainWindow::End() {
 	SDL_Quit();
 }
 
-void MainWindow::onKeyPress(int key) {
+int MainWindow::getWidth() {
+	return width;
+}
+
+int MainWindow::getHeight() {
+	return height;
+}
+
+real MainWindow::getFPS() {
+	return fps;
+}
+
+void MainWindow::onKeyUp(int key) {
+
+}
+
+void MainWindow::onKeyDown(int key) {
 	if (key == 'q' || key == 27) {
 		this->End();
 		running = false;

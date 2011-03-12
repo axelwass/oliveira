@@ -89,7 +89,10 @@ class Color {
 		}
 
 		SDL_Color getSDL_Color() {
-			SDL_Color tmp = { (Uint8) r, (Uint8) g, (Uint8) b };
+			SDL_Color tmp;
+			tmp.r = (Uint8) r;
+			tmp.g = (Uint8) g;
+			tmp.b = (Uint8) b;
 			return tmp;
 		}
 

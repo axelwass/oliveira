@@ -8,27 +8,49 @@
 #define MAINWINDOW_H_
 
 #include "../../Events/Events.h"
+#include "../../Generic/Generic.h"
 
 #include <SDL/SDL.h>
 
 class MainWindow: public KeyListener {
 
-private:
+	private:
 
-	SDL_Surface * screen;
-	int width, height;
+		SDL_Surface * screen;
+		int width, height;
+		bool running;
 
-	bool running;
+		real fps;
+		real time;
 
-public:
+		static MainWindow * instance;
 
-	SDL_Event event;
-	int Refresh(int delay);
-	MainWindow(int width, int height);
-	virtual ~MainWindow();
-	void End();
+		MainWindow(int width, int height);
 
-	void onKeyPress(int key);
+	public:
+
+		static MainWindow * getInstance() {
+			return instance;
+		}
+
+		static MainWindow * getInstance(int width, int height) {
+			if (instance == NULL)
+				instance = new MainWindow(width, height);
+			return instance;
+		}
+
+		SDL_Event event;
+		int Refresh(int delay);
+
+		virtual ~MainWindow();
+		void End();
+
+		void onKeyDown(int key);
+		void onKeyUp(int key);
+
+		int getWidth();
+		int getHeight();
+		real getFPS();
 };
 
 #endif /* MAINWINDOW_H_ */

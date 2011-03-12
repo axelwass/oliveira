@@ -83,50 +83,50 @@ void testText() {
 	x = 0;
 	y = 0;
 	z = 0;
+	/*
+	 Texture * texture = new TextTexture("Yayy! probando", 60, Color(255, 255,
+	 255));
+	 texture->LoadTexture();
 
-	Texture * texture = new TextTexture("Yayy! probando", 60, Color(255, 255,
-			255));
-	texture->LoadTexture();
+	 w = texture->getWidth();
+	 h = texture->getHeight();
 
-	w = texture->getWidth();
-	h = texture->getHeight();
+	 while (gEngine.update()) {
 
-	while (gEngine.update()) {
+	 events.update();
 
-		events.update();
+	 gEngine.render();
 
-		gEngine.render();
+	 glDisable(GL_DEPTH_TEST);
+	 glDepthMask(GL_FALSE);
+	 // 2D OpenGL UI
 
-		glDisable(GL_DEPTH_TEST);
-		glDepthMask(GL_FALSE);
-		// 2D OpenGL UI
+	 texture->BindTexture();
 
-		texture->BindTexture();
+	 // Draw rectangle
+	 glBegin(GL_QUADS);
 
-		// Draw rectangle
-		glBegin(GL_QUADS);
+	 glTexCoord2i(0, 0);
+	 glVertex3f(x, y, -z);
 
-		glTexCoord2i(0, 0);
-		glVertex3f(x, y, -z);
+	 glTexCoord2i(1, 0);
+	 glVertex3f(x + w, y, -z);
 
-		glTexCoord2i(1, 0);
-		glVertex3f(x + w, y, -z);
+	 glTexCoord2i(1, 1);
+	 glVertex3f(x + w, y + h, -z);
 
-		glTexCoord2i(1, 1);
-		glVertex3f(x + w, y + h, -z);
+	 glTexCoord2i(0, 1);
+	 glVertex3f(x, y + h, -z);
 
-		glTexCoord2i(0, 1);
-		glVertex3f(x, y + h, -z);
+	 glEnd();
 
-		glEnd();
+	 texture->UnbindTexture();
 
-		texture->UnbindTexture();
+	 glEnable(GL_DEPTH_TEST);
+	 glDepthMask(GL_TRUE);
+	 // 3D OpenGL stuff
 
-		glEnable(GL_DEPTH_TEST);
-		glDepthMask(GL_TRUE);
-		// 3D OpenGL stuff
-
-	}
+	 }*/
 }
 
 int main(int argc, char *argv[]) {

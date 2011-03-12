@@ -6,12 +6,14 @@
  */
 
 #include "Color.h"
-#include "Texture.h"
-#include "ImageTexture.h"
-#include "TextTexture.h"
 #include "MainWindow.h"
-#include "Camera/PerspectiveCamera.h"
-#include "Camera/Camera.h"
+
+#include "Camera/WalkthroughCamera.h"
+
+#include "UserInterface/UIOverlay.h"
+
+#include "UserInterface/UITextLabel.h"
+
 #include "../../Events/Events.h"
 
 #ifndef ENGINEMAIN_H_
@@ -19,19 +21,22 @@
 
 class GraphicsEngine {
 
-private:
+	private:
 
-	MainWindow * mainWindow;
-	Camera *  mainCamera;
+		MainWindow * mainWindow;
+		Camera * mainCamera;
 
-	MouseManager * observer;
+		list<RenderLayer *> layers;
 
-public:
-	GraphicsEngine();
+		// FEISIMO ESTO jajaja
+		UITextLabel * fpsCounter;
 
-	void render();
+	public:
+		GraphicsEngine();
 
-	bool update();
+		void render();
+
+		bool update();
 };
 
 #endif /* ENGINEMAIN_H_ */
