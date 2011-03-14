@@ -6,6 +6,7 @@
  */
 
 #include "../Camera/Camera.h"
+#include "Renderable.h"
 
 #ifndef RENDERLAYER_H_
 #define RENDERLAYER_H_
@@ -16,13 +17,17 @@ class RenderLayer {
 		Camera * camera;
 
 		// RenderGlobals * settings;
-		// list<Renderable *> objects;
+		list<Renderable *> objects;
 
 	public:
 		RenderLayer() {
 		}
 
 		virtual void render() = 0;
+
+		void addRenderable(Renderable * r){
+			this->objects.push_back(r);
+		}
 };
 
 #endif /* RENDERLAYER_H_ */

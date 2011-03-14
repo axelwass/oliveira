@@ -30,6 +30,7 @@ class Texture {
 				glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 				glGenTextures(1, &texture);
 				glBindTexture(GL_TEXTURE_2D, texture);
+
 				SDL_PixelFormat *format = surface->format;
 
 				this->width = surface->w;
@@ -47,8 +48,9 @@ class Texture {
 				loaded = true;
 				SDL_FreeSurface(surface);
 				surface = NULL;
+				glBindTexture(GL_TEXTURE_2D, NULL);
 			}
-			glBindTexture(GL_TEXTURE_2D, NULL);
+
 		}
 
 	public:

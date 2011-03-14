@@ -1,23 +1,25 @@
-/*
- * EngineMain.h
- *
- *  Created on: Jul 23, 2010
- *      Author: Mariano
- */
-
 #include "Color.h"
 #include "MainWindow.h"
 
 #include "Camera/WalkthroughCamera.h"
 
-#include "UserInterface/UIOverlay.h"
+#include "Mesh/Mesh.h"
+#include "Mesh/MeshRenderer.h"
+#include "Mesh/GLMeshRenderer.h"
+#include "Mesh/MeshLoader.h"
 
+#include "Texture/ImageTexture.h"
+
+#include "Render/RenderLayer3D.h"
+
+#include "UserInterface/UIOverlay.h"
 #include "UserInterface/UITextLabel.h"
+#include "UserInterface/UITexture.h"
 
 #include "../../Events/Events.h"
 
-#ifndef ENGINEMAIN_H_
-#define ENGINEMAIN_H_
+#ifndef GRAPHICSENGINE_H_
+#define GRAPHICSENGINE_H_
 
 class GraphicsEngine {
 
@@ -39,4 +41,4 @@ class GraphicsEngine {
 		bool update();
 };
 
-#endif /* ENGINEMAIN_H_ */
+#endif /* GRAPHICSENGINE_H_ */

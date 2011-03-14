@@ -18,5 +18,4 @@ RenderLayer2D::RenderLayer2D() {
 
 void RenderLayer2D::render() {
 	this->camera->render();
-
 }
