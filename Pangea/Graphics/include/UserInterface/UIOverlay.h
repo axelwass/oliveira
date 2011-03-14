@@ -21,7 +21,6 @@ class UIOverlay: public RenderLayer2D {
 
 	public:
 		UIOverlay() {
-
 		}
 
 		void addUIComponent(UIComponent * c) {
@@ -29,6 +28,7 @@ class UIOverlay: public RenderLayer2D {
 		}
 
 		void render() {
+
 			super::render(); // Render camera
 			list<UIComponent *>::iterator c;
 

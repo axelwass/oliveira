@@ -1,10 +1,3 @@
-/*
- * EngineMain.cpp
- *
- *  Created on: Jul 23, 2010
- *      Author: Mariano
- */
-
 #include "../include/GraphicsEngine.h"
 #include <SDL/SDL.h>
 
@@ -15,32 +8,45 @@ GraphicsEngine::GraphicsEngine() {
 
 	mainWindow = MainWindow::getInstance(1200, 600);
 
+	fpsCounter = NULL;
+
 	UIOverlay * ui = new UIOverlay();
+
+	// jajaja esto parece swing
+	UITexture * logo = new UITexture(new ImageTexture("pangea_small.png"));
+	logo->setPosition(Vector3(MainWindow::getInstance()->getWidth() - 80, 5, 0));
+	ui->addUIComponent(logo);
+
 	ui->addUIComponent(new UITextLabel("Pangea Engine v0.01", 12, Color(150,
-			150, 150), Vector3(2, 0, 0)));
+			150, 150), Vector3(2, 2, 0)));
 
 	fpsCounter = new UITextLabel("Frames per second: ", 12,
 			Color(150, 150, 150), Vector3(2, 15, 0));
-
 	ui->addUIComponent(fpsCounter);
 
-	layers.push_back(ui);
+	RenderLayer3D * objs = new RenderLayer3D();
 
-	mainCamera = new WalkthroughCamera(Vector3(-500, 0, 0), 5000, 1, 35);
+	Mesh * m = MeshLoader::load("bunny.obj");
+	m->setScale(Vector3(1000, 1000, 1000));
+	m->setRenderer(new GLMeshRenderer(m));
+	//objs->addRenderable(m->getRenderer());
+
+	layers.push_back(objs);
+	layers.push_back(ui);
 }
 
 void GraphicsEngine::render() {
 
-	stringstream str;
-	str << "Frames per second: " << MainWindow::getInstance()->getFPS();
-
-	fpsCounter->setString(str.str());
+	//test eh!
+	if (fpsCounter != NULL) {
+		stringstream str;
+		str << "Frames per second: " << MainWindow::getInstance()->getFPS();
+		fpsCounter->setString(str.str());
+	}
 
 	list<RenderLayer *>::iterator l;
 	for (l = layers.begin(); l != layers.end(); l++)
 		(*l)->render();
-
-	mainCamera->render();
 }
 
 bool GraphicsEngine::update() {

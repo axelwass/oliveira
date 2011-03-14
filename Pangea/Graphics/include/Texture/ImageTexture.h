@@ -22,8 +22,9 @@ class ImageTexture: public Texture {
 		}
 
 		void LoadTexture() {
-			SDL_Surface* surface = IMG_Load(this->name.c_str());
+			this->surface = IMG_Load(this->name.c_str());
 			LoadGLTexture();
+			printf("Loaded image texture.\n");
 		}
 };
 
