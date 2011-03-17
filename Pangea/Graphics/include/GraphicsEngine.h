@@ -11,6 +11,7 @@
 #include "Texture/ImageTexture.h"
 
 #include "Render/RenderLayer3D.h"
+#include "Render/RenderLayer2D.h"
 
 #include "UserInterface/UIOverlay.h"
 #include "UserInterface/UITextLabel.h"

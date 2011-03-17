@@ -42,7 +42,7 @@ void testParticleCollision() {
 		gEngine.render();
 
 		//world.runPhysics();
-		world.render();
+		//world.render();
 
 		nextTime = SDL_GetTicks() - time;
 		time = time + nextTime;

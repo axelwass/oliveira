@@ -20,9 +20,14 @@ RenderLayer3D::RenderLayer3D() {
 
 void RenderLayer3D::render() {
 
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_DEPTH_TEST);
+
 	this->camera->render();
 
 	list<Renderable *>::iterator o;
 	for (o = objects.begin(); o != objects.end(); o++)
 		(*o)->render();
+
 }

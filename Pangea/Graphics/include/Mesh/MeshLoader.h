@@ -98,8 +98,7 @@ class MeshLoader {
 				}
 
 				// Get rid of comment lines
-				if ((line[0] == '#'))
-					;
+				if ((line[0] == '#') || line[0] == ' ');
 
 			}
 
@@ -109,7 +108,7 @@ class MeshLoader {
 			//outMesh.translate(outMesh.getPivot() * -1);
 			//outMesh.softenNormals();
 
-			printf("Vertex count: %d\n", tmpVertices.size());
+			printf("Vertex count: %d, Face count: %d\n", tmpVertices.size(), outMesh->getFaces()->size());
 			return outMesh;
 		}
 

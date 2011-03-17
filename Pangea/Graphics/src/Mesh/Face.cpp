@@ -28,10 +28,14 @@ void Face::updateNormal() {
 	Vector3 p2 = v2 - v1;
 
 	normal = p1.vectorProduct(p2);
-	normal *= -1;
 	normal.normalize();
+/*
 
-	printf("%f,%f,%f, MAG: %f\n", normal.getX(), normal.getZ(), normal.getY(), normal.magnitude());
+	list<Vertex *>::iterator v;
+	for(v=vertices.begin();v!=vertices.end();v++){
+		(*v)->updateNormal(normal);
+	}*/
+
 }
 
 void Face::addVertex(Vertex * v) {

@@ -86,8 +86,8 @@ class WalkthroughCamera: public PerspectiveCamera,
 			if (!active)
 				return;
 			real yaw, pitch;
-			yaw = x / 1000.0;
-			pitch = y / 1000.0;
+			yaw = x / 500.0;
+			pitch = y / 500.0;
 			rotate(Vector3(0, yaw, pitch));
 		}
 

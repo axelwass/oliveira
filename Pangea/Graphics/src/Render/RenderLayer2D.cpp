@@ -9,6 +9,8 @@
 #include "../../include/Camera/OrthographicCamera.h"
 #include "../../include/MainWindow.h"
 
+#include <GL/gl.h>
+
 RenderLayer2D::RenderLayer2D() {
 	int w, h;
 	w = MainWindow::getInstance()->getWidth();
@@ -17,5 +19,10 @@ RenderLayer2D::RenderLayer2D() {
 }
 
 void RenderLayer2D::render() {
+
+	glDisable(GL_LIGHTING);
+	glDisable(GL_DEPTH_TEST);
+
 	this->camera->render();
+
 }

@@ -34,9 +34,6 @@ int MainWindow::Refresh(int delay) {
 	glClearColor(35 / 255.0f, 35 / 255.0f, 35 / 255.0f, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
 	// Set 2D view
 	glViewport(0, 0, width, height);
 
@@ -71,6 +68,9 @@ MainWindow::MainWindow(int width, int height) {
 
 	//Enable textures
 	glEnable(GL_TEXTURE_2D);
+
+
+	glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 
 	time = SDL_GetTicks();
 }
