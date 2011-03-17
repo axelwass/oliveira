@@ -26,13 +26,15 @@ GraphicsEngine::GraphicsEngine() {
 
 	RenderLayer3D * objs = new RenderLayer3D();
 
-	Mesh * m = MeshLoader::load("bunny.obj");
-	m->setScale(Vector3(1000, 1000, 1000));
+	Mesh * m = MeshLoader::load("dchair_obj.obj");
+	m->setScale(Vector3(1, 1, 1));
 	m->setRenderer(new GLMeshRenderer(m));
-	//objs->addRenderable(m->getRenderer());
+	objs->addRenderable(m->getRenderer());
 
-	layers.push_back(objs);
 	layers.push_back(ui);
+	layers.push_back(objs);
+
+	mainCamera = new WalkthroughCamera(Vector3(-500, 0, 0), 5000, 1, 35);
 }
 
 void GraphicsEngine::render() {

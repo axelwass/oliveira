@@ -17,30 +17,27 @@ void GLMeshRenderer::render() {
 	Vector3 s = mesh->getScale();
 
 	//      Sets color to red
-	glColor3f(1.0f, 1.0f, 1.0f);
 	glTranslatef(p.getX(), p.getY(), p.getZ());
-
-	glScalef(s.getX(), s.getY(), s.getZ());
 
 	list<Face *>::iterator faceItr = mesh->getFaces()->begin();
 	for (; faceItr != mesh->getFaces()->end(); faceItr++) {
 
 		list<Vertex *> faceVertices = (*faceItr)->getVertices();
 		list<Vertex *>::iterator vertexItr = faceVertices.begin();
+
+		Vector3 normal;
+		Vector3 vPos;
+
 		glBegin(GL_POLYGON);
+		for (vertexItr = faceVertices.begin(); vertexItr != faceVertices.end(); vertexItr++) {
+			normal = (*faceItr)->getNormal();
+			vPos = (*vertexItr)->getPosition().componentProduct(s);
 
-		for (; vertexItr != faceVertices.end(); vertexItr++) {
-			Vector3 normal = (*faceItr)->getNormal();
-
-			glNormal3f(normal.getX(), normal.getZ(), normal.getY());
-
-			glVertex3f((*vertexItr)->getPosition().getX(),
-					(*vertexItr)->getPosition().getZ(),
-					(*vertexItr)->getPosition().getY());
-
+			// Prevent normals from scaling
+			glNormal3f(normal.getX(), normal.getY(), normal.getZ());
+			glVertex3f(vPos.getX(), vPos.getY(), vPos.getZ());
 		}
 		glEnd();
-
 	}
 
 	glTranslatef(-p.getX(), -p.getY(), -p.getZ());
