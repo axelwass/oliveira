@@ -29,7 +29,7 @@ class WalkthroughCamera: public PerspectiveCamera,
 
 		WalkthroughCamera(Vector3 pos, real farClip, real nearClip, real angle) :
 			PerspectiveCamera(pos, farClip, nearClip, angle) {
-			velocityMagnitude = 10;
+			velocityMagnitude = 5;
 			active = false;
 		}
 

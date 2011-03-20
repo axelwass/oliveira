@@ -31,9 +31,7 @@ class MeshLoader {
 
 			Mesh * outMesh = new Mesh();
 
-			vector<Vertex *> tmpVertices;
-
-			// LOAD OBJECT
+			// Load file
 			ifstream file(filename.c_str());
 
 			while (!file.eof()) {
@@ -43,72 +41,145 @@ class MeshLoader {
 				getline(file, line);
 
 				// Get vertices values
-				if (line[0] == 'v' && line[1] == ' ') {
+				if (line[0] == 'v') {
 
-					int flag = 1;
-					if (line[2] == ' ')
-						flag = 2;
+					if (line[1] == ' ') {
+						int flag = 1;
+						if (line[2] == ' ')
+							flag = 2;
 
-					double xyz[3];
-					stringstream values(line.substr(flag, line.size()));
+						double xyz[3];
+						stringstream values(line.substr(flag, line.size()));
 
-					values >> xyz[0];
-					values >> xyz[1];
-					values >> xyz[2];
+						values >> xyz[0];
+						values >> xyz[1];
+						values >> xyz[2];
 
-					// Add vertex to mesh
-					tmpVertices.push_back(new Vertex((Vector3(xyz[0], xyz[1],
-							xyz[2]))));
+						// Add vertex to mesh
+						outMesh->addVertex(new Vertex((Vector3(xyz[0], xyz[1],
+								xyz[2]))));
+					}
 
+					if (line[1] == 'n') {
+						double xyz[3];
+						stringstream values(line.substr(2, line.size()));
+
+						values >> xyz[0];
+						values >> xyz[1];
+						values >> xyz[2];
+
+						//		printf("%g,%g,%g\n", xyz[0], xyz[1], xyz[2]);
+
+						outMesh->addVertexNormal(
+								Vector3(xyz[0], xyz[1], xyz[2]));
+					}
+
+					if (line[1] == 't') {
+						double xyz[3];
+						stringstream values(line.substr(2, line.size()));
+
+						values >> xyz[0];
+						values >> xyz[1];
+						values >> xyz[2];
+
+						outMesh->addTextureCoordinate(Vector3(xyz[0], xyz[1],
+								xyz[2]));
+					}
 				}
 
 				// Get faces values
 				if (line[0] == 'f') {
 
-					vector<int> indices;
+					vector<VertexWrapper> indices;
 					stringstream values(line.substr(1, line.size()));
-
-					int tmp;
 
 					//Get index of each vertex
 					while (!(values.eof())) {
-						stringstream index;
+						stringstream indexStreams[3];
+
 						values.get();
 
-						while (values.peek() != '/' && values.peek() != ' '
-								&& !values.eof())
-							index.put(values.get());
+						int index = 0;
+						while (values.peek() != ' ' && !values.eof()) {
+
+							if (values.peek() == '/') {
+								values.get();
+								index++;
+							}
+
+							indexStreams[index].put(values.get());
+						}
 
 						while (values.peek() != ' ' && !values.eof())
 							values.get();
 
-						index >> tmp;
-						indices.push_back(tmp);
+						int tmpIndices[3];
+						indexStreams[0] >> tmpIndices[0];
+						indexStreams[1] >> tmpIndices[1];
+						indexStreams[2] >> tmpIndices[2];
+
+						indices.push_back(VertexWrapper(tmpIndices[0],
+								tmpIndices[1], tmpIndices[2]));
 					}
 
 					Face * face = new Face();
 
 					// Get all the loop vertices on a container
 					// Note that OBJ index starts at 1, while C++ starts at 0
-					for (unsigned i = 0; i < indices.size(); i++)
-						face->addVertex(tmpVertices[indices[i] - 1]);
+					for (unsigned i = 0; i < indices.size(); i++) {
+						face->addVertex(indices[i].getVertex() - 1,
+								indices[i].getNormal() - 1,
+								indices[i].getTexture() - 1);
 
-					face->updateNormal();
+						Vector3 normal = outMesh->getNormals()[indices[i].getNormal() - 1];
+						printf("%g,%g,%g\n", normal.getX(), normal.getY(),
+														normal.getZ());
+					}
+
+					printf("CORTE\n");
+
+					vector<VertexWrapper>& faceVertices = face->getVertices();
+					vector<VertexWrapper>::iterator n;
+					for (n = faceVertices.begin(); n != faceVertices.end(); n++) {
+						int index = (*n).getNormal();
+						Vector3 normal = outMesh->getNormals()[index];
+						printf("%g,%g,%g\n", normal.getX(), normal.getY(),
+								normal.getZ());
+					}
+
+					printf("\n\n");
+
+					// CARGA MAL LAS COSAS EN LAS FACES!!!
+
+					//	face->updateNormal();
 					outMesh->addFace(face);
 				}
-
-				// Get rid of comment lines
-				if ((line[0] == '#') || line[0] == ' ');
 
 			}
 
 			file.close();
 
-			//outMesh.centerPivot();
-			//outMesh.translate(outMesh.getPivot() * -1);
-			//outMesh.softenNormals();
+			// Center mesh on origin
+			outMesh->centerPivot();
+			outMesh->getTransform()->setPosition(outMesh->getPivot() * (-1));
+			outMesh->applyTransform();
+			outMesh->centerPivot();
 
-			printf("Vertex count: %d, Face count: %d\n", tmpVertices.size(), outMesh->getFaces()->size());
+			/*
+
+			 printf("Cargue\n");
+
+			 vector<Vector3>& normals = outMesh->getNormals();
+			 vector<Vector3>::iterator n;
+			 for(n=normals.begin();n!=normals.end();n++){
+			 printf("%g,%g,%g\n", (*n).getX(),(*n).getY(),(*n).getZ());
+			 }*/
+
+			printf(
+					"Vertex count: %d, Face count: %d, Normal count: %d, TX count: %d\n",
+					outMesh->getVertices()->size(),
+					outMesh->getFaces()->size(), outMesh->getNormals().size(),
+					outMesh->getTextureCoordinates().size());
 			return outMesh;
 		}
 

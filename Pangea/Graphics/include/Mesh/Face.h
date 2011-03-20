@@ -8,29 +8,57 @@
 #include <list>
 #include "../../../Generic/Generic.h"
 #include "Vertex.h"
+#include <vector>
 
 using namespace std;
 
 #ifndef FACE_H_
 #define FACE_H_
 
+class VertexWrapper {
+	private:
+		int vertexIndex;
+		int normalIndex;
+		int txIndex;
+	public:
+		VertexWrapper(int v, int n, int t) :
+			vertexIndex(v), normalIndex(n), txIndex(t) {
+		}
+
+		int getVertex() {
+			return vertexIndex;
+		}
+
+		int getNormal() {
+			return normalIndex;
+		}
+
+		int getTexture() {
+			return txIndex;
+		}
+};
+
 class Face {
 
-private:
+	private:
 
-	list<Vertex *> vertices;
-	Vector3 normal;
+		vector<VertexWrapper> vertices;
 
-public:
-	void addVertex(Vertex * v);
+		Vector3 normal;
 
-	void setNormal(const Vector3& normal);
+	public:
 
-	Vector3 getNormal();
+		void addVertex(int vertex, int normal, int txCoordiante) {
+			vertices.push_back(VertexWrapper(vertex, normal, txCoordiante));
+		}
 
-	void updateNormal();
+		Vector3 getNormal();
 
-	list<Vertex *> getVertices();
+		void updateNormal();
+
+		vector<VertexWrapper>& getVertices() {
+			return vertices;
+		}
 
 };
 

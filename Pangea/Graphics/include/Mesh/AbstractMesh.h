@@ -8,7 +8,9 @@
 
 #include "Vertex.h"
 #include "Face.h"
+#include "Transform.h"
 #include "MeshRenderer.h"
+#include <vector>
 
 using namespace std;
 
@@ -22,11 +24,11 @@ using namespace std;
  * It has a null renderer at construction.
  */
 class AbstractMesh {
-	private:
-		Vector3 position;
-		Vector3 rotation;
-		Vector3 scale;
 
+	private:
+
+		Transform transform;
+		Vector3 pivot;
 		MeshRenderer * renderer;
 
 	public:
@@ -34,25 +36,23 @@ class AbstractMesh {
 		AbstractMesh();
 
 		void setRenderer(MeshRenderer * mr);
+		void setPivot(const Vector3& p);
+
+		Vector3 getPivot() const;
 		MeshRenderer * getRenderer();
+		Transform * getTransform();
+
 		void render();
-
-		void rotate(const Vector3& r);
-		void translate(const Vector3& t);
-
-		void setPosition(const Vector3& position);
-		void setRotation(const Vector3& rotation);
-		void setScale(const Vector3& scale);
-
-		Vector3 getPosition();
-		Vector3 getRotation();
-		Vector3 getScale();
+		void applyTransform();
 
 		virtual void addVertex(Vertex * vertex) = 0;
 		virtual void addFace(Face * face) = 0;
 
-		virtual list<Vertex *> * getVertices() = 0;
-		virtual list<Face *> * getFaces() = 0;
+
+		virtual vector<Vector3>& getTextureCoordinates() = 0;
+		virtual vector<Vector3>& getNormals() = 0;
+		virtual vector<Vertex *> * getVertices() = 0;
+		virtual vector<Face *> * getFaces() = 0;
 };
 
 #endif /* ABSTRACTMESH_H_ */

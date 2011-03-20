@@ -21,14 +21,8 @@ int MainWindow::Refresh(int delay) {
 	time = SDL_GetTicks();
 
 	/* Update screen */
-	glFlush();
 	glFinish();
 	SDL_GL_SwapBuffers();
-
-	// AA
-	//	glEnable(GL_LINE_SMOOTH);
-	//  glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
-
 
 	// Set background color
 	glClearColor(35 / 255.0f, 35 / 255.0f, 35 / 255.0f, 1);
@@ -62,6 +56,11 @@ MainWindow::MainWindow(int width, int height) {
 
 	SDL_WM_SetCaption("Pangea Engine", NULL);
 
+	// AA
+	//	glEnable(GL_LINE_SMOOTH);
+	//  glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
+
+
 	// Enable blending
 	glEnable(GL_BLEND | GL_ALPHA_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -69,7 +68,7 @@ MainWindow::MainWindow(int width, int height) {
 	//Enable textures
 	glEnable(GL_TEXTURE_2D);
 
-
+	// Enable two sided lighing
 	glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 
 	time = SDL_GetTicks();

@@ -10,30 +10,63 @@
 #include <GL/gl.h>
 #include <stdio.h>
 
+void GLMeshRenderer::renderTransform(const Vector3& p, real size) {
+
+	glBegin(GL_LINES);
+	glVertex3f(0, 0, 0);
+	glVertex3f(size, 0, 0);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glVertex3f(0, 0, 0);
+	glVertex3f(0, size, 0);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glVertex3f(0, 0, 0);
+	glVertex3f(0, 0, size);
+	glEnd();
+}
+
 void GLMeshRenderer::render() {
 
-	Vector3 p = mesh->getPosition();
-	Vector3 r = mesh->getRotation();
-	Vector3 s = mesh->getScale();
+	Transform * t = mesh->getTransform();
+
+	vector<Vertex *> vertices = *mesh->getVertices();
+	vector<Vector3>& normals = mesh->getNormals();
+	vector<Vector3>& txCoords = mesh->getTextureCoordinates();
+
+	Vector3 s = t->getScale();
+	Vector3 p = t->getPosition().componentProduct(s);
+
+	renderTransform(p, 5);
 
 	//      Sets color to red
 	glTranslatef(p.getX(), p.getY(), p.getZ());
 
-	list<Face *>::iterator faceItr = mesh->getFaces()->begin();
+	vector<Face *>::iterator faceItr = mesh->getFaces()->begin();
 	for (; faceItr != mesh->getFaces()->end(); faceItr++) {
 
-		list<Vertex *> faceVertices = (*faceItr)->getVertices();
-		list<Vertex *>::iterator vertexItr = faceVertices.begin();
+		vector<VertexWrapper>& faceVertices = (*faceItr)->getVertices();
+		vector<VertexWrapper>::iterator vertexItr = faceVertices.begin();
 
 		Vector3 normal;
 		Vector3 vPos;
 
 		glBegin(GL_POLYGON);
 		for (vertexItr = faceVertices.begin(); vertexItr != faceVertices.end(); vertexItr++) {
-			normal = (*faceItr)->getNormal();
-			vPos = (*vertexItr)->getPosition().componentProduct(s);
+			int nIndex = (*vertexItr).getNormal();
+			int pIndex = (*vertexItr).getVertex();
+			int tIndex = (*vertexItr).getTexture();
 
-			// Prevent normals from scaling
+			Vector3 normal = normals[nIndex];
+			Vector3 tx = txCoords[tIndex];
+			Vector3 pos = vertices[pIndex]->getPosition();
+			vPos = pos.componentProduct(s);
+
+		//	printf("%g,%g,%g\n", normal.getX(),normal.getY(),normal.getZ());
+
+			// Prevent normals from scaling!
 			glNormal3f(normal.getX(), normal.getY(), normal.getZ());
 			glVertex3f(vPos.getX(), vPos.getY(), vPos.getZ());
 		}

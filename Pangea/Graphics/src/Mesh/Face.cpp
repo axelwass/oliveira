@@ -7,16 +7,12 @@
 #include <stdio.h>
 #include "../../include/Mesh/Face.h"
 
-void Face::setNormal(const Vector3& normal) {
-	this->normal = normal;
-}
-
 Vector3 Face::getNormal() {
 	return normal;
 }
 
 void Face::updateNormal() {
-
+/*
 	if (vertices.size() < 3)
 		return;
 
@@ -29,20 +25,6 @@ void Face::updateNormal() {
 
 	normal = p1.vectorProduct(p2);
 	normal.normalize();
-/*
-
-	list<Vertex *>::iterator v;
-	for(v=vertices.begin();v!=vertices.end();v++){
-		(*v)->updateNormal(normal);
-	}*/
+	*/
 
 }
-
-void Face::addVertex(Vertex * v) {
-	this->vertices.push_back(v);
-}
-
-list<Vertex *> Face::getVertices() {
-	return list<Vertex *> (vertices);
-}
-
