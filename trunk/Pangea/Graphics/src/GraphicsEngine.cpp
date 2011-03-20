@@ -26,8 +26,8 @@ GraphicsEngine::GraphicsEngine() {
 
 	RenderLayer3D * objs = new RenderLayer3D();
 
-	Mesh * m = MeshLoader::load("dchair_obj.obj");
-	m->setScale(Vector3(1, 1, 1));
+	Mesh * m = MeshLoader::load("cubo.obj");
+	m->getTransform()->setScale(Vector3(15, 15, 15));
 	m->setRenderer(new GLMeshRenderer(m));
 	objs->addRenderable(m->getRenderer());
 

@@ -13,10 +13,16 @@
 #define OPENGLMESHRENDERER_H_
 
 class GLMeshRenderer: public MeshRenderer {
-public:
-	GLMeshRenderer(AbstractMesh * mesh) : MeshRenderer(mesh){};
+	private:
+		void renderTransform(const Vector3& p, real size);
 
-	void render();
+	public:
+
+		GLMeshRenderer(AbstractMesh * mesh) :
+			MeshRenderer(mesh) {
+		}
+
+		void render();
 };
 
 #endif /* OPENGLMESHRENDERER_H_ */

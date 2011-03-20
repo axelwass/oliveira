@@ -12,33 +12,37 @@
 
 class Vertex {
 
-private:
-	Vector3 position;
-	Vector3 normal;
-	Vector3 color;
+	private:
+		Vector3 position;
+		Vector3 normal;
+		Vector3 color;
 
-public:
+	public:
 
-	Vertex(const Vector3& position = Vector3(), const Vector3& normal =
-			Vector3(), const Vector3& color = Vector3()) :
-		position(position), normal(normal), color(color) {
-	}
+		Vertex(const Vector3& position = Vector3(), const Vector3& normal =
+				Vector3(), const Vector3& color = Vector3()) :
+			position(position), normal(normal), color(color) {
+		}
 
-	Vector3 getPosition() {
-		return position;
-	}
+		void setPosition(const Vector3& p) {
+			this->position = p;
+		}
 
-	Vector3 getNormal() {
-		return normal;
-	}
+		Vector3 getPosition() {
+			return position;
+		}
 
-	void resetNormal(){
-		this->normal = Vector3();
-	}
+		Vector3 getNormal() {
+			return normal;
+		}
 
-	void updateNormal(const Vector3& n) {
-		this->normal += n;
-	}
+		void resetNormal() {
+			this->normal = Vector3();
+		}
+
+		void setNormal(const Vector3& n) {
+			this->normal = n;
+		}
 
 };
 

@@ -16,8 +16,7 @@ void AbstractMesh::setRenderer(MeshRenderer * mr) {
 	this->renderer = mr;
 }
 
-
-MeshRenderer * AbstractMesh::getRenderer(){
+MeshRenderer * AbstractMesh::getRenderer() {
 	return this->renderer;
 }
 
@@ -25,34 +24,26 @@ void AbstractMesh::render() {
 	this->renderer->render();
 }
 
-void AbstractMesh::setPosition(const Vector3& position) {
-	this->position = position;
+Transform * AbstractMesh::getTransform() {
+	return &transform;
 }
 
-void AbstractMesh::setRotation(const Vector3& rotation) {
-	this->rotation = rotation;
+void AbstractMesh::setPivot(const Vector3& p) {
+	this->pivot = p;
 }
 
-void AbstractMesh::setScale(const Vector3& scale) {
-	this->scale = scale;
+Vector3 AbstractMesh::getPivot() const {
+	return pivot;
 }
 
-Vector3 AbstractMesh::getPosition() {
-	return position;
-}
+void AbstractMesh::applyTransform() {
 
-Vector3 AbstractMesh::getRotation() {
-	return rotation;
-}
+	vector<Vertex *> * vList = getVertices();
+	vector<Vertex *>::iterator v;
+	for (v = vList->begin(); v != vList->end(); v++) {
+		Vector3 p = (*v)->getPosition() + transform.getPosition();
+		(*v)->setPosition(p);
+	}
 
-Vector3 AbstractMesh::getScale() {
-	return scale;
-}
-
-void AbstractMesh::rotate(const Vector3& r) {
-	this->rotation += r;
-}
-
-void AbstractMesh::translate(const Vector3& t) {
-	this->position += t;
+	transform.setPosition(Vector3());
 }

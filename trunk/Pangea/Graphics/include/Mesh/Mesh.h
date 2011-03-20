@@ -7,6 +7,7 @@
 
 #include "AbstractMesh.h"
 #include "Face.h"
+#include <vector>
 using namespace std;
 
 #ifndef MESH_H_
@@ -14,8 +15,11 @@ using namespace std;
 
 class Mesh: public AbstractMesh {
 	private:
-		list<Vertex *> vertices;
-		list<Face *> faces;
+
+		vector<Vertex *> vertices;
+		vector<Vector3> normals;
+		vector<Vector3> txCoords;
+		vector<Face *> faces;
 
 		typedef AbstractMesh super;
 
@@ -24,11 +28,22 @@ class Mesh: public AbstractMesh {
 		Mesh() {
 		}
 
+		void centerPivot();
+
 		void addVertex(Vertex * vertex);
+		void addVertexNormal(Vector3 n);
+		void addTextureCoordinate(Vector3 t);
+
+
+
 		void addFace(Face * face);
 
-		list<Vertex *> * getVertices();
-		list<Face *> * getFaces();
+
+
+		vector<Vector3>& getTextureCoordinates();
+		vector<Vector3>& getNormals();
+		vector<Vertex *> * getVertices();
+		vector<Face *> * getFaces();
 
 };
 
