@@ -29,6 +29,7 @@ GraphicsEngine::GraphicsEngine() {
 	Mesh * m = MeshLoader::load("mesa.obj");
 	m->getTransform()->setScale(Vector3(15, 15, 15));
 	m->setRenderer(new GLMeshRenderer(m));
+	m->getRenderer()->setTexture(new ImageTexture("test_tx.jpg"));
 	objs->addRenderable(m->getRenderer());
 
 	layers.push_back(ui);
@@ -38,7 +39,6 @@ GraphicsEngine::GraphicsEngine() {
 }
 
 void GraphicsEngine::render() {
-
 	//test eh!
 	if (fpsCounter != NULL) {
 		stringstream str;

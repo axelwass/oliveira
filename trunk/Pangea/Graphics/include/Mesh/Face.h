@@ -46,9 +46,29 @@ class Face {
 
 		Vector3 normal;
 
+		bool hasTxCoords, hasNormals;
+
+
 	public:
 
+		Face(){
+			hasTxCoords = false;
+			hasNormals = false;
+		}
+
+		bool isTexturizable(){
+			return hasTxCoords;
+		}
+
+		bool hasVertexNormals(){
+			return hasNormals;
+		}
+
 		void addVertex(int vertex, int normal, int txCoordiante) {
+			if(normal >= 0)
+				hasNormals = true;
+			if(txCoordiante >= 0)
+				hasTxCoords = true;
 			vertices.push_back(VertexWrapper(vertex, normal, txCoordiante));
 		}
 

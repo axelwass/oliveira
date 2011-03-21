@@ -44,6 +44,9 @@ void GLMeshRenderer::render() {
 	//      Sets color to red
 	glTranslatef(p.getX(), p.getY(), p.getZ());
 
+	if (texture)
+		texture->BindTexture();
+
 	vector<Face *>::iterator faceItr = mesh->getFaces()->begin();
 	for (; faceItr != mesh->getFaces()->end(); faceItr++) {
 
@@ -59,19 +62,26 @@ void GLMeshRenderer::render() {
 			int pIndex = (*vertexItr).getVertex();
 			int tIndex = (*vertexItr).getTexture();
 
-			Vector3 normal = normals[nIndex];
-			Vector3 tx = txCoords[tIndex];
-			Vector3 pos = vertices[pIndex]->getPosition();
+			Vector3 normal, tx, pos;
+
+			if ((*faceItr)->hasVertexNormals())
+				normal = normals[nIndex];
+			if ((*faceItr)->isTexturizable())
+				tx = txCoords[tIndex];
+			pos = vertices[pIndex]->getPosition();
 			vPos = pos.componentProduct(s);
 
-		//	printf("%g,%g,%g\n", normal.getX(),normal.getY(),normal.getZ());
-
 			// Prevent normals from scaling!
+
 			glNormal3f(normal.getX(), normal.getY(), normal.getZ());
+			glTexCoord2f(tx.getX(), tx.getY());
 			glVertex3f(vPos.getX(), vPos.getY(), vPos.getZ());
 		}
 		glEnd();
 	}
+
+	if (texture)
+		texture->UnbindTexture();
 
 	glTranslatef(-p.getX(), -p.getY(), -p.getZ());
 
