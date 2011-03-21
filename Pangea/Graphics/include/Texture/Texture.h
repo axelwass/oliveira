@@ -6,6 +6,8 @@
  */
 
 #include <string>
+#include <SDL/SDL.h>
+#include <GL/gl.h>
 #include <GL/glu.h>
 
 using namespace std;
@@ -15,75 +17,86 @@ using namespace std;
 
 class Texture {
 
-	protected:
+protected:
 
-		GLuint texture; // This is a handle to our texture object
-		int width, height;
-		SDL_Surface * surface;
-		string name;
-		bool loaded;
+	GLuint texture; // This is a handle to our texture object
+	int width, height;
+	SDL_Surface * surface;
+	string name;
+	bool loaded;
 
-		// Convert SDL_Surface to Texture
-		void LoadGLTexture() {
+	// Convert SDL_Surface to Texture
+	void LoadGLTexture() {
 
-			if (surface != NULL) {
-				glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-				glGenTextures(1, &texture);
-				glBindTexture(GL_TEXTURE_2D, texture);
+		if (surface != NULL) {
+			//		glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
-				SDL_PixelFormat *format = surface->format;
+			SDL_PixelFormat *format = surface->format;
 
-				this->width = surface->w;
-				this->height = surface->h;
+			this->width = surface->w;
+			this->height = surface->h;
 
-				if (format->Amask) {
-					gluBuild2DMipmaps(GL_TEXTURE_2D, 4, this->width,
-							this->height, GL_RGBA, GL_UNSIGNED_BYTE,
-							surface->pixels);
-				} else {
-					gluBuild2DMipmaps(GL_TEXTURE_2D, 3, this->width,
-							this->height, GL_RGB, GL_UNSIGNED_BYTE,
-							surface->pixels);
-				}
-				loaded = true;
-				SDL_FreeSurface(surface);
-				surface = NULL;
-				glBindTexture(GL_TEXTURE_2D, NULL);
-			}
-
-		}
-
-	public:
-
-		virtual ~Texture() {
-			glDeleteTextures(1, &texture);
-		}
-
-		//Constructor
-		Texture(string name) {
-			this->name = name;
-			this->surface = NULL;
-			this->loaded = false;
-		}
-
-		//Accessing
-		void BindTexture() {
+			glGenTextures(1, &texture);
 			glBindTexture(GL_TEXTURE_2D, texture);
-		}
+			glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+					GL_LINEAR_MIPMAP_LINEAR);
 
-		void UnbindTexture() {
+			glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
+
+			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+			glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+
+			if (format->Amask)
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
+						GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels);
+			else
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
+						GL_RGB, GL_UNSIGNED_BYTE, surface->pixels);
+
 			glBindTexture(GL_TEXTURE_2D, NULL);
+
+			loaded = true;
+			SDL_FreeSurface(surface);
+			surface = NULL;
 		}
 
-		int getWidth() {
-			return this->width;
-		}
+	}
 
-		int getHeight() {
-			return this->height;
-		}
+public:
 
-		virtual void LoadTexture() = 0;
+	virtual ~Texture() {
+		glDeleteTextures(1, &texture);
+	}
+
+	//Constructor
+	Texture(string name) {
+		this->name = name;
+		this->surface = NULL;
+		this->loaded = false;
+	}
+
+	//Accessing
+	void BindTexture() {
+		glBindTexture(GL_TEXTURE_2D, texture);
+	}
+
+	void UnbindTexture() {
+		glBindTexture(GL_TEXTURE_2D, NULL);
+	}
+
+	int getWidth() {
+		return this->width;
+	}
+
+	int getHeight() {
+		return this->height;
+	}
+
+	virtual void LoadTexture() = 0;
 };
 
 #endif /* TEXTURE_H_ */

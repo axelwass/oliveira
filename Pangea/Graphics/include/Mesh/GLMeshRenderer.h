@@ -9,20 +9,22 @@
 #include "MeshRenderer.h"
 #include "../Render/Renderable.h"
 
+#include "../Texture/Texture.h"
+
 #ifndef OPENGLMESHRENDERER_H_
 #define OPENGLMESHRENDERER_H_
 
 class GLMeshRenderer: public MeshRenderer {
-	private:
-		void renderTransform(const Vector3& p, real size);
+private:
+	void renderTransform(const Vector3& p, real size);
 
-	public:
+public:
 
-		GLMeshRenderer(AbstractMesh * mesh) :
-			MeshRenderer(mesh) {
-		}
+	GLMeshRenderer(AbstractMesh * mesh) :
+		MeshRenderer(mesh) {
+	}
 
-		void render();
+	void render();
 };
 
 #endif /* OPENGLMESHRENDERER_H_ */

@@ -10,15 +10,14 @@ y la esfera, cambia mucho si las particulas del plano tienen 2 o 5 subdivisiones
 GRAFICO	
 ********************************************
 
+- Arreglar el meshLoader - si no hay normales o txcoords, tiene que hacer algo. Por ahora solo cambia un flag en CADA cara, lo cual
+es ineficiente. Arreglar eso.
+- Armar un DAG node
 - Separar texturas de GL y SDL. Hacer clases abstractas y sus impl en gl y sdl (ttf)
-- Mergear los meshes del engine viejo y ver como encajan.
-- Levantar texturas y normales de .obj
-- Usar texturas en meshes
 - Sistema de luces. Investigar si usar las de GL o mediante fragment shaders
 - Armar un mini sistema de (futuros) materiales.
 - Ver de hacer ventanas para el ui. Hacer una mini consola para datos y eso 
 - Pensar la responsabilidad de MainWindow vs GraphicsEngine, y crear RenderSettings. MainWindow deberia ser abs. 
-- Transform nodes!
 
 - REPASAR ENGINE GRAFICO y repensar algunos patrones, mejorar clases, dar mas funcionalidad, etc. 
 

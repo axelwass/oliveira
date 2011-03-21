@@ -26,6 +26,8 @@ void RenderLayer3D::render() {
 
 	this->camera->render();
 
+	glEnable(GL_TEXTURE_2D);
+
 	list<Renderable *>::iterator o;
 	for (o = objects.begin(); o != objects.end(); o++)
 		(*o)->render();
