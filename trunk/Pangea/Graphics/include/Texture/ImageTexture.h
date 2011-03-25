@@ -24,7 +24,6 @@ class ImageTexture: public Texture {
 		void LoadTexture() {
 			this->surface = IMG_Load(this->name.c_str());
 			LoadGLTexture();
-			printf("Loaded image texture.\n");
 		}
 };
 

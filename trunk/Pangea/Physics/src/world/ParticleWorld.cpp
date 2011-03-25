@@ -91,7 +91,6 @@ void ParticleWorld::integrate() {
 
 		groupsOctree->update();
 		resolveGroupCollisions();
-
 		// Integrate groups synchronized
 		for (itr = groups.begin(); itr != groups.end(); itr++)
 			(*itr)->integrateStep(time, precision);
@@ -105,7 +104,7 @@ void ParticleWorld::integrate() {
 // PARA TESTEAR!!!
 void ParticleWorld::render() {
 
-//	groupsOctree->render(NULL, false);
+	//	groupsOctree->render(NULL, false);
 
 	// Draw Particles
 	list<ParticleGroupPtr>::iterator group;

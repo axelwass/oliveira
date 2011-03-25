@@ -130,6 +130,12 @@ void ParticleGroup::applyStep(real step) {
 
 void ParticleGroup::repositionCollided(Particle * p1, Particle * p2) {
 
+
+	// quick fix, TODO later
+	if (p2->getCollisionableType() == C_RigidBody || p1->getCollisionableType()
+			== C_RigidBody)
+		return;
+
 	// from 1 to 2
 	Vector3 dist = p1->getPosition() - p2->getPosition();
 
@@ -177,8 +183,8 @@ void ParticleGroup::resolveInternalCollisions() {
 		for (closeP = closestElements.begin(); closeP != closestElements.end(); closeP++) {
 
 			Particle * other = (*closeP)->getThis();
-
 			if (other != (*p)) {
+
 				IntersectionData data = (*p)->checkCollision(*other);
 				if (data.hasIntersected()) {
 					repositionCollided(*p, other);
@@ -260,11 +266,16 @@ void ParticleGroup::render() {
 	for (i = particles.begin(); i != particles.end(); i++) {
 		Vector3 kPos = (*i)->getData().getPosition();
 
+		//printf("%g,%g,%g\n", kPos.getX(), kPos.getY(), kPos.getZ());
+		//printf("%g,%g,%g\n", vel.getX(), vel.getY(), vel.getZ());
+
 		real m = fabs((*i)->getData().getMass());
 
 		glTranslatef(kPos.getX(), kPos.getY(), kPos.getZ());
-		glutSolidSphere(m,1+sqrt(m),1+sqrt(m));
+		glutSolidSphere(m, 3 + sqrt(m), 3 + sqrt(m));
 		glTranslatef(-kPos.getX(), -kPos.getY(), -kPos.getZ());
 	}
+
+	//printf("\n\n\n");
 }
 

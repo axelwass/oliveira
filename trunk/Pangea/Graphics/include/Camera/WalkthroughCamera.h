@@ -15,97 +15,103 @@ class WalkthroughCamera: public PerspectiveCamera,
 		public MouseListener,
 		public KeyListener {
 
-	private:
+private:
 
-		typedef PerspectiveCamera super;
+	typedef PerspectiveCamera super;
 
-		// Velocity values
-		real frontVel, sideVel;
-		real velocityMagnitude;
+	// Velocity values
+	real frontVel, sideVel;
+	real velocityMagnitude;
 
-		bool active;
+	bool active;
 
-	public:
+public:
 
-		WalkthroughCamera(Vector3 pos, real farClip, real nearClip, real angle) :
-			PerspectiveCamera(pos, farClip, nearClip, angle) {
-			velocityMagnitude = 5;
-			active = false;
+	WalkthroughCamera(Vector3 pos, real farClip, real nearClip, real angle) :
+		PerspectiveCamera(pos, farClip, nearClip, angle), MouseListener() {
+		velocityMagnitude = 5;
+		active = false;
+	}
+
+	void render() {
+
+		Vector3 frontDispl = u;
+		frontDispl.normalize();
+		frontDispl *= frontVel;
+
+		Vector3 sideDispl = v;
+		sideDispl.normalize();
+		sideDispl *= sideVel;
+
+		position += frontDispl + sideDispl;
+
+		super::render();
+	}
+
+	void onKeyUp(int key) {
+		switch (key) {
+		case 'a':
+			sideVel -= -velocityMagnitude;
+			break;
+		case 'd':
+			sideVel -= velocityMagnitude;
+			break;
+		case 'w':
+			frontVel -= velocityMagnitude;
+			break;
+		case 's':
+			frontVel -= -velocityMagnitude;
+			break;
 		}
+	}
 
-		void render() {
-
-			Vector3 frontDispl = u;
-			frontDispl.normalize();
-			frontDispl *= frontVel;
-
-			Vector3 sideDispl = v;
-			sideDispl.normalize();
-			sideDispl *= sideVel;
-
-			position += frontDispl + sideDispl;
-
-			super::render();
+	void onKeyDown(int key) {
+		switch (key) {
+		case 'a':
+			sideVel += -velocityMagnitude;
+			break;
+		case 'd':
+			sideVel += velocityMagnitude;
+			break;
+		case 'w':
+			frontVel += velocityMagnitude;
+			break;
+		case 's':
+			frontVel += -velocityMagnitude;
+			break;
 		}
+	}
 
-		void onKeyUp(int key) {
-			switch (key) {
-			case 'a':
-				sideVel -= -velocityMagnitude;
-				break;
-			case 'd':
-				sideVel -= velocityMagnitude;
-				break;
-			case 'w':
-				frontVel -= velocityMagnitude;
-				break;
-			case 's':
-				frontVel -= -velocityMagnitude;
-				break;
-			}
-		}
+	void onMouseMotion(MouseEvent event) {
 
-		void onKeyDown(int key) {
-			switch (key) {
-			case 'a':
-				sideVel += -velocityMagnitude;
-				break;
-			case 'd':
-				sideVel += velocityMagnitude;
-				break;
-			case 'w':
-				frontVel += velocityMagnitude;
-				break;
-			case 's':
-				frontVel += -velocityMagnitude;
-				break;
-			}
-		}
+		int x, y;
+		x = event.getRelativeX();
+		y = event.getRelativeY();
 
-		void onMouseRelativeMotion(int x, int y) {
-			if (!active)
-				return;
-			real yaw, pitch;
-			yaw = x / 500.0;
-			pitch = y / 500.0;
-			rotate(Vector3(0, yaw, pitch));
-		}
+		if (!active)
+			return;
+		real yaw, pitch;
+		yaw = x / 500.0;
+		pitch = y / 500.0;
+		rotate(Vector3(0, yaw, pitch));
 
-		void onMouseMotion(int x, int y) {
-		}
+	}
 
-		void onMouseWheelDown() {
-		}
+	void onMouseWheelDown(MouseEvent event) {
+	}
 
-		void onMouseWheelUp() {
-		}
+	void onMouseWheelUp(MouseEvent event) {
+	}
 
-		void onMouseLeftClickDown() {
-			active = true;
-		}
-		void onMouseLeftClickUp() {
-			active = false;
-		}
+	void onMouseLeftClickDown(MouseEvent event) {
+		active = true;
+	}
+	void onMouseLeftClickUp(MouseEvent event) {
+		active = false;
+	}
+
+	void onMouseLeftClick(MouseEvent event) {
+	}
 
 };
 

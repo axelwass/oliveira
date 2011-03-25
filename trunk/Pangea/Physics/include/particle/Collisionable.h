@@ -16,7 +16,7 @@ class Collisionable {
 
 		// For inter type collisions
 		typedef enum {
-			C_Particle, C_ParticleGroup
+			C_Particle, C_ParticleGroup, C_RigidBody
 		} CollisionableType;
 
 	public:

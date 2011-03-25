@@ -16,69 +16,52 @@ using namespace std;
 #define FACE_H_
 
 class VertexWrapper {
-	private:
-		int vertexIndex;
-		int normalIndex;
-		int txIndex;
-	public:
-		VertexWrapper(int v, int n, int t) :
-			vertexIndex(v), normalIndex(n), txIndex(t) {
-		}
+private:
+	int vertexIndex;
+	int normalIndex;
+	int txIndex;
+public:
+	VertexWrapper(int v, int n, int t) :
+		vertexIndex(v), normalIndex(n), txIndex(t) {
+	}
 
-		int getVertex() {
-			return vertexIndex;
-		}
+	int getVertex() {
+		return vertexIndex;
+	}
 
-		int getNormal() {
-			return normalIndex;
-		}
+	int getNormal() {
+		return normalIndex;
+	}
 
-		int getTexture() {
-			return txIndex;
-		}
+	int getTexture() {
+		return txIndex;
+	}
 };
 
 class Face {
 
-	private:
+private:
 
-		vector<VertexWrapper> vertices;
+	vector<VertexWrapper> vertices;
 
-		Vector3 normal;
+	Vector3 normal;
 
-		bool hasTxCoords, hasNormals;
+public:
 
+	Face() {
+	}
 
-	public:
+	void addVertex(int vertex, int normal, int txCoordiante) {
+		vertices.push_back(VertexWrapper(vertex, normal, txCoordiante));
+	}
 
-		Face(){
-			hasTxCoords = false;
-			hasNormals = false;
-		}
+	Vector3 getNormal();
 
-		bool isTexturizable(){
-			return hasTxCoords;
-		}
+	void updateNormal();
 
-		bool hasVertexNormals(){
-			return hasNormals;
-		}
-
-		void addVertex(int vertex, int normal, int txCoordiante) {
-			if(normal >= 0)
-				hasNormals = true;
-			if(txCoordiante >= 0)
-				hasTxCoords = true;
-			vertices.push_back(VertexWrapper(vertex, normal, txCoordiante));
-		}
-
-		Vector3 getNormal();
-
-		void updateNormal();
-
-		vector<VertexWrapper>& getVertices() {
-			return vertices;
-		}
+	vector<VertexWrapper>& getVertices() {
+		return vertices;
+	}
 
 };
 

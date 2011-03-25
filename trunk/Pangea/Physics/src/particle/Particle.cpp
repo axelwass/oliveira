@@ -80,7 +80,8 @@ bool Particle::resolveCollision(Collisionable& other,
 
 	Vector3 impulseNormal = intersectionData.getNormal();
 
-	if (other.getCollisionableType() == C_Particle) {
+	if (other.getCollisionableType() == C_Particle
+			|| other.getCollisionableType() == C_RigidBody) {
 
 		Particle& p = (Particle&) other;
 
@@ -96,12 +97,13 @@ bool Particle::resolveCollision(Collisionable& other,
 		else if (mb == INFINITE_MASS)
 			coeff = ma;
 		else
-			coeff = (2 * ma * mb) / (ma + mb);
+			coeff = (ma * mb) / (ma + mb);
 
 		Vector3 va = data.getVelocity();
 		Vector3 vb = p.data.getVelocity();
 
-		Vector3 impulse = impulseNormal * (coeff * ((va - vb) * impulseNormal));
+		Vector3 impulse = impulseNormal * (2 * coeff * ((va - vb)
+				* impulseNormal));
 
 		Vector3 finalVela = impulse * -1 * this->data.getInverseMass();
 		Vector3 finalVelb = impulse * p.data.getInverseMass();

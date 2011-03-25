@@ -20,67 +20,61 @@
 
 class Particle: public Positionable<Particle> , public Collisionable {
 
-	private:
+protected:
 
-		list<Vector3> path;
+	// Information about particle
+	ParticleData data;
 
-		// Information about particle
-		ParticleData data;
+	// Particle private integrator
+	Integrator * integrator;
 
-		// Particle private integrator
-		Integrator * integrator;
+	// Particle force accumulator
+	Force * forceAccum;
 
-		// Particle force accumulator
-		Force * forceAccum;
+public:
 
-	public:
+	Particle * getThis() {
+		return this;
+	}
 
-		Particle * getThis() {
-			return this;
-		}
+	// From positionable
+	Vector3 getPosition() {
+		return data.getPosition();
+	}
 
-		// From positionable
-		Vector3 getPosition() {
-			return data.getPosition();
-		}
+	virtual CollisionableType getCollisionableType() {
+		return C_Particle;
+	}
 
-		list<Vector3> getPath() {
-			return path;
-		}
+	// Construct particle in origin with mass 1
+	Particle();
 
-		CollisionableType getCollisionableType() {
-			return C_Particle;
-		}
+	// Construct particle with given position and mass
+	Particle(const Vector3& position, real inverseMass);
 
-		// Construct particle in origin with mass 1
-		Particle();
+	// Construct particle with given data
+	Particle(const ParticleData& data);
 
-		// Construct particle with given position and mass
-		Particle(const Vector3& position, real inverseMass);
+	// Get particle data
+	ParticleData getData();
 
-		// Construct particle with given data
-		Particle(const ParticleData& data);
+	// Change particle data
+	void setData(const ParticleData& data);
 
-		// Get particle data
-		ParticleData getData();
+	// Check if two particles are equal
+	bool operator==(Particle& other);
 
-		// Change particle data
-		void setData(const ParticleData& data);
+	bool integrate(real t, real h);
 
-		// Check if two particles are equal
-		bool operator==(Particle& other);
+	void applyStep(real h);
 
-		bool integrate(real t, real h);
+	virtual void addForce(Force * force);
 
-		void applyStep(real h);
+	void clearForces();
 
-		void addForce(Force * force);
+	virtual bool resolveCollision(Collisionable& other, IntersectionData& data);
 
-		void clearForces();
-
-		bool resolveCollision(Collisionable& other, IntersectionData& data);
-
-		ShapePtr getCollisionShape();
+	virtual ShapePtr getCollisionShape();
 
 };
 

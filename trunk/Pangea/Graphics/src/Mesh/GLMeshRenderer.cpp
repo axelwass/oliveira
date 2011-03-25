@@ -53,9 +53,6 @@ void GLMeshRenderer::render() {
 		vector<VertexWrapper>& faceVertices = (*faceItr)->getVertices();
 		vector<VertexWrapper>::iterator vertexItr = faceVertices.begin();
 
-		Vector3 normal;
-		Vector3 vPos;
-
 		glBegin(GL_POLYGON);
 		for (vertexItr = faceVertices.begin(); vertexItr != faceVertices.end(); vertexItr++) {
 			int nIndex = (*vertexItr).getNormal();
@@ -64,18 +61,18 @@ void GLMeshRenderer::render() {
 
 			Vector3 normal, tx, pos;
 
-			if ((*faceItr)->hasVertexNormals())
+			if (nIndex >= 0)
 				normal = normals[nIndex];
-			if ((*faceItr)->isTexturizable())
+			if (tIndex >= 0)
 				tx = txCoords[tIndex];
+
 			pos = vertices[pIndex]->getPosition();
-			vPos = pos.componentProduct(s);
+			pos = pos.componentProduct(s);
 
 			// Prevent normals from scaling!
-
 			glNormal3f(normal.getX(), normal.getY(), normal.getZ());
 			glTexCoord2f(tx.getX(), tx.getY());
-			glVertex3f(vPos.getX(), vPos.getY(), vPos.getZ());
+			glVertex3f(pos.getX(), pos.getY(), pos.getZ());
 		}
 		glEnd();
 	}

@@ -10,10 +10,14 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+#include <tr1/memory>
 using namespace std;
 
 #ifndef TEXTURE_H_
 #define TEXTURE_H_
+
+class Texture;
+typedef tr1::shared_ptr<Texture> TexturePtr;
 
 class Texture {
 
@@ -45,7 +49,7 @@ protected:
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
 					GL_LINEAR_MIPMAP_LINEAR);
 
-			glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
+			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
 
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 			glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);

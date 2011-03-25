@@ -15,34 +15,35 @@ using namespace std;
 
 class UITextLabel: public UITexture {
 
-	protected:
+protected:
 
-		string text;
-		Color color;
-		int size;
+	string text;
+	Color color;
+	int size;
 
-	public:
+public:
 
-		UITextLabel(string text, int size, const Color& color, const Vector3& p) {
-			this->text = text;
-			this->position = p;
-			this->color = color;
-			this->size = size;
+	UITextLabel(string text, int size, const Color& color, const Vector3& p) {
+		this->text = text;
+		this->position = p;
+		this->color = color;
+		this->size = size;
 
-			this->setString(text);
-		}
+		this->setString(text);
+	}
 
-		virtual void setTexture(Texture * t) {
-		}
+	virtual void setTexture(TexturePtr t) {
+	}
 
-		void setString(string text) {
-			this->text = text;
-			this->texture = new TextTexture(text, size, color);
-			this->texture->LoadTexture();
+	void setString(string text) {
+		this->text = text;
 
-			this->w = texture->getWidth();
-			this->h = texture->getHeight();
-		}
+		this->texture = TexturePtr(new TextTexture(text, size, color));
+		this->texture->LoadTexture();
+
+		this->w = texture->getWidth();
+		this->h = texture->getHeight();
+	}
 
 };
 

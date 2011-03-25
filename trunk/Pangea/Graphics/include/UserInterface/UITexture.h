@@ -13,61 +13,61 @@
 
 class UITexture: public UIComponent {
 
-	protected:
+protected:
 
-		Texture * texture;
-		int w, h;
+	TexturePtr texture;
+	int w, h;
 
-	public:
+public:
 
-		UITexture() {
-			texture = NULL;
-		}
+	UITexture() {
+	}
 
-		UITexture(Texture * t) {
-			setTexture(t);
-		}
+	UITexture(TexturePtr t) {
+		setTexture(t);
+	}
 
-		virtual void setTexture(Texture * t) {
-			if (t != NULL) {
-				this->texture = t;
-				this->texture->LoadTexture();
-			}
-		}
+	virtual void setTexture(TexturePtr t) {
+		this->texture = t;
+		if (t.get() != NULL)
+			this->texture->LoadTexture();
+	}
 
-		void render() {
+	void render() {
+		// To prevent modifying texture
+		glColor4f(1, 1, 1, 1);
 
-			if (texture == NULL)
-				return;
+		if (texture.get() == NULL)
+			return;
 
-			int x, y;
-			x = position.getX();
-			y = position.getY();
-			h = texture->getHeight();
-			w = texture->getWidth();
+		int x, y;
+		x = position.getX();
+		y = position.getY();
+		h = texture->getHeight();
+		w = texture->getWidth();
 
-			texture->BindTexture();
+		texture->BindTexture();
 
-			// Draw rectangle
-			glBegin(GL_QUADS);
+		// Draw rectangle
+		glBegin(GL_QUADS);
 
-			glTexCoord2f(0, 0);
-			glVertex3f(x, y, 0);
+		glTexCoord2f(0, 0);
+		glVertex3f(x, y, 0);
 
-			glTexCoord2f(1, 0);
-			glVertex3f(x + w, y, 0);
+		glTexCoord2f(1, 0);
+		glVertex3f(x + w, y, 0);
 
-			glTexCoord2f(1, 1);
-			glVertex3f(x + w, y + h, 0);
+		glTexCoord2f(1, 1);
+		glVertex3f(x + w, y + h, 0);
 
-			glTexCoord2f(0, 1);
-			glVertex3f(x, y + h, 0);
+		glTexCoord2f(0, 1);
+		glVertex3f(x, y + h, 0);
 
-			glEnd();
+		glEnd();
 
-			texture->UnbindTexture();
+		texture->UnbindTexture();
 
-		}
+	}
 };
 
 #endif /* UITEXTURE_H_ */

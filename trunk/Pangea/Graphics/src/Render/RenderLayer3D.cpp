@@ -12,10 +12,7 @@
 #include "../../include/Color.h"
 
 RenderLayer3D::RenderLayer3D() {
-
-	// por ahora asi..
 	this->camera = new WalkthroughCamera(Vector3(-500, 0, 0), 5000, 1, 35);
-
 }
 
 void RenderLayer3D::render() {
