@@ -6,7 +6,7 @@
  */
 
 #include <list>
-#include <SDL/SDL.h>
+#include "MouseEvent.h"
 using namespace std;
 
 class MouseListener;
@@ -19,10 +19,13 @@ class MouseManager {
 private:
 
 	list<MouseListener *> listeners;
-
 	static MouseManager * instance;
 
+	bool leftPress, rightPress;
+
 	MouseManager() {
+		leftPress = false;
+		rightPress = false;
 	}
 
 public:
@@ -35,7 +38,7 @@ public:
 
 	void registerListener(MouseListener* l);
 
-	void update(SDL_Event * event);
+	void update(MouseEvent event);
 };
 
 #endif /* MOUSEOBSERVER_H_ */

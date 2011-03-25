@@ -4,6 +4,7 @@
 #include "Camera/WalkthroughCamera.h"
 
 #include "Mesh/Mesh.h"
+#include "Mesh/Primitives/MeshPlane.h"
 #include "Mesh/MeshRenderer.h"
 #include "Mesh/GLMeshRenderer.h"
 #include "Mesh/MeshLoader.h"
@@ -14,7 +15,9 @@
 #include "Render/RenderLayer2D.h"
 
 #include "UserInterface/UIOverlay.h"
+#include "UserInterface/UIWindow.h"
 #include "UserInterface/UITextLabel.h"
+#include "UserInterface/UITextInput.h"
 #include "UserInterface/UITexture.h"
 
 #include "../../Events/Events.h"
@@ -24,22 +27,22 @@
 
 class GraphicsEngine {
 
-	private:
+private:
 
-		MainWindow * mainWindow;
-		Camera * mainCamera;
+	MainWindow * mainWindow;
+	Camera * mainCamera;
 
-		list<RenderLayer *> layers;
+	list<RenderLayer *> layers;
 
-		// FEISIMO ESTO jajaja
-		UITextLabel * fpsCounter;
+	// FEISIMO ESTO jajaja
+	UITextLabel * fpsCounter;
 
-	public:
-		GraphicsEngine();
+public:
+	GraphicsEngine();
 
-		void render();
+	void render();
 
-		bool update();
+	bool update();
 };
 
 #endif /* GRAPHICSENGINE_H_ */

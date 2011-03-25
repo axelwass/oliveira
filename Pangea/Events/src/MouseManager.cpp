@@ -8,49 +8,47 @@
 #include "../include/MouseManager.h"
 #include "../include/MouseListener.h"
 
-#include <SDL/SDL.h>
-#include <GL/glut.h>
-
 MouseManager * MouseManager::instance = NULL;
 
 void MouseManager::registerListener(MouseListener* l) {
 	this->listeners.push_back(l);
 }
 
-void MouseManager::update(SDL_Event * event) {
+void MouseManager::update(MouseEvent event) {
 
 	list<MouseListener*>::iterator elem;
 
-	int relX, relY;
+	MouseEventButton button = event.getButton();
 
-	switch (event->type) {
-	case SDL_MOUSEMOTION:
-
-		SDL_GetRelativeMouseState(&relX, &relY);
-
-		for (elem = listeners.begin(); elem != listeners.end(); elem++) {
-			(*elem)->onMouseMotion(event->button.x, event->button.y);
-			(*elem)->onMouseRelativeMotion(relX, relY);
-		}
-
+	switch (event.getType()) {
+	case MOUSE_MOTION:
+		for (elem = listeners.begin(); elem != listeners.end(); elem++)
+			(*elem)->onMouseMotion(event);
 		break;
-	case SDL_MOUSEBUTTONDOWN:
-
-		if (event->button.button == SDL_BUTTON_WHEELUP)
+	case MOUSE_BUTTON_DOWN:
+		if (button == MOUSE_WHEEL_UP)
 			for (elem = listeners.begin(); elem != listeners.end(); elem++)
-				(*elem)->onMouseWheelUp();
-		else if (event->button.button == SDL_BUTTON_WHEELDOWN)
+				(*elem)->onMouseWheelUp(event);
+		else if (button == MOUSE_WHEEL_DOWN)
 			for (elem = listeners.begin(); elem != listeners.end(); elem++)
-				(*elem)->onMouseWheelDown();
-		else if (event->button.button == SDL_BUTTON_LEFT)
+				(*elem)->onMouseWheelDown(event);
+		else if (button == MOUSE_BUTTON_LEFT) {
+			leftPress = true;
 			for (elem = listeners.begin(); elem != listeners.end(); elem++)
-				(*elem)->onMouseLeftClickDown();
+				(*elem)->onMouseLeftClickDown(event);
+		}
 		// either left middle or right button, or wheels
 		break;
-	case SDL_MOUSEBUTTONUP:
-		if (event->button.button == SDL_BUTTON_LEFT)
+	case MOUSE_BUTTON_UP:
+		if (button == MOUSE_BUTTON_LEFT) {
 			for (elem = listeners.begin(); elem != listeners.end(); elem++)
-				(*elem)->onMouseLeftClickUp();
+				(*elem)->onMouseLeftClickUp(event);
+			if (leftPress) {
+				leftPress = false;
+				for (elem = listeners.begin(); elem != listeners.end(); elem++)
+					(*elem)->onMouseLeftClick(event);
+			}
+		}
 		break;
 	default:
 		break;

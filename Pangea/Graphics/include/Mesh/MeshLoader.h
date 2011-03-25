@@ -31,6 +31,9 @@ public:
 
 		Mesh * outMesh = new Mesh();
 
+
+		bool hasNormals, hasTexture;
+
 		// Load file
 		ifstream file(filename.c_str());
 
@@ -74,32 +77,28 @@ public:
 
 					int index = 0;
 					while (values.peek() != ' ' && !values.eof()) {
-
 						if (values.peek() == '/') {
 							values.get();
 							index++;
 						}
-
 						indexStreams[index].put(values.get());
 					}
 
 					while (values.peek() != ' ' && !values.eof())
 						values.get();
 
-					int tmpIndices[3];
+					int tmpIndices[3] = { 0, 0, 0 };
 					indexStreams[0] >> tmpIndices[0];
 
+					// Tx
 					if (index >= 1)
 						indexStreams[1] >> tmpIndices[1];
-					else
-						tmpIndices[1] = 0;
 
+					// Normals
 					if (index >= 2)
 						indexStreams[2] >> tmpIndices[2];
-					else
-						tmpIndices[2] = 0;
 
-					// WARNING: order is of indices is 0,2,1! (v,vt,vn), wrapper is (v,vn,vt)
+					// WARNING: order is of indices is 0,1,2! (v,vt,vn), wrapper is (v,vn,vt)
 					indices.push_back(VertexWrapper(tmpIndices[0],
 							tmpIndices[2], tmpIndices[1]));
 				}

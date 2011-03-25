@@ -6,29 +6,26 @@
  */
 
 #include "MouseManager.h"
+#include "MouseEvent.h"
 
 #ifndef MOUSELISTENER_H_
 #define MOUSELISTENER_H_
 
 class MouseListener {
-	public:
-		MouseListener() {
-			MouseManager::getInstance()->registerListener(this);
-		}
+public:
+	MouseListener() {
+		MouseManager::getInstance()->registerListener(this);
+	}
 
-		void registerListener() {
-			MouseManager::getInstance()->registerListener(this);
-		}
+	virtual void onMouseMotion(MouseEvent event) = 0;
 
-		// for now... just x,y
-		virtual void onMouseMotion(int x, int y) = 0;
-		virtual void onMouseRelativeMotion(int x, int y) = 0;
+	virtual void onMouseWheelDown(MouseEvent event) = 0;
+	virtual void onMouseWheelUp(MouseEvent event) = 0;
 
-		virtual void onMouseWheelDown() = 0;
-		virtual void onMouseWheelUp() = 0;
+	virtual void onMouseLeftClickDown(MouseEvent event) = 0;
+	virtual void onMouseLeftClickUp(MouseEvent event) = 0;
 
-		virtual void onMouseLeftClickDown() = 0;
-		virtual void onMouseLeftClickUp() = 0;
+	virtual void onMouseLeftClick(MouseEvent event) = 0;
 
 };
 

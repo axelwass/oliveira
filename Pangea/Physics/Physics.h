@@ -8,7 +8,6 @@
 #ifndef PHYSICS_H_
 #define PHYSICS_H_
 
-
 #include "../Generic/Generic.h"
 
 #include <GL/glut.h>
@@ -26,6 +25,8 @@
 #include "include/particle/ParticleData.h"
 
 #include "include/particle/ParticleGroup.h"
+
+#include "include/particle/RigidBody.h"
 #include "include/particle/Particle.h"
 #include "include/particle/constructs/ParticleRope.h"
 #include "include/particle/constructs/ParticleBridge.h"
@@ -50,6 +51,5 @@
 #include <tr1/memory>
 
 using namespace std;
-
 
 #endif /* PHYSICS_H_ */

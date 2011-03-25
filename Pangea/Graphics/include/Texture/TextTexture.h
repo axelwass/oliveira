@@ -15,52 +15,52 @@
 
 class TextTexture: public Texture {
 
-	private:
+private:
 
-		TTF_Font * font;
-		Color color;
-		int size;
+	TTF_Font * font;
+	Color color;
+	int size;
 
-		int nextpoweroftwo(int x) {
-			double logbase2 = log(x) / log(2);
-			return round(pow(2, ceil(logbase2)));
-		}
+	int nextpoweroftwo(int x) {
+		double logbase2 = log(x) / log(2);
+		return round(pow(2, ceil(logbase2)));
+	}
 
-	public:
+public:
 
-		//Constructor
-		TextTexture(string name, int size, Color color) :
-			Texture(name) {
-			this->size = size;
-			this->color = color;
-			this->font = NULL;
-		}
+	//Constructor
+	TextTexture(string name, int size, Color color) :
+		Texture(name) {
+		this->size = size;
+		this->color = color;
+		this->font = NULL;
+	}
 
-		void LoadTexture() {
+	void LoadTexture() {
 
-			font = TTF_OpenFont("verdana.ttf", size);
+		if (name.size() <= 0)
+			name = string(" ");
 
-			//TTF_SetFontStyle(font, TTF_STYLE_BOLD);
+		font = TTF_OpenFont("verdana.ttf", size);
 
-			//White text. To change it, use Color.Set_GLColor
-			SDL_Color tmp = this->color.getSDL_Color();
-			SDL_Surface * initial;
+		SDL_Color tmp = this->color.getSDL_Color();
+		SDL_Surface * initial;
 
-			initial = TTF_RenderText_Solid(font, name.c_str(), tmp);
+		initial = TTF_RenderText_Solid(font, name.c_str(), tmp);
 
-			/* Convert the rendered text to a known format */
-			width = nextpoweroftwo(initial->w);
-			height = nextpoweroftwo(initial->h);
+		/* Convert the rendered text to a known format */
+		width = nextpoweroftwo(initial->w);
+		height = nextpoweroftwo(initial->h);
 
-			surface = SDL_CreateRGBSurface(0, width, height, 32, 0x00ff0000,
-					0x0000ff00, 0x000000ff, 0xff000000);
+		surface = SDL_CreateRGBSurface(0, width, height, 32, 0x00ff0000,
+				0x0000ff00, 0x000000ff, 0xff000000);
 
-			SDL_BlitSurface(initial, 0, surface, 0);
+		SDL_BlitSurface(initial, 0, surface, 0);
 
-			LoadGLTexture();
-			TTF_CloseFont(font);
-			SDL_FreeSurface(initial);
-		}
+		LoadGLTexture();
+		TTF_CloseFont(font);
+		SDL_FreeSurface(initial);
+	}
 };
 
 #endif /* TEXTTEXTURE_H_ */

@@ -13,29 +13,29 @@ using namespace std;
 #define UIOVERLAY_H_
 
 class UIOverlay: public RenderLayer2D {
-	private:
+private:
 
-		typedef RenderLayer2D super;
+	typedef RenderLayer2D super;
 
-		list<UIComponent *> components;
+	list<UIComponent *> components;
 
-	public:
-		UIOverlay() {
-		}
+public:
+	UIOverlay() {
+	}
 
-		void addUIComponent(UIComponent * c) {
-			this->components.push_back(c);
-		}
+	void addUIComponent(UIComponent * c) {
+		this->components.push_back(c);
+	}
 
-		void render() {
+	void render() {
 
-			super::render(); // Render camera
-			list<UIComponent *>::iterator c;
+		super::render(); // Render camera
+		list<UIComponent *>::iterator c;
 
-			for (c = components.begin(); c != components.end(); c++)
-				(*c)->render();
+		for (c = components.begin(); c != components.end(); c++)
+			(*c)->render();
 
-		}
+	}
 };
 
 #endif /* UIOVERLAY_H_ */

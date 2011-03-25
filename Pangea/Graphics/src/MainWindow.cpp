@@ -54,7 +54,7 @@ MainWindow::MainWindow(int width, int height) {
 
 	screen = SDL_SetVideoMode(width, height, 32, SDL_OPENGL);
 
-	SDL_WM_SetCaption("Pangea Engine", NULL);
+	SDL_WM_SetCaption("Engine", NULL);
 
 	// Enable blending
 	glEnable(GL_BLEND | GL_ALPHA_TEST);
@@ -93,7 +93,7 @@ void MainWindow::onKeyUp(int key) {
 }
 
 void MainWindow::onKeyDown(int key) {
-	if (key == 'q' || key == 27) {
+	if (key == 27) {
 		this->End();
 		running = false;
 	}
