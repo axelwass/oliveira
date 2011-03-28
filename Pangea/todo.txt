@@ -6,6 +6,14 @@ hay cosas que andan muy lentas, con bajar la cantidad de complejidad grafica va 
 y la esfera, cambia mucho si las particulas del plano tienen 2 o 5 subdivisiones (se pierden muchos fps)
 
 
+BUGS ACTUALES:
+- put del octree. buscar una solucion! por esto no intersecta...
+- Las esferas no salen del centro de la camara. Averiguar porque
+- Las esferas, por alguna razon... se mueven raro.
+
+
+
+
 ********************************************
 GRAFICO	
 ********************************************

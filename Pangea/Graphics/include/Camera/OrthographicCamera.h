@@ -13,27 +13,35 @@
 
 class OrthographicCamera: public Camera {
 
-	private:
+private:
 
-		real nearClip, farClip;
-		real left, right, bottom, top;
+	real nearClip, farClip;
+	real left, right, bottom, top;
 
-	public:
-		OrthographicCamera(real nearClip, real farClip, real left, real right,
-				real bottom, real top) :
-			nearClip(nearClip), farClip(farClip), left(left), right(right),
-					bottom(bottom), top(top) {
+public:
+	OrthographicCamera(real nearClip, real farClip, real left, real right,
+			real bottom, real top) :
+		nearClip(nearClip), farClip(farClip), left(left), right(right), bottom(
+				bottom), top(top) {
 
-		}
+	}
 
-		void render() {
-			glMatrixMode(GL_PROJECTION);
-			glLoadIdentity();
-			glOrtho(left, right, bottom, top, nearClip, farClip);
+	Vector3 getPosition() {
+		return Vector3();
+	}
 
-			glMatrixMode(GL_MODELVIEW);
-			glLoadIdentity();
-		}
+	Vector3 getDirection() {
+		return Vector3();
+	}
+
+	void render() {
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(left, right, bottom, top, nearClip, farClip);
+
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+	}
 };
 
 #endif /* ORTHOGRAPHICCAMERA_H_ */

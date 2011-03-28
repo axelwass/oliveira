@@ -50,11 +50,11 @@ class Shape {
 			return position;
 		}
 
-		Vector3 getRotation() {
+		Vector3 getRotation() const {
 			return rotation;
 		}
 
-		Vector3 getScale() {
+		Vector3 getScale() const {
 			return scale;
 		}
 

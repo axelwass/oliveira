@@ -30,9 +30,10 @@ class GraphicsEngine {
 private:
 
 	MainWindow * mainWindow;
-	Camera * mainCamera;
 
 	list<RenderLayer *> layers;
+
+	RenderLayer * base3DLayer;
 
 	// FEISIMO ESTO jajaja
 	UITextLabel * fpsCounter;
@@ -43,6 +44,16 @@ public:
 	void render();
 
 	bool update();
+
+	// TODO esto es pesimo, manejarse con adapters
+	void addMesh(Mesh * m) {
+		if (layers.size())
+			layers.front()->addRenderable(m->getRenderer());
+	}
+
+	RenderLayer * get3DLayer() {
+		return base3DLayer;
+	}
 };
 
 #endif /* GRAPHICSENGINE_H_ */

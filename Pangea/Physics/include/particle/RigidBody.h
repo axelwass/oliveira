@@ -20,6 +20,8 @@ public:
 	RigidBody(ShapePtr s) :
 		Particle(s->getPosition(), 0) {
 		this->shape = s;
+
+		printf("RG: %g,%g,%g\n", getPosition().getX(),getPosition().getY(),getPosition().getZ());
 	}
 
 	virtual ShapePtr getCollisionShape() {

@@ -57,11 +57,13 @@ public:
 
 		Vector3 distance = s->position - this->position;
 
-		if (distance.magnitude() - this->radius - s->radius < 0) {
+		if (distance.magnitude() - (this->radius * scale.magnitude())
+				- (s->radius * s->scale.magnitude()) < 0) {
 			Vector3 n = distance;
 			n.normalize();
 			// Return distance normalized... normal of collision
-			return IntersectionData(this->position + (n * this->radius), n);
+			return IntersectionData(this->position + (n * this->radius
+					* scale.magnitude()), n);
 		} else
 			return IntersectionData();
 	}

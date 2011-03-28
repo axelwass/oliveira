@@ -18,79 +18,87 @@
  */
 class PerspectiveCamera: public Camera {
 
-	protected:
+protected:
 
-		Vector3 position;
-		Vector3 rotation;
-		Vector3 u, v, n;
+	Vector3 position;
+	Vector3 rotation;
+	Vector3 u, v, n;
 
-		real distance;
-		real farClip, nearClip;
-		real angle;
+	real distance;
+	real farClip, nearClip;
+	real angle;
 
-	public:
+public:
 
-		PerspectiveCamera(Vector3 pos, real farClip, real nearClip, real angle) {
-			this->position = pos;
-			this->farClip = farClip;
-			this->nearClip = nearClip;
-			this->angle = angle;
+	PerspectiveCamera(Vector3 pos, real farClip, real nearClip, real angle) {
+		this->position = pos;
+		this->farClip = farClip;
+		this->nearClip = nearClip;
+		this->angle = angle;
 
-			this->distance = 1;
+		this->distance = 1;
 
-			// Local space vectors
-			this->u = Vector3(1, 0, 0); // U is direction
-			this->v = Vector3(0, 0, 1);
-			this->n = Vector3(0, 1, 0); // Up vector
-		}
+		// Local space vectors
+		this->u = Vector3(1, 0, 0); // U is direction
+		this->v = Vector3(0, 0, 1);
+		this->n = Vector3(0, 1, 0); // Up vector
+	}
 
-		void render();
+	Vector3 getPosition() {
+		return position;
+	}
 
-		void rotate(const Vector3& r);
+	Vector3 getDirection() {
+		return u;
+	}
 
-		void setRotation(const Vector3& r);
+	void render();
 
-		/*
-		 void onMouseLeftClickDown() {
-		 active = false;
-		 }
+	void rotate(const Vector3& r);
 
-		 void onMouseMotion(int x, int y) {
-		 if (active) {
-		 float theta = .01 + x * 3.1415 / 360;
-		 float phi = y * 3.1415 / 360;
+	void setRotation(const Vector3& r);
 
-		 if (phi > 3.14)
-		 phi = 3.14;
+	/*
+	 void onMouseLeftClickDown() {
+	 active = false;
+	 }
 
-		 position = interestPoint + Vector3(distance * cos(theta) * sin(
-		 phi), -distance * cos(phi), distance * sin(theta)
-		 * sin(phi));
-		 }
-		 }
+	 void onMouseMotion(int x, int y) {
+	 if (active) {
+	 float theta = .01 + x * 3.1415 / 360;
+	 float phi = y * 3.1415 / 360;
 
-		 void setZoomSensitivity(float s) {
-		 this->zoomSensitivity = s;
-		 }
+	 if (phi > 3.14)
+	 phi = 3.14;
 
-		 void onMouseWheelDown() {
+	 position = interestPoint + Vector3(distance * cos(theta) * sin(
+	 phi), -distance * cos(phi), distance * sin(theta)
+	 * sin(phi));
+	 }
+	 }
 
-		 Vector3 dir = interestPoint - position;
-		 dir.normalize();
+	 void setZoomSensitivity(float s) {
+	 this->zoomSensitivity = s;
+	 }
 
-		 distance -= zoomSensitivity;
-		 position += dir * zoomSensitivity;
+	 void onMouseWheelDown() {
 
-		 }
+	 Vector3 dir = interestPoint - position;
+	 dir.normalize();
 
-		 void onMouseWheelUp() {
-		 Vector3 dir = interestPoint - position;
-		 dir.normalize();
+	 distance -= zoomSensitivity;
+	 position += dir * zoomSensitivity;
 
-		 distance += zoomSensitivity;
-		 position -= dir * zoomSensitivity;
-		 }
-		 */
+	 }
+
+	 void onMouseWheelUp() {
+	 Vector3 dir = interestPoint - position;
+	 dir.normalize();
+
+	 distance += zoomSensitivity;
+	 position -= dir * zoomSensitivity;
+	 }
+	 */
 };
 
 #endif /* PERSPECTIVECAMERA_H_ */

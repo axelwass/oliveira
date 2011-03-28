@@ -13,24 +13,24 @@
 
 class OrbitCamera: public PerspectiveCamera, public MouseListener {
 
-	public:
+public:
 
-		OrbitCamera(Vector3 pos, Vector3 interestPoint, real farClip,
-				real nearClip, real angle) :
-			PerspectiveCamera(pos, farClip, nearClip, angle) {
-		}
+	OrbitCamera(Vector3 pos, Vector3 interestPoint, real farClip,
+			real nearClip, real angle) :
+		PerspectiveCamera(pos, farClip, nearClip, angle) {
+	}
 
-		void onMouseRelativeMotion(int x, int y) {
-		}
+	void onMouseRelativeMotion(int x, int y) {
+	}
 
-		void onMouseMotion(int x, int y) {
-		}
+	void onMouseMotion(int x, int y) {
+	}
 
-		void onMouseWheelDown() {
-		}
+	void onMouseWheelDown() {
+	}
 
-		void onMouseWheelUp() {
-		}
+	void onMouseWheelUp() {
+	}
 };
 
 #endif /* ORBITCAMERA_H_ */
