@@ -22,6 +22,9 @@ public:
 	}
 
 	virtual void render() = 0;
+
+	virtual Vector3 getPosition() = 0;
+	virtual Vector3 getDirection() = 0;
 };
 
 #endif /* CAMERA_H_ */

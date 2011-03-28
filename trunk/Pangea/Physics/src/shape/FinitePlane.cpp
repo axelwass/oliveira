@@ -15,8 +15,6 @@ FinitePlane::FinitePlane(real w, real h) {
 	this->v = Vector3(0, 0, 1);
 
 	normal = v % u;
-
-	printf("(%g,%g,%g)\n", normal.getX(), normal.getY(), normal.getZ());
 }
 
 void FinitePlane::setRotation(const Vector3& r) {
@@ -36,9 +34,6 @@ void FinitePlane::setRotation(const Vector3& r) {
 	u = resultU;
 	v = resultV;
 	normal = u % v;
-
-	printf("%g,%g,%g\n", normal.getX(), normal.getY(), normal.getZ());
-
 }
 
 Shape::shapeType FinitePlane::getType() const {
@@ -127,8 +122,6 @@ IntersectionData FinitePlane::intersection(const Sphere * s) {
 
 		// Remember, d is distance to plane ( would be nDist )
 		Vector3 totalDistance(uDist, d, vDist);
-
-		//printf("u:%g, v:%g, n:%g\n", uDist, vDist, d);
 
 		if (totalDistance.magnitude() <= r)
 			return IntersectionData(p, normal);	// If border is hit, consider as full hit

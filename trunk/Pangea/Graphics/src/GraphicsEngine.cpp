@@ -40,26 +40,25 @@ GraphicsEngine::GraphicsEngine() {
 	ui->addUIComponent(fpsCounter);
 
 	RenderLayer3D * objs = new RenderLayer3D();
-
-	MeshPlane * plane = new MeshPlane();
-
-	plane->getTransform()->setScale(Vector3(150, 150, 150));
-	plane->setRenderer(new GLMeshRenderer(plane));
-	objs->addRenderable(plane->getRenderer());
+	base3DLayer = objs;
 	/*
-	 Mesh * m = MeshLoader::load("bunny.obj");
-	 m->getTransform()->setScale(Vector3(150, 150, 15));
+	 MeshPlane * plane = new MeshPlane();
+
+	 plane->getTransform()->setScale(Vector3(150, 150, 150));
+	 plane->setRenderer(new GLMeshRenderer(plane));
+	 objs->addRenderable(plane->getRenderer());
+
+	 Mesh * m = MeshLoader::load("columna_2.obj");
+	 m->getTransform()->setScale(Vector3(15, 15, 15));
 	 m->setRenderer(new GLMeshRenderer(m));
 	 m->getRenderer()->setTexture(new ImageTexture("test_tx.jpg"));
-	 objs->addRenderable(m->getRenderer());*/
-
+	 objs->addRenderable(m->getRenderer());
+	 */
 	// Order of 3d-ui is important until z-layers are implemented
 
 
-	layers.push_back(ui);
-
 	layers.push_back(objs);
-
+	layers.push_back(ui);
 }
 
 void GraphicsEngine::render() {

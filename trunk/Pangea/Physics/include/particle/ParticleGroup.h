@@ -20,64 +20,68 @@ class ParticleGroup;
 typedef tr1::shared_ptr<ParticleGroup> ParticleGroupPtr;
 
 class ParticleGroup: public Positionable<ParticleGroup> , public Collisionable {
-	private:
+private:
 
-		// Useful for all particle related
-		typedef tr1::shared_ptr<Octree<Particle> > OctreePtr;
+	// Useful for all particle related
+	typedef tr1::shared_ptr<Octree<Particle> > OctreePtr;
 
-		OctreePtr octree;
-		list<Particle *> particles;
+	OctreePtr octree;
+	list<Particle *> particles;
 
-		list<Force *> fields;
+	list<Force *> fields;
 
-		bool selfCollisions;
-		Vector3 centerOfMass;
-		SpherePtr boundingShape;
+	bool selfCollisions;
+	Vector3 centerOfMass;
+	SpherePtr boundingShape;
 
-		void repositionCollided(Particle * p1, Particle * p2);
+	void repositionCollided(Particle * p1, Particle * p2);
 
-	public:
-		~ParticleGroup() {
-			//cout << "Grupo destruido" << endl;
-		}
+public:
+	~ParticleGroup() {
+		//cout << "Grupo destruido" << endl;
+	}
 
-		CollisionableType getCollisionableType() {
-			return C_ParticleGroup;
-		}
+	CollisionableType getCollisionableType() {
+		return C_ParticleGroup;
+	}
 
-		// Empty position is group's position if it has empty particles
-		ParticleGroup(const Vector3& emptyPosition, bool selfCollisions);
+	void setBoundingShape(SpherePtr shape) {
+		this->boundingShape = shape;
+	}
 
-		Vector3 getPosition();
+	// Empty position is group's position if it has empty particles
+	ParticleGroup(const Vector3& emptyPosition, bool selfCollisions);
 
-		int getParticleCount();
+	Vector3 getPosition();
 
-		// I hate this
-		ParticleGroup * getThis();
+	int getParticleCount();
 
-		Particle * addParticle(real inverseMass, const Vector3& pos,
-				const Vector3& vel = Vector3());
+	// I hate this
+	ParticleGroup * getThis();
 
-		Particle * addParticle(Particle * p);
+	Particle * addParticle(real inverseMass, const Vector3& pos,
+			const Vector3& vel = Vector3());
 
-		void addField(Force * field);
+	Particle * addParticle(Particle * p);
 
-		void addInternalForce(InterParticleForce * f);
+	void addField(Force * field);
 
-		list<Particle *>& getParticles();
+	void addInternalForce(InterParticleForce * f);
 
-		bool integrateStep(real time, real step);
+	list<Particle *>& getParticles();
 
-		void applyStep(real step);
+	bool integrateStep(real time, real step);
 
-		void resolveInternalCollisions();
+	void applyStep(real step);
 
-		bool resolveCollision(Collisionable& other, IntersectionData& data);
+	void resolveInternalCollisions();
 
-		ShapePtr getCollisionShape();
+	bool resolveCollision(Collisionable& other, IntersectionData& data);
 
-		// test
-		void render();
+	ShapePtr getCollisionShape();
+
+	// test
+	void render();
 };
 
 #endif /* PARTICLEGROUP_H_ */

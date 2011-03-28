@@ -12,20 +12,27 @@
 
 void GLMeshRenderer::renderTransform(const Vector3& p, real size) {
 
+	glDisable(GL_LIGHTING);
+
+	glColor3f(1, 0, 0);
 	glBegin(GL_LINES);
 	glVertex3f(0, 0, 0);
 	glVertex3f(size, 0, 0);
 	glEnd();
 
+	glColor3f(0, 1, 0);
 	glBegin(GL_LINES);
 	glVertex3f(0, 0, 0);
 	glVertex3f(0, size, 0);
 	glEnd();
 
+	glColor3f(0, 0, 1);
 	glBegin(GL_LINES);
 	glVertex3f(0, 0, 0);
 	glVertex3f(0, 0, size);
 	glEnd();
+
+	glEnable(GL_LIGHTING);
 }
 
 void GLMeshRenderer::render() {
@@ -37,12 +44,17 @@ void GLMeshRenderer::render() {
 	vector<Vector3>& txCoords = mesh->getTextureCoordinates();
 
 	Vector3 s = t->getScale();
-	Vector3 p = t->getPosition().componentProduct(s);
+	Vector3 p = t->getPosition();
+	Vector3 r = t->getRotation();
+	real angle = r.magnitude() * 180.0 / 3.1415;
+
+	r.normalize();
 
 	renderTransform(p, 5);
 
 	//      Sets color to red
 	glTranslatef(p.getX(), p.getY(), p.getZ());
+	glRotatef(angle, r.getX(), r.getY(), r.getZ());
 
 	if (texture)
 		texture->BindTexture();
@@ -81,5 +93,6 @@ void GLMeshRenderer::render() {
 		texture->UnbindTexture();
 
 	glTranslatef(-p.getX(), -p.getY(), -p.getZ());
+	glRotatef(-angle, r.getX(), r.getY(), r.getZ());
 
 }

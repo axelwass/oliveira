@@ -12,22 +12,26 @@
 #define RENDERLAYER_H_
 
 class RenderLayer {
-	protected:
+protected:
 
-		Camera * camera;
+	Camera * camera;
 
-		// RenderGlobals * settings;
-		list<Renderable *> objects;
+	// RenderGlobals * settings;
+	list<Renderable *> objects;
 
-	public:
-		RenderLayer() {
-		}
+public:
+	RenderLayer() {
+	}
 
-		virtual void render() = 0;
+	virtual void render() = 0;
 
-		void addRenderable(Renderable * r){
-			this->objects.push_back(r);
-		}
+	void addRenderable(Renderable * r) {
+		this->objects.push_back(r);
+	}
+
+	Camera * getCamera() {
+		return camera;
+	}
 };
 
 #endif /* RENDERLAYER_H_ */

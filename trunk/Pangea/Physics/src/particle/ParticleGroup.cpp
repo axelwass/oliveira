@@ -40,7 +40,8 @@ Particle * ParticleGroup::addParticle(Particle * p) {
 		p->addForce(*itr);
 
 	particles.push_back(p);
-	octree->put(p);
+	if (!octree->put(p))
+		printf("Particle octree failed: put\n");
 	return p;
 }
 
@@ -87,11 +88,9 @@ bool ParticleGroup::integrateStep(real time, real step) {
 
 	octree->update();
 
-	// Just self collisions. Group collisions will be handled by world
 	if (selfCollisions)
 		resolveInternalCollisions();
 
-	// Integrate step
 	for (itr = particles.begin(); itr != particles.end(); itr++)
 		(*itr)->integrate(time, step);
 
@@ -129,7 +128,6 @@ void ParticleGroup::applyStep(real step) {
 }
 
 void ParticleGroup::repositionCollided(Particle * p1, Particle * p2) {
-
 
 	// quick fix, TODO later
 	if (p2->getCollisionableType() == C_RigidBody || p1->getCollisionableType()
