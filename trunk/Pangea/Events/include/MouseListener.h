@@ -25,6 +25,9 @@ public:
 	virtual void onMouseLeftClickDown(MouseEvent event) = 0;
 	virtual void onMouseLeftClickUp(MouseEvent event) = 0;
 
+	virtual void onMouseRightClickDown(MouseEvent event) = 0;
+	virtual void onMouseRightClickUp(MouseEvent event) = 0;
+
 	virtual void onMouseLeftClick(MouseEvent event) = 0;
 
 };

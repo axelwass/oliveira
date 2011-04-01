@@ -73,7 +73,7 @@ public:
 			button = MOUSE_WHEEL_UP;
 			break;
 		case SDL_BUTTON_WHEELDOWN:
-			button = MOUSE_WHEEL_UP;
+			button = MOUSE_WHEEL_DOWN;
 			break;
 		case SDL_BUTTON_LEFT:
 			button = MOUSE_BUTTON_LEFT;

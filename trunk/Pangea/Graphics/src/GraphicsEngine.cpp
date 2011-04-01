@@ -20,6 +20,34 @@ GraphicsEngine::GraphicsEngine() {
 
 	ui->addUIComponent(new UITextLabel("Engine v0.01", 12,
 			Color(150, 150, 150), Vector3(2, 2, 0)));
+
+	int size = 256;
+
+	MandelbrotTexture * m = new MandelbrotTexture(size, size, Vector3(), 2, 2);
+	m->setColor(Color(255, 255, 255));
+	UITexture * fractal = new UITexture(TexturePtr(m));
+	fractal->setPosition(Vector3(0, 0, 0));
+	ui->addUIComponent(fractal);
+
+	/*
+	 int size = 128;
+	 int maxX = MainWindow::getInstance()->getWidth() / size;
+	 int maxY = MainWindow::getInstance()->getHeight() / size;
+
+	 for (int j = 0; j < maxY; j++)
+	 for (int i = 0; i < maxX; i++) {
+
+	 JuliaTexture * julia = new JuliaTexture(Vector3(), 2, 2, size,
+	 size, 10, ((float) i) / maxX, (float) j / maxY);
+
+	 julia->setColor(Color(rand() % 255, rand() % 255, rand() % 255));
+	 UITexture * fractal = new UITexture(TexturePtr(julia));
+
+	 fractal->setPosition(Vector3(size * i, size * j, 0));
+	 ui->addUIComponent(fractal);
+
+	 } */
+
 	/*
 	 UIWindow * window = new UIWindow(Vector3(10,
 	 MainWindow::getInstance()->getHeight() - 160, 0), 400, 150, Color(

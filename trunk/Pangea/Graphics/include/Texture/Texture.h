@@ -49,7 +49,7 @@ protected:
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
 					GL_LINEAR_MIPMAP_LINEAR);
 
-			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
+			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 			glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
@@ -73,6 +73,10 @@ protected:
 public:
 
 	virtual ~Texture() {
+		unload();
+	}
+
+	virtual void unload() {
 		glDeleteTextures(1, &texture);
 	}
 

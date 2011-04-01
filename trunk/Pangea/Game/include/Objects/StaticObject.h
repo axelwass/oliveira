@@ -16,6 +16,7 @@ protected:
 	Particle * body;
 
 public:
+
 	StaticObject(Mesh * m, Particle * b) :
 		mesh(m), body(b) {
 	}

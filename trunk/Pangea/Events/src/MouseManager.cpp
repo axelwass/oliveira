@@ -36,17 +36,33 @@ void MouseManager::update(MouseEvent event) {
 			leftPress = true;
 			for (elem = listeners.begin(); elem != listeners.end(); elem++)
 				(*elem)->onMouseLeftClickDown(event);
+		} else if (button == MOUSE_BUTTON_RIGHT) {
+			rightPress = true;
+			for (elem = listeners.begin(); elem != listeners.end(); elem++)
+				(*elem)->onMouseRightClickDown(event);
 		}
 		// either left middle or right button, or wheels
 		break;
 	case MOUSE_BUTTON_UP:
-		if (button == MOUSE_BUTTON_LEFT) {
+		if (button == MOUSE_WHEEL_UP)
+			for (elem = listeners.begin(); elem != listeners.end(); elem++)
+				(*elem)->onMouseWheelUp(event);
+		else if (button == MOUSE_BUTTON_LEFT) {
 			for (elem = listeners.begin(); elem != listeners.end(); elem++)
 				(*elem)->onMouseLeftClickUp(event);
 			if (leftPress) {
 				leftPress = false;
 				for (elem = listeners.begin(); elem != listeners.end(); elem++)
 					(*elem)->onMouseLeftClick(event);
+			}
+		} else if (button == MOUSE_BUTTON_RIGHT) {
+			for (elem = listeners.begin(); elem != listeners.end(); elem++)
+				(*elem)->onMouseRightClickUp(event);
+			if (rightPress) {
+				rightPress = false;
+				for (elem = listeners.begin(); elem != listeners.end(); elem++)
+					;
+				//TODO		(*elem)->onMouseRightClick(event);
 			}
 		}
 		break;

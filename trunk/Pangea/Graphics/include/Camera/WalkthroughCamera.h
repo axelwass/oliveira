@@ -113,6 +113,14 @@ public:
 	void onMouseLeftClick(MouseEvent event) {
 	}
 
+	void onMouseRightClickDown(MouseEvent event) {
+
+	}
+
+	void onMouseRightClickUp(MouseEvent event) {
+
+	}
+
 };
 
 #endif /* WALKTHROUGHCAMERA_H_ */
