@@ -10,7 +10,6 @@
 GameEngine::GameEngine() {
 
 	srand(time(NULL));
-
 	world = new ParticleWorld(.05);
 
 	ballGroup = ParticleGroupPtr(new ParticleGroup(Vector3(0, 0, 1), true));

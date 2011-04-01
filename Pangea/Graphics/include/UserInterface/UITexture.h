@@ -33,6 +33,10 @@ public:
 			this->texture->LoadTexture();
 	}
 
+	TexturePtr getTexture(){
+		return texture;
+	}
+
 	void render() {
 		// To prevent modifying texture
 		glColor4f(1, 1, 1, 1);

@@ -58,7 +58,6 @@ public:
 				else if (line[1] == 'n')
 					outMesh->addVertexNormal(Vector3(xyz[0], xyz[1], xyz[2]));
 				else if (line[1] == 't')
-
 					outMesh->addTextureCoordinate(Vector3(xyz[0], xyz[1],
 							xyz[2]));
 			}
@@ -106,7 +105,7 @@ public:
 				Face * face = new Face();
 
 				// Get all the loop vertices on a container
-				// Note that OBJ index starts at 1, while C++ starts at 0
+				// Note that OBJ index starts at 1, while C/C++ starts at 0
 				for (unsigned i = 0; i < indices.size(); i++)
 					face->addVertex(indices[i].getVertex() - 1,
 							indices[i].getNormal() - 1, indices[i].getTexture()

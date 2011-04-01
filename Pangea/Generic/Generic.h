@@ -10,7 +10,7 @@
 
 #include "include/Vector3.h"
 #include "include/Matrix.h"
+#include "include/Stochastic.h"
 #include "include/precision.h"
-
 
 #endif /* GENERIC_H_ */

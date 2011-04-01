@@ -9,6 +9,9 @@
 #include "Mesh/GLMeshRenderer.h"
 #include "Mesh/MeshLoader.h"
 
+
+#include "Texture/Procedural/MandelbrotTexture.h"
+#include "Texture/Procedural/JuliaTexture.h"
 #include "Texture/ImageTexture.h"
 
 #include "Render/RenderLayer3D.h"
