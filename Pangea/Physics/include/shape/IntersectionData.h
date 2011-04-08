@@ -15,6 +15,7 @@ class IntersectionData {
 	private:
 		Vector3 point;
 		Vector3 normal;
+		Vector3 distance; // between elements, for repositioning
 
 		bool intersected;
 
@@ -23,8 +24,9 @@ class IntersectionData {
 			intersected = false;
 		}
 
-		IntersectionData(Vector3 point, Vector3 normal) {
+		IntersectionData(Vector3 point, Vector3 normal, Vector3 distance) {
 			this->point = point;
+			this->distance = distance;
 			this->normal = normal;
 			this->normal.normalize();
 			intersected = true;
@@ -40,6 +42,10 @@ class IntersectionData {
 
 		Vector3 getNormal() {
 			return normal;
+		}
+
+		Vector3 getDistance() {
+			return distance;
 		}
 };
 

@@ -104,7 +104,7 @@ void ParticleWorld::integrate() {
 // PARA TESTEAR!!!
 void ParticleWorld::render() {
 
-	//	groupsOctree->render(NULL, false);
+	//groupsOctree->render(NULL, false);
 
 	// Draw Particles
 	list<ParticleGroupPtr>::iterator group;

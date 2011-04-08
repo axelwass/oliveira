@@ -31,7 +31,6 @@ public:
 
 		Mesh * outMesh = new Mesh();
 
-
 		bool hasNormals, hasTexture;
 
 		// Load file
@@ -125,11 +124,11 @@ public:
 		outMesh->applyTransform();
 		outMesh->centerPivot();
 
-		printf(
-				"Vertex count: %d, Face count: %d, Normal count: %d, TX count: %d\n",
-				outMesh->getVertices()->size(), outMesh->getFaces()->size(),
-				outMesh->getNormals().size(),
-				outMesh->getTextureCoordinates().size());
+		/*	printf(
+		 "Vertex count: %d, Face count: %d, Normal count: %d, TX count: %d\n",
+		 outMesh->getVertices()->size(), outMesh->getFaces()->size(),
+		 outMesh->getNormals().size(),
+		 outMesh->getTextureCoordinates().size());*/
 		return outMesh;
 	}
 
