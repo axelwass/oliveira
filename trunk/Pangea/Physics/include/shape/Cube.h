@@ -35,6 +35,18 @@ public:
 		return length;
 	}
 
+	Vector3 getU() const {
+		return u;
+	}
+
+	Vector3 getV() const {
+		return v;
+	}
+
+	Vector3 getN() const {
+		return n;
+	}
+
 	void setLength(const real& length) {
 		this->length = length;
 	}
@@ -71,7 +83,7 @@ public:
 		case CUBE:
 			return IntersectionData();
 		case PLANE:
-			return IntersectionData();
+			return ((FinitePlane *) s)->intersection((Cube *) this);
 		case NULLSHAPE:
 			return IntersectionData();
 		}
@@ -108,7 +120,7 @@ public:
 			totalDistance.normalize();
 
 			// dont know point yet..
-			return IntersectionData(Vector3(), totalDistance);
+			return IntersectionData(Vector3(), totalDistance, distance);
 		} else
 			return IntersectionData();
 	}

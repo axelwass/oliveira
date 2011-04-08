@@ -127,12 +127,13 @@ void ParticleGroup::applyStep(real step) {
 	boundingShape->setRadius(maxRadius + EPSILON);
 }
 
-void ParticleGroup::repositionCollided(Particle * p1, Particle * p2) {
+void ParticleGroup::repositionCollided(Particle * p1, Particle * p2,
+		IntersectionData data) {
 
-	// quick fix, TODO later
 	if (p2->getCollisionableType() == C_RigidBody || p1->getCollisionableType()
-			== C_RigidBody)
+			== C_RigidBody) {
 		return;
+	}
 
 	// from 1 to 2
 	Vector3 dist = p1->getPosition() - p2->getPosition();
@@ -140,7 +141,7 @@ void ParticleGroup::repositionCollided(Particle * p1, Particle * p2) {
 	real ma = p1->getData().getMass();
 	real mb = p2->getData().getMass();
 
-	real diff = fabs(dist.magnitude() - fabs(ma) - fabs(mb)) + EPSILON; // 5 is radius of particle for now
+	real diff = fabs(dist.magnitude() - fabs(ma) - fabs(mb)) + EPSILON;
 
 	real ca, cb;
 
@@ -182,7 +183,6 @@ void ParticleGroup::resolveInternalCollisions() {
 
 			Particle * other = (*closeP)->getThis();
 			if (other != (*p)) {
-
 				IntersectionData data = (*p)->checkCollision(*other);
 				if (data.hasIntersected()) {
 					repositionCollided(*p, other);
@@ -248,7 +248,7 @@ ShapePtr ParticleGroup::getCollisionShape() {
 // PARA TESTEAR!!!
 void ParticleGroup::render() {
 
-	//octree->render(NULL, true);
+	octree->render(NULL, true);
 	/*
 	 glColor4f(0, 1, 1.0, .05);
 	 glTranslatef(centerOfMass.getX(), centerOfMass.getY(), centerOfMass.getZ());

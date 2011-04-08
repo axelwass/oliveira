@@ -9,6 +9,7 @@
 #include "Shape.h"
 
 class Sphere;
+class Cube;
 
 #ifndef FINITEPLANE_H_
 #define FINITEPLANE_H_
@@ -45,6 +46,8 @@ public:
 
 	// For now, just return center of intersection (ignore circle)
 	IntersectionData intersection(const Sphere * s);
+
+	IntersectionData intersection(const Cube * s);
 };
 
 #endif /* FINITEPLANE_H_ */

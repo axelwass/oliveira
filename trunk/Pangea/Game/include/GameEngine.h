@@ -42,7 +42,7 @@ public:
 		Vector3 pos = mainCamera->getPosition();
 		Vector3 d = mainCamera->getDirection();
 
-		Particle * p = ballGroup->addParticle(.05, pos, d * 50);
+		Particle * p = ballGroup->addParticle(1, pos, d * 50);
 
 		// GRAPHICS CONTEXT
 		Mesh * ball = MeshLoader::load("sphere.obj");

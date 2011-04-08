@@ -7,6 +7,7 @@
 
 #include "../../include/shape/FinitePlane.h"
 #include "../../include/shape/Sphere.h"
+#include "../../include/shape/Cube.h"
 
 FinitePlane::FinitePlane(real w, real h) {
 	this->width = w;
@@ -47,9 +48,9 @@ IntersectionData FinitePlane::intersection(const Shape * s) {
 	case SPHERE:
 		return intersection((Sphere*) s);
 	case CUBE:
-		return IntersectionData();
+		return intersection((Cube *) s);
 	case PLANE:
-		return ((FinitePlane *) s)->intersection(this);
+		return IntersectionData();
 	case NULLSHAPE:
 		return IntersectionData();
 	}
@@ -69,6 +70,27 @@ Vector3 FinitePlane::getU() const {
 
 Vector3 FinitePlane::getV() const {
 	return v;
+}
+
+// For now, just work as infinite plane!
+IntersectionData FinitePlane::intersection(const Cube * c) {
+
+	Vector3 cPos = c->getPosition();
+
+	real length = c->getLength();
+	real dU = fabs(length * normal.scalarProduct(c->getU()));
+	real dV = fabs(length * normal.scalarProduct(c->getV()));
+	real dN = fabs(length * normal.scalarProduct(c->getN()));
+
+	Vector3 difference = this->position - cPos;
+	real d = normal.scalarProduct(difference);
+	// Point of intersection
+	Vector3 p = normal * d;
+
+	if (fabs(d) <= dU + dV + dN)
+		return IntersectionData(p, normal, difference); // If border is hit, consider as full hit
+
+	return IntersectionData();
 }
 
 // For now, just return center of intersection (ignore circle)
@@ -124,7 +146,7 @@ IntersectionData FinitePlane::intersection(const Sphere * s) {
 		Vector3 totalDistance(uDist, d, vDist);
 
 		if (totalDistance.magnitude() <= r)
-			return IntersectionData(p, normal);	// If border is hit, consider as full hit
+			return IntersectionData(p, normal,translated); // If border is hit, consider as full hit
 	}
 
 	return IntersectionData();

@@ -12,22 +12,8 @@ GraphicsEngine::GraphicsEngine() {
 
 	UIOverlay * ui = new UIOverlay();
 
-	// jajaja esto parece swing
-	UITexture * logo = new UITexture(TexturePtr(new ImageTexture(
-			"pangea_small.png")));
-	logo->setPosition(Vector3(MainWindow::getInstance()->getWidth() - 80, 5, 0));
-	ui->addUIComponent(logo);
-
 	ui->addUIComponent(new UITextLabel("Engine v0.01", 12,
 			Color(150, 150, 150), Vector3(2, 2, 0)));
-
-	int size = 256;
-
-	MandelbrotTexture * m = new MandelbrotTexture(size, size, Vector3(), 2, 2);
-	m->setColor(Color(255, 255, 255));
-	UITexture * fractal = new UITexture(TexturePtr(m));
-	fractal->setPosition(Vector3(0, 0, 0));
-	ui->addUIComponent(fractal);
 
 	/*
 	 int size = 128;

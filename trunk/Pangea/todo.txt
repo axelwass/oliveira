@@ -7,12 +7,9 @@ y la esfera, cambia mucho si las particulas del plano tienen 2 o 5 subdivisiones
 
 
 BUGS ACTUALES:
-- put del octree. buscar una solucion! por esto no intersecta...
-- Las esferas no salen del centro de la camara. Averiguar porque
-- Las esferas, por alguna razon... se mueven raro.
-
-
-
+- put del octree. Si se pasa del treshold pero hay elementos con misma posicion, dejarla pasar e incrementar el treshold del nodo. 
+- arreglar el repositioning de shapes genericos! (muy caro? tal vez sea mejor usar un algoritmo preventivo...)
+Nota: por lo del repositioning no anda bien el plano-esfera, porque la esfera choca recursivamente hasta que se pasa por error numerico, es aleatorio si rebota o no.
 
 ********************************************
 GRAFICO	
@@ -25,7 +22,6 @@ GRAFICO
 - Separar texturas de GL y SDL. Hacer clases abstractas y sus impl en gl y sdl (ttf)
 - Sistema de luces.  
 - Armar un mini sistema de (futuros) materiales.
-- Ver de hacer ventanas para el ui. 
 - Pensar la responsabilidad de MainWindow vs GraphicsEngine, y crear RenderSettings. MainWindow deberia ser abs. 
 
 - REPASAR ENGINE GRAFICO y repensar algunos patrones, mejorar clases, dar mas funcionalidad, etc. 
@@ -77,7 +73,7 @@ Cosas a agregar CORTO PLAZO
 -------------------------------
 
 1) Planos y cubos colisionables de masa infinita (principio de rigid bodies)
-2) Intersecciones Cubo-Cubo, Plano-Cubo, Plano-Plano. Tambien, revisar Plano-Esfera y optimizarlo
+2) Intersecciones Cubo-Cubo, Plano-Plano. Tambien, revisar Plano-Esfera y optimizarlo
 3) Hard constraints (de la mano de rigidos)
 4) Cuerpos rigidos basicos (primitivas, esfera plano cubo). Esto incluye agregar rotacion, lo cual es un bardo por ahora
 

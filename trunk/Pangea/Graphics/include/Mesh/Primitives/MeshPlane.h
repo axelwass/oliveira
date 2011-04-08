@@ -12,10 +12,10 @@ class MeshPlane: public Mesh {
 public:
 	MeshPlane() {
 
-		addVertex(new Vertex(Vector3(-1, 0, -1)));
-		addVertex(new Vertex(Vector3(-1, 0, 1)));
-		addVertex(new Vertex(Vector3(1, 0, 1)));
-		addVertex(new Vertex(Vector3(1, 0, -1)));
+		addVertex(new Vertex(Vector3(-.5, 0, -.5)));
+		addVertex(new Vertex(Vector3(-.5, 0, .5)));
+		addVertex(new Vertex(Vector3(.5, 0, .5)));
+		addVertex(new Vertex(Vector3(.5, 0, -.5)));
 
 		addTextureCoordinate(Vector3(0,0,0));
 		addTextureCoordinate(Vector3(0,1,0));
