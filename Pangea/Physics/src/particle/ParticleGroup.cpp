@@ -84,6 +84,10 @@ ParticleGroup * ParticleGroup::getThis() {
 // Groups must be synchronized with other groups, cannot
 // integrate isolated in case of inter-group collisions or interactions
 bool ParticleGroup::integrateStep(real time, real step) {
+
+	this->time = time;
+	this->step = step;
+
 	list<Particle *>::iterator itr;
 
 	octree->update();
@@ -127,63 +131,32 @@ void ParticleGroup::applyStep(real step) {
 	boundingShape->setRadius(maxRadius + EPSILON);
 }
 
-void ParticleGroup::repositionCollided(Particle * p1, Particle * p2,
+void ParticleGroup::speculateContact(Particle * p1, Particle * p2,
 		IntersectionData data) {
 
-	if (p1->getCollisionableType() == C_RigidBody) {
+	Vector3 normal = data.getNormal();
+	Vector3 velocity = p1->getData().getVelocity();
+	Vector3 distance = normal * data.getDistance();
+	real projected = fabs(velocity.scalarProduct(normal));
 
-		// Hardcodeado para que funcione con planos!
-		real dist = p2->getData().getMass() + data.getDistance() + EPSILON;
+	if (projected * step >= distance.magnitude()) {
+		Vector3 remove = distance;
+		remove.normalize();
+		remove *= projected - distance.magnitude() * (1.0 / step);
+		velocity += remove;
 
-		ParticleData d2 = p2->getData();
-		d2.setPosition(d2.getPosition() + data.getNormal() * dist);
-		p2->setData(d2);
-
-		// Plane is infinite, dont move!
-		return;
-	} else if (p2->getCollisionableType() == C_RigidBody) {
-		printf("la otra particula es un rigid body!\n");
-		return;
-	} else {
-
-		// from 1 to 2
-		Vector3 dist = p1->getPosition() - p2->getPosition();
-
-		real ma = p1->getData().getMass();
-		real mb = p2->getData().getMass();
-
-		real diff = fabs(dist.magnitude() - fabs(ma) - fabs(mb)) + EPSILON;
-
-		real ca, cb;
-
-		// coeffs to balance repositioning
-		if (ma == INFINITE_MASS && mb == INFINITE_MASS)
-			return;
-		else if (ma == INFINITE_MASS) {
-			ca = 1;
-			cb = 0;
-		} else if (mb == INFINITE_MASS) {
-			ca = 0;
-			cb = 1;
-		} else {
-			ca = ma / (ma + mb);
-			cb = mb / (ma + mb);
-		}
-
-		dist.normalize();
-
-		ParticleData d1 = p1->getData();
-		d1.setPosition(d1.getPosition() + dist * diff * cb);
-		p1->setData(d1);
-
-		ParticleData d2 = p2->getData();
-		d2.setPosition(d2.getPosition() - dist * diff * ca);
-		p2->setData(d2);
+		ParticleData tmp = p1->getData();
+		tmp.setVelocity(velocity);
+		p1->setData(tmp);
 	}
 }
 
 void ParticleGroup::resolveInternalCollisions() {
 	list<Particle *>::iterator p;
+
+	for (p = particles.begin(); p != particles.end(); p++)
+		(*p)->resetCollided();
+
 	for (p = particles.begin(); p != particles.end(); p++) {
 
 		list<Positionable<Particle> *>
@@ -193,13 +166,15 @@ void ParticleGroup::resolveInternalCollisions() {
 		list<Positionable<Particle> *>::iterator closeP;
 		for (closeP = closestElements.begin(); closeP != closestElements.end(); closeP++) {
 
-
 			Particle * other = (*closeP)->getThis();
 			if (other != (*p)) {
 				IntersectionData data = (*p)->checkCollision(*other);
-				if (data.hasIntersected()) {
-					repositionCollided(*p, other, data);
+				if (data.hasIntersected() && !(*p)->hasCollided(other)) {
 					(*p)->resolveCollision(*other, data);
+					(*p)->addCollided(other);
+					other->addCollided(*p);
+				} else {
+					speculateContact(*p, other, data);
 				}
 			}
 		}
@@ -208,6 +183,10 @@ void ParticleGroup::resolveInternalCollisions() {
 
 bool ParticleGroup::resolveCollision(Collisionable& other,
 		IntersectionData& data) {
+
+	list<Particle *>::iterator p;
+	for (p = particles.begin(); p != particles.end(); p++)
+		(*p)->resetCollided();
 
 	if (other.getCollisionableType() == C_ParticleGroup) {
 
@@ -243,8 +222,11 @@ bool ParticleGroup::resolveCollision(Collisionable& other,
 					IntersectionData data = particle->checkCollision(
 							*otherParticle);
 					if (data.hasIntersected()) {
-						repositionCollided(particle, otherParticle, data);
 						particle->resolveCollision(*otherParticle, data);
+						particle->addCollided(otherParticle);
+						otherParticle->addCollided(particle);
+					} else {
+						speculateContact(particle, otherParticle, data);
 					}
 				}
 			}

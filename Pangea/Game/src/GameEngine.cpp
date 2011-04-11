@@ -10,10 +10,10 @@
 GameEngine::GameEngine() {
 
 	srand(time(NULL));
-	world = new ParticleWorld(.01);
+	world = new ParticleWorld(.05);
 
 	ballGroup = ParticleGroupPtr(new ParticleGroup(Vector3(), true));
-	ballGroup->addField(new ConstantForce(100, Vector3(0, -1, 0)));
+	ballGroup->addField(new ConstantForce(50, Vector3(0, -1, 0)));
 	world->addParticleGroup(ballGroup);
 
 	RigidBody * rg1 = new RigidBody(ShapePtr(new FinitePlane(500, 500)));
