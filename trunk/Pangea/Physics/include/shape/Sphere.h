@@ -63,7 +63,7 @@ public:
 			n.normalize();
 			// Return distance normalized... normal of collision
 			return IntersectionData(this->position + (n * this->radius
-					* scale.getX()), n, distance);
+					* scale.getX()), n, distance.magnitude());
 		} else
 			return IntersectionData();
 	}

@@ -120,7 +120,7 @@ public:
 			totalDistance.normalize();
 
 			// dont know point yet..
-			return IntersectionData(Vector3(), totalDistance, distance);
+			return IntersectionData(Vector3(), totalDistance, distance.magnitude());
 		} else
 			return IntersectionData();
 	}

@@ -11,6 +11,7 @@ GraphicsEngine::GraphicsEngine() {
 	fpsCounter = NULL;
 
 	UIOverlay * ui = new UIOverlay();
+	base2DLayer = ui;
 
 	ui->addUIComponent(new UITextLabel("Engine v0.01", 12,
 			Color(150, 150, 150), Vector3(2, 2, 0)));

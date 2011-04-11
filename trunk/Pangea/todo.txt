@@ -5,11 +5,36 @@ que mucho del rendering es jodidamente INEFICIENTE, por lo que no hay que asusta
 hay cosas que andan muy lentas, con bajar la cantidad de complejidad grafica va a mejorar mucho. Por ej, con el ejemplo del plano deformable
 y la esfera, cambia mucho si las particulas del plano tienen 2 o 5 subdivisiones (se pierden muchos fps)
 
+SEMI URGENTE:
+- unificar los headers, sacar YA a glut, y empezar a usar glew+sdl desde el vamos.
+- Ver capacidades del integrador de ir atras en el tiempo.
+- Realmente, cada particula tiene que tener un integrador? lo veo mas como que el world tiene que tener un integrador...
+
+Nota acerca de las colisiones:
+Andar anda, pero el step tiene que ser __chico__. El problema es que la deteccion se hace tarde.
+Esto evidentemente no esta bueno, asi que hay dos o tres opciones:
+- usar un algoritmo de sweeping sobre el tiempo. 
+	- analitico. Contra: no sirve mucho para cuerpos complejos (incluso usando bounding boxes).
+	- numerico. Contra: hay que viajar en el tiempo, y el rk4 es muy pesado para viajar.
+- en el momento de una colision, viajar directamente a la ultima posicion valida. Contra: puedo perder colisiones. (y ademas no me anduvo ajjajja)
+- hacerlo previsivo o como se diga; ir un paso adelante, checkear colisiones, volver en el tiempo, aplicar, intentar de nuevo.. Contra: puede haber recursividad, y es pesado
+A todo esto, hay que ver como jode las cosas con el octree....
+ 
 
 BUGS ACTUALES:
+- si roto un plano, no colisiona. WTF?
 - put del octree. Si se pasa del treshold pero hay elementos con misma posicion, dejarla pasar e incrementar el treshold del nodo. 
-- arreglar el repositioning de shapes genericos! (muy caro? tal vez sea mejor usar un algoritmo preventivo...)
 Nota: por lo del repositioning no anda bien el plano-esfera, porque la esfera choca recursivamente hasta que se pasa por error numerico, es aleatorio si rebota o no.
+
+
+********************************************
+EVENTS	
+********************************************
+
+- Decidir como manejar el focus
+- Decidir como manejar la jerarquia de listeners, se pasan los eventos hacia abajo?
+- Decidir si usar un buffer para hacer picking por colores, al menos para el mouse event.
+
 
 ********************************************
 GRAFICO	
@@ -17,7 +42,6 @@ GRAFICO
 
 
 - DECISION DE DISEÑO ACTUAL: Si el .obj no tiene normales ni tx, no genera nada! Voy a esperar a implementar VBO's o display lists para ver como es la estructura optima y analizar la mejor opcion
-- Consola grafica
 - Armar un DAG node
 - Separar texturas de GL y SDL. Hacer clases abstractas y sus impl en gl y sdl (ttf)
 - Sistema de luces.  
@@ -38,12 +62,11 @@ GRAFICO
 
 
 ********************************************
-GENERAL	
+GA E	
 ********************************************
 
-- Falta la carpeta Game, donde van todas las cosas mezcla. Ej camara con eventos, mesh fisico, etc
-- Ir armando un boceto de los adapters de Graphics, Physics y Events y probarlos
-
+- Hacer los adapters...
+- Consola grafica
 
 ********************************************
 FISICO
@@ -62,12 +85,6 @@ Cosas a fixear, revisar, etc. CORTO PLAZO
 -Eliminacion de elementos de grupos
 -Pasar mas cosas por referencia, en particular las listas. Analizar overhead de datos y minimizarlo
 	
-
-* Nota: El metodo actual de colisiones, si bien el octree optimiza un monton, tiene problemas con fuerzas muy potentes, porque pueden 
- llegar a integrar pasos muy grandes y puede saltearse una colision o incluso caer dentro de otra particula (en cuyo caso, la gravedad
- explota). El path tracing es ver si la recta de la direccion de cada particula puede llegar a intersectar de antemano; habria que 
- investigar como implementarlo. Tambien hay que revisar el algoritmo de superficie de contacto, creo que hay casos en los que mueve mal las cosas.
- 
 -------------------------------
 Cosas a agregar CORTO PLAZO
 -------------------------------
@@ -94,18 +111,6 @@ Cosas a agregar LARGO PLAZO
 
 1) Cuerpos rigidos y deformables complejos (objetos)
 2) Fuerzas entre grupos (considerar un grupo como un cuerpo entero)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 n!) Nadie sabe que deparara el futuro jajaja

@@ -30,9 +30,9 @@ class Mesh: public AbstractMesh {
 
 		void centerPivot();
 
-		void addVertex(Vertex * vertex);
-		void addVertexNormal(Vector3 n);
-		void addTextureCoordinate(Vector3 t);
+		int addVertex(Vertex * vertex);
+		int addVertexNormal(Vector3 n);
+		int addTextureCoordinate(Vector3 t);
 
 
 

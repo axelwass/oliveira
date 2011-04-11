@@ -34,7 +34,7 @@ private:
 	Vector3 centerOfMass;
 	SpherePtr boundingShape;
 
-	void repositionCollided(Particle * p1, Particle * p2);
+	void repositionCollided(Particle * p1, Particle * p2, IntersectionData data);
 
 public:
 	~ParticleGroup() {
