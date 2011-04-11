@@ -12,41 +12,47 @@
 
 class IntersectionData {
 
-	private:
-		Vector3 point;
-		Vector3 normal;
-		real distance; // between elements, for repositioning
+private:
+	Vector3 point;
+	Vector3 normal;
+	real distance; // between elements, for repositioning
 
-		bool intersected;
+	bool intersected;
 
-	public:
-		IntersectionData() {
-			intersected = false;
-		}
+public:
+	IntersectionData() {
+		intersected = false;
+	}
 
-		IntersectionData(Vector3 point, Vector3 normal, real distance) {
-			this->point = point;
-			this->distance = distance;
-			this->normal = normal;
-			this->normal.normalize();
-			intersected = true;
-		}
+	IntersectionData(real distance, Vector3 normal) {
+		intersected = false;
+		this->distance = distance;
+		this->normal = normal;
+	}
 
-		bool hasIntersected() {
-			return intersected;
-		}
+	IntersectionData(Vector3 point, Vector3 normal, real distance) {
+		this->point = point;
+		this->distance = distance;
+		this->normal = normal;
+		this->normal.normalize();
+		intersected = true;
+	}
 
-		Vector3 getPoint() {
-			return point;
-		}
+	bool hasIntersected() {
+		return intersected;
+	}
 
-		Vector3 getNormal() {
-			return normal;
-		}
+	Vector3 getPoint() {
+		return point;
+	}
 
-		real getDistance() {
-			return distance;
-		}
+	Vector3 getNormal() {
+		return normal;
+	}
+
+	real getDistance() {
+		return distance;
+	}
 };
 
 #endif /* COLLISIONDATA_H_ */

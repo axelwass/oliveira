@@ -146,8 +146,8 @@ IntersectionData FinitePlane::intersection(const Sphere * s) {
 		Vector3 totalDistance(uDist, d, vDist);
 
 		if (totalDistance.magnitude() <= r)
-			return IntersectionData(p, normal,d); // If border is hit, consider as full hit
+			return IntersectionData(p, normal, d); // If border is hit, consider as full hit
 	}
 
-	return IntersectionData();
+	return IntersectionData(fabs(d) - s->getRadius() * s->getScale().getX(), normal);
 }

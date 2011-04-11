@@ -34,7 +34,12 @@ private:
 	Vector3 centerOfMass;
 	SpherePtr boundingShape;
 
-	void repositionCollided(Particle * p1, Particle * p2, IntersectionData data);
+	real time, step;
+
+	void
+	repositionCollided(Particle * p1, Particle * p2, IntersectionData data);
+
+	void speculateContact(Particle * p1, Particle * p2, IntersectionData data);
 
 public:
 	~ParticleGroup() {
@@ -47,6 +52,10 @@ public:
 
 	void setBoundingShape(SpherePtr shape) {
 		this->boundingShape = shape;
+	}
+
+	void setStep(real step) {
+		this->step = step;
 	}
 
 	// Empty position is group's position if it has empty particles
