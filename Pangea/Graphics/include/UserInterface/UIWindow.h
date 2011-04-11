@@ -9,7 +9,7 @@
 #define UIWINDOW_H_
 
 class UIWindow: public UIComponent {
-private:
+protected:
 
 	int width, height;
 	Color bgColor, borderColor;

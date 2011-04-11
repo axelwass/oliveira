@@ -130,44 +130,56 @@ void ParticleGroup::applyStep(real step) {
 void ParticleGroup::repositionCollided(Particle * p1, Particle * p2,
 		IntersectionData data) {
 
-	if (p2->getCollisionableType() == C_RigidBody || p1->getCollisionableType()
-			== C_RigidBody) {
+	if (p1->getCollisionableType() == C_RigidBody) {
+
+		// Hardcodeado para que funcione con planos!
+		real dist = p2->getData().getMass() + data.getDistance() + EPSILON;
+
+		ParticleData d2 = p2->getData();
+		d2.setPosition(d2.getPosition() + data.getNormal() * dist);
+		p2->setData(d2);
+
+		// Plane is infinite, dont move!
 		return;
-	}
-
-	// from 1 to 2
-	Vector3 dist = p1->getPosition() - p2->getPosition();
-
-	real ma = p1->getData().getMass();
-	real mb = p2->getData().getMass();
-
-	real diff = fabs(dist.magnitude() - fabs(ma) - fabs(mb)) + EPSILON;
-
-	real ca, cb;
-
-	// coeffs to balance repositioning
-	if (ma == INFINITE_MASS && mb == INFINITE_MASS)
+	} else if (p2->getCollisionableType() == C_RigidBody) {
+		printf("la otra particula es un rigid body!\n");
 		return;
-	else if (ma == INFINITE_MASS) {
-		ca = 1;
-		cb = 0;
-	} else if (mb == INFINITE_MASS) {
-		ca = 0;
-		cb = 1;
 	} else {
-		ca = ma / (ma + mb);
-		cb = mb / (ma + mb);
+
+		// from 1 to 2
+		Vector3 dist = p1->getPosition() - p2->getPosition();
+
+		real ma = p1->getData().getMass();
+		real mb = p2->getData().getMass();
+
+		real diff = fabs(dist.magnitude() - fabs(ma) - fabs(mb)) + EPSILON;
+
+		real ca, cb;
+
+		// coeffs to balance repositioning
+		if (ma == INFINITE_MASS && mb == INFINITE_MASS)
+			return;
+		else if (ma == INFINITE_MASS) {
+			ca = 1;
+			cb = 0;
+		} else if (mb == INFINITE_MASS) {
+			ca = 0;
+			cb = 1;
+		} else {
+			ca = ma / (ma + mb);
+			cb = mb / (ma + mb);
+		}
+
+		dist.normalize();
+
+		ParticleData d1 = p1->getData();
+		d1.setPosition(d1.getPosition() + dist * diff * cb);
+		p1->setData(d1);
+
+		ParticleData d2 = p2->getData();
+		d2.setPosition(d2.getPosition() - dist * diff * ca);
+		p2->setData(d2);
 	}
-
-	dist.normalize();
-
-	ParticleData d1 = p1->getData();
-	d1.setPosition(d1.getPosition() + dist * diff * cb);
-	p1->setData(d1);
-
-	ParticleData d2 = p2->getData();
-	d2.setPosition(d2.getPosition() - dist * diff * ca);
-	p2->setData(d2);
 }
 
 void ParticleGroup::resolveInternalCollisions() {
@@ -181,11 +193,12 @@ void ParticleGroup::resolveInternalCollisions() {
 		list<Positionable<Particle> *>::iterator closeP;
 		for (closeP = closestElements.begin(); closeP != closestElements.end(); closeP++) {
 
+
 			Particle * other = (*closeP)->getThis();
 			if (other != (*p)) {
 				IntersectionData data = (*p)->checkCollision(*other);
 				if (data.hasIntersected()) {
-					repositionCollided(*p, other);
+					repositionCollided(*p, other, data);
 					(*p)->resolveCollision(*other, data);
 				}
 			}
@@ -230,7 +243,7 @@ bool ParticleGroup::resolveCollision(Collisionable& other,
 					IntersectionData data = particle->checkCollision(
 							*otherParticle);
 					if (data.hasIntersected()) {
-						repositionCollided(particle, otherParticle);
+						repositionCollided(particle, otherParticle, data);
 						particle->resolveCollision(*otherParticle, data);
 					}
 				}

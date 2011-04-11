@@ -88,7 +88,7 @@ IntersectionData FinitePlane::intersection(const Cube * c) {
 	Vector3 p = normal * d;
 
 	if (fabs(d) <= dU + dV + dN)
-		return IntersectionData(p, normal, difference); // If border is hit, consider as full hit
+		return IntersectionData(p, normal, difference.magnitude()); // If border is hit, consider as full hit
 
 	return IntersectionData();
 }
@@ -146,7 +146,7 @@ IntersectionData FinitePlane::intersection(const Sphere * s) {
 		Vector3 totalDistance(uDist, d, vDist);
 
 		if (totalDistance.magnitude() <= r)
-			return IntersectionData(p, normal,translated); // If border is hit, consider as full hit
+			return IntersectionData(p, normal,d); // If border is hit, consider as full hit
 	}
 
 	return IntersectionData();

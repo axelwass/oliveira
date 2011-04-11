@@ -12,16 +12,19 @@ void Mesh::addFace(Face * face) {
 	this->faces.push_back(face);
 }
 
-void Mesh::addVertex(Vertex * vertex) {
+int Mesh::addVertex(Vertex * vertex) {
 	this->vertices.push_back(vertex);
+	return vertices.size()-1;
 }
 
-void Mesh::addVertexNormal(Vector3 n) {
+int Mesh::addVertexNormal(Vector3 n) {
 	this->normals.push_back(n);
+	return normals.size()-1;
 }
 
-void Mesh::addTextureCoordinate(Vector3 t) {
+int Mesh::addTextureCoordinate(Vector3 t) {
 	this->txCoords.push_back(t);
+	return txCoords.size()-1;
 }
 
 vector<Vertex *> * Mesh::getVertices() {

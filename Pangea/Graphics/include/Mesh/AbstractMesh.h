@@ -45,7 +45,7 @@ class AbstractMesh {
 		void render();
 		void applyTransform();
 
-		virtual void addVertex(Vertex * vertex) = 0;
+		virtual int addVertex(Vertex * vertex) = 0;
 		virtual void addFace(Face * face) = 0;
 
 

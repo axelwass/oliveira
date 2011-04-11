@@ -22,6 +22,10 @@ class UIComponent {
 			this->position = p;
 		}
 
+		Vector3 getPosition() const{
+			return position;
+		}
+
 		void translate(const Vector3& p) {
 			this->position += p;
 		}

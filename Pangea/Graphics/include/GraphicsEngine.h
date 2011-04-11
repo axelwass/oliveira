@@ -4,6 +4,8 @@
 #include "Camera/WalkthroughCamera.h"
 
 #include "Mesh/Mesh.h"
+
+#include "Mesh/Primitives/MeshCube.h"
 #include "Mesh/Primitives/MeshPlane.h"
 #include "Mesh/MeshRenderer.h"
 #include "Mesh/GLMeshRenderer.h"
@@ -37,6 +39,7 @@ private:
 	list<RenderLayer *> layers;
 
 	RenderLayer * base3DLayer;
+	UIOverlay * base2DLayer;
 
 	// FEISIMO ESTO jajaja
 	UITextLabel * fpsCounter;
@@ -56,6 +59,11 @@ public:
 
 	RenderLayer * get3DLayer() {
 		return base3DLayer;
+	}
+
+
+	UIOverlay * getUIOverlay() {
+		return base2DLayer;
 	}
 };
 
