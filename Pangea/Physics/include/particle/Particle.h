@@ -83,9 +83,13 @@ public:
 	// Check if two particles are equal
 	bool operator==(Particle& other);
 
-	bool integrate(real t, real h);
+	Integrator * getIntegrator() {
+		return integrator;
+	}
 
-	void applyStep(real h);
+	void evaluate(real t, real h);
+
+	void integrate(real h);
 
 	virtual void addForce(Force * force);
 

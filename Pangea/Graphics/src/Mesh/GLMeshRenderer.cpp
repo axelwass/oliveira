@@ -65,7 +65,7 @@ void GLMeshRenderer::render() {
 		vector<VertexWrapper>& faceVertices = (*faceItr)->getVertices();
 		vector<VertexWrapper>::iterator vertexItr = faceVertices.begin();
 
-		glBegin(GL_POLYGON);
+		glBegin(wireframe ? GL_LINE_LOOP : GL_POLYGON);
 		for (vertexItr = faceVertices.begin(); vertexItr != faceVertices.end(); vertexItr++) {
 			int nIndex = (*vertexItr).getNormal();
 			int pIndex = (*vertexItr).getVertex();

@@ -47,7 +47,7 @@ public:
 
 		// GRAPHICS CONTEXT
 		Mesh * ball = MeshLoader::load("sphere.obj");
-		ball->setRenderer(new GLMeshRenderer(ball));
+		ball->setRenderer(new GLMeshRenderer(ball, true));
 		gEngine.addMesh(ball);
 
 		// AND CONSTRUCT GAME OBJECT

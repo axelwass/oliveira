@@ -86,18 +86,27 @@ void ParticleWorld::resolveGroupCollisions() {
 void ParticleWorld::integrate() {
 	list<ParticleGroupPtr>::iterator itr;
 
-	// Finishes when every particle finishes (they all have the same step)
-	for (int i = 0; i < 4; i++) {
+	printf("INTEGRATE ----------\n");
+
+	// We first check and resolve collisions
+	for (itr = groups.begin(); itr != groups.end(); itr++)
+		(*itr)->resolveInternalCollisions();
+
+	// Integrate synchronized
+	for (int i = 0; i < RK4::getMaxSteps(); i++) {
 
 		groupsOctree->update();
 		resolveGroupCollisions();
-		// Integrate groups synchronized
-		for (itr = groups.begin(); itr != groups.end(); itr++)
-			(*itr)->integrateStep(time, precision);
 
-		// Apply step
+		// Evaluate
 		for (itr = groups.begin(); itr != groups.end(); itr++)
-			(*itr)->applyStep(precision);
+			(*itr)->evaluate(time, precision);
+
+		// Integrate
+		for (itr = groups.begin(); itr != groups.end(); itr++)
+			(*itr)->integrate(precision);
+
+		RK4::nextStep();
 	}
 }
 

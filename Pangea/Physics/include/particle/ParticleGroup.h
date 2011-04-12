@@ -36,10 +36,7 @@ private:
 
 	real time, step;
 
-	void
-	repositionCollided(Particle * p1, Particle * p2, IntersectionData data);
-
-	void speculateContact(Particle * p1, Particle * p2, IntersectionData data);
+	void speculateContact(Particle * p1, Particle * p2);
 
 public:
 	~ParticleGroup() {
@@ -65,6 +62,8 @@ public:
 
 	int getParticleCount();
 
+	void speculateInternalCollisions();
+
 	// I hate this
 	ParticleGroup * getThis();
 
@@ -79,9 +78,9 @@ public:
 
 	list<Particle *>& getParticles();
 
-	bool integrateStep(real time, real step);
+	void evaluate(real time, real step);
 
-	void applyStep(real step);
+	void integrate(real step);
 
 	void resolveInternalCollisions();
 
