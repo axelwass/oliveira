@@ -52,7 +52,7 @@ class ParticleData {
 		bool operator==(ParticleData& other);
 
 		/** Returns a copy of this derivative scaled to the given value.*/
-		ParticleData operator*(const real value) {
+		ParticleData operator*(const real value) const {
 			ParticleData out;
 			out.velocity = this->velocity * value;
 			out.position = this->position * value;
@@ -61,7 +61,7 @@ class ParticleData {
 		}
 
 		/** Returns the value of the given derivative added to this*/
-		ParticleData operator+(const DerivativeData& derivative) {
+		ParticleData operator+(const DerivativeData& derivative) const{
 			ParticleData out;
 			out.velocity = this->velocity + derivative.dv;
 			out.position = this->position + derivative.dx;
@@ -70,7 +70,7 @@ class ParticleData {
 		}
 
 		/** Returns the value of the given derivative added to this*/
-		ParticleData operator+(const ParticleData& other) {
+		ParticleData operator+(const ParticleData& other) const {
 			ParticleData out;
 			out.velocity = this->velocity + other.velocity;
 			out.position = this->position + other.position;
@@ -79,7 +79,7 @@ class ParticleData {
 		}
 
 		/** Returns the value of the given derivative substracted from this */
-		ParticleData operator-(const ParticleData& other) {
+		ParticleData operator-(const ParticleData& other) const {
 			ParticleData out;
 			out.velocity = this->velocity - other.velocity;
 			out.position = this->position - other.position;

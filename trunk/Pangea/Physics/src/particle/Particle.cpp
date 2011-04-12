@@ -53,18 +53,17 @@ void Particle::clearForces() {
 	this->forceAccum = new NullForce();
 }
 
-bool Particle::integrate(real t, real h) {
+void Particle::evaluate(real t, real h) {
 	//this->path.push_back(this->data.getPosition());
-	bool out = integrator->integrate(this->forceAccum, &this->data, t, h);
-	return out;
+	integrator->evaluate(this->forceAccum, &this->data, t, h);
 }
 
 void Particle::setData(const ParticleData& data) {
 	this->data = data;
 }
 
-void Particle::applyStep(real h) {
-	integrator->applyStep(&this->data, h);
+void Particle::integrate(real h) {
+	integrator->integrate(&this->data, h);
 }
 
 ShapePtr Particle::getCollisionShape() {

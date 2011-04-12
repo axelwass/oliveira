@@ -51,7 +51,7 @@ void Vector3::operator*=(const real value) {
 /**
  *  Returns a copy of this vector scaled to the given value.
  */
-Vector3 Vector3::operator*(const real value){
+Vector3 Vector3::operator*(const real value) const{
 	return Vector3(x * value, y * value, z * value);
 }
 

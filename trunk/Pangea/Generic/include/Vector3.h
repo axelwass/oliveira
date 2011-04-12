@@ -79,7 +79,7 @@ class Vector3 {
 		void operator-=(const Vector3& v);
 
 		/** Returns a copy of this vector scaled to the given value.*/
-		Vector3 operator*(const real value);
+		Vector3 operator*(const real value) const;
 
 		/** Returns the value of the given vector added to this*/
 		Vector3 operator+(const Vector3& v) const;
