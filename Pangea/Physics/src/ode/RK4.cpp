@@ -46,9 +46,9 @@ void RK4::integrate(ParticleData * state, real h) {
 	case 4:
 		(*state) = initialStepData + (slope * (h / 6.0));
 
-		printf("Initial state pos.Y: %g\n", initialStepData.getPosition().getY());
-		printf("Final state pos.Y: %g\n", state->getPosition().getY());
-		printf("Final slope vel.Y: %g\n", (slope * (h / 6.0)).dx.getY());
+	//	printf("Initial state pos.Y: %g\n", initialStepData.getPosition().getY());
+	//	printf("Final state pos.Y: %g\n", state->getPosition().getY());
+	//	printf("Final slope vel.Y: %g\n", (slope * (h / 6.0)).dx.getY());
 
 		break;
 	default:

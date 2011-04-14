@@ -21,10 +21,9 @@ class CollisionEvent {
 public:
 
 	// Lost magnitudes due to speculation
-	real v1, v2;
 	Particle * p1, *p2;
 
-	CollisionEvent(Particle * p1, real v2, Particle * p2, real v2);
+	CollisionEvent(Particle * p1, Particle * p2);
 	virtual ~CollisionEvent();
 	bool operator==(const CollisionEvent& e);
 
