@@ -11,7 +11,7 @@
 GameEngine::GameEngine() {
 
 	srand(time(NULL));
-	world = new ParticleWorld(.1);
+	world = new ParticleWorld(.01);
 
 	ballGroup = ParticleGroupPtr(new ParticleGroup(Vector3(), true));
 	ballGroup->addField(new ConstantForce(5, Vector3(0, -1, 0)));

@@ -14,7 +14,6 @@ CollisionEvent::CollisionEvent(Particle * p1, Particle * p2) {
 }
 
 CollisionEvent::~CollisionEvent() {
-	printf("Colision destruida\n");
 }
 
 bool CollisionEvent::operator==(const CollisionEvent& e) {

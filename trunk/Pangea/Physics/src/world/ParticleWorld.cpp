@@ -86,8 +86,6 @@ void ParticleWorld::resolveGroupCollisions() {
 void ParticleWorld::integrate() {
 	list<ParticleGroupPtr>::iterator itr;
 
-	printf("INTEGRATE ----------\n");
-
 	// Integrate synchronized
 	for (int i = 0; i < RK4::getMaxSteps(); i++) {
 

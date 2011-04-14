@@ -22,35 +22,11 @@ class Particle: public Positionable<Particle> , public Collisionable {
 
 protected:
 
-	// Information about particle
 	ParticleData data;
-
-	// Particle private integrator
 	Integrator * integrator;
-
-	// Particle force accumulator
 	Force * forceAccum;
 
-	list<Particle *> collided;
-
 public:
-
-	void addCollided(Particle * p) {
-		collided.push_back(p);
-	}
-
-	bool hasCollided(Particle * p) {
-		list<Particle *>::iterator c;
-		for (c = collided.begin(); c != collided.end(); c++)
-			if ((*c) == p)
-				return true;
-
-		return false;
-	}
-
-	void resetCollided() {
-		collided.clear();
-	}
 
 	Particle * getThis() {
 		return this;

@@ -24,6 +24,14 @@ void CollisionManager::speculate(real h) {
 				closestElements = octree->getIntersectionElements(
 						(*p)->getCollisionShape().get());
 
+		// Save future kinetic energy
+		Vector3 velocity = (*p)->getIntegrator()->getIntegrationSlope(h)->dv;
+		velocity *= (*p)->getIntegrator()->getSlopeStep(h);
+		velocity += (*p)->getData().getVelocity();
+		real prevMagnitude = velocity.magnitude();
+
+		printf("prev: %g\n", prevMagnitude);
+
 		// Check possible collisions and speculate
 		list<Positionable<Particle> *>::iterator closeP;
 		for (closeP = closestElements.begin(); closeP != closestElements.end(); closeP++) {
@@ -34,6 +42,26 @@ void CollisionManager::speculate(real h) {
 
 		// Update this particle's final state
 		(*p)->integrate(h);
+
+		// And restore its kinetic energy
+		ParticleData data = (*p)->getData();
+		Vector3 v = data.getVelocity();
+
+		printf("post: %g\n", v.magnitude());
+
+		v.normalize();
+		v *= prevMagnitude;
+		data.setVelocity(v);
+		(*p)->setData(data);
+
+
+
+
+		real ek = .5 * (*p)->getData().getMass() * pow((*p)->getData().getVelocity().magnitude(),2);
+		real ep = (*p)->getData().getMass() * 5 * (*p)->getData().getPosition().getY();
+
+		//printf("E: %g\n",ek+ep);
+
 	}
 
 	// Now resolve all collisions
@@ -70,17 +98,17 @@ void CollisionManager::speculateContact(Particle * p1, Particle * p2, real h) {
 	// If next step's position is greater than distance, collision occurs!
 	if (projected * rkStep >= distance.magnitude()) {
 
-		printf("NEAR COLLISION\n");
-		printf("p: %g\n", projected * rkStep);
-		printf("d: %g\n", distance.magnitude());
+		//	printf("NEAR COLLISION\n");
+		//	printf("p: %g\n", projected * rkStep);
+		//	printf("d: %g\n", distance.magnitude());
 
 		Vector3 remove = distance;
 		remove.normalize();
 		remove *= projected - distance.magnitude() * (1.0 / rkStep);
 		velocity += remove;
 
-		printf("Remove: %g\n", remove.magnitude() * rkStep);
-		printf("post p: %g\n\n", velocity.getY() * rkStep);
+	//	printf("Remove: %g\n", remove.magnitude());
+		//	printf("post p: %g\n\n", velocity.getY() * rkStep);
 
 		p1->getIntegrator()->getIntegrationSlope(h)->dx = velocity;
 

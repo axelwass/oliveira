@@ -5,7 +5,7 @@
  *      Author: mmerchan
  */
 
-#include "../../include/collision/CollisionManager.h".h"
+#include "../../include/collision/CollisionManager.h"
 #include "../../include/particle/ParticleGroup.h"
 
 ParticleGroup::ParticleGroup(const Vector3& emptyPosition, bool selfCollisions) {
@@ -86,15 +86,12 @@ ParticleGroup * ParticleGroup::getThis() {
 // Groups must be synchronized with other groups, cannot
 // integrate isolated in case of inter-group collisions or interactions
 void ParticleGroup::evaluate(real time, real step) {
-
 	this->time = time;
 	this->step = step;
 
 	list<Particle *>::iterator itr;
-
 	for (itr = particles.begin(); itr != particles.end(); itr++)
 		(*itr)->evaluate(time, step);
-
 }
 
 void ParticleGroup::integrate(real h) {
@@ -134,10 +131,6 @@ void ParticleGroup::integrate(real h) {
 bool ParticleGroup::resolveCollision(Collisionable& other,
 		IntersectionData& data) {
 
-	list<Particle *>::iterator p;
-	for (p = particles.begin(); p != particles.end(); p++)
-		(*p)->resetCollided();
-
 	if (other.getCollisionableType() == C_ParticleGroup) {
 
 		ParticleGroup& otherGroup = (ParticleGroup&) other;
@@ -173,8 +166,8 @@ bool ParticleGroup::resolveCollision(Collisionable& other,
 							*otherParticle);
 					if (data.hasIntersected()) {
 						particle->resolveCollision(*otherParticle, data);
-						particle->addCollided(otherParticle);
-						otherParticle->addCollided(particle);
+				//		particle->addCollided(otherParticle);
+				//		otherParticle->addCollided(particle);
 					} else {
 						//	speculateContact(particle, otherParticle, data);
 					}
