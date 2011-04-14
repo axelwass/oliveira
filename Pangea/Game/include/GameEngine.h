@@ -9,7 +9,6 @@
 #define GAMEENGINE_H_
 
 #include "../Game.h"
-#include "UI/Console.h"
 #include "Core/GameObject.h"
 
 #include "Objects/StaticObject.h"

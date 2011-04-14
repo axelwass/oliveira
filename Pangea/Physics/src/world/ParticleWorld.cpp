@@ -88,15 +88,11 @@ void ParticleWorld::integrate() {
 
 	printf("INTEGRATE ----------\n");
 
-	// We first check and resolve collisions
-	for (itr = groups.begin(); itr != groups.end(); itr++)
-		(*itr)->resolveInternalCollisions();
-
 	// Integrate synchronized
 	for (int i = 0; i < RK4::getMaxSteps(); i++) {
 
 		groupsOctree->update();
-		resolveGroupCollisions();
+		//resolveGroupCollisions(); TODO
 
 		// Evaluate
 		for (itr = groups.begin(); itr != groups.end(); itr++)

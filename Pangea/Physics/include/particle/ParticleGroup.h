@@ -12,6 +12,8 @@
 #include <tr1/memory>
 using namespace std;
 
+class CollisionManager;
+
 #ifndef PARTICLEGROUP_H_
 #define PARTICLEGROUP_H_
 
@@ -25,9 +27,9 @@ private:
 	// Useful for all particle related
 	typedef tr1::shared_ptr<Octree<Particle> > OctreePtr;
 
+	CollisionManager * cManager;
 	OctreePtr octree;
 	list<Particle *> particles;
-
 	list<Force *> fields;
 
 	bool selfCollisions;
@@ -55,6 +57,10 @@ public:
 		this->step = step;
 	}
 
+	OctreePtr getOctree(){
+		return octree;
+	}
+
 	// Empty position is group's position if it has empty particles
 	ParticleGroup(const Vector3& emptyPosition, bool selfCollisions);
 
@@ -76,7 +82,7 @@ public:
 
 	void addInternalForce(InterParticleForce * f);
 
-	list<Particle *>& getParticles();
+	list<Particle *> * getParticles();
 
 	void evaluate(real time, real step);
 

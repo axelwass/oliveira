@@ -32,7 +32,7 @@ void ParticlePlane::initialize() {
 			subdivLength, k, 0));
 	ParticleRopePtr next = prev;
 
-	list<Particle *> prevList = prev->getRope()->getParticles();
+	list<Particle *> prevList = *prev->getRope()->getParticles();
 	list<Particle *> nextList;
 
 	for (int i = 1; i < subdivWidth; i++) {
@@ -40,7 +40,7 @@ void ParticlePlane::initialize() {
 		next = ParticleRopePtr(new ParticleRope(world, from + translation * i,
 				to + translation * i, subdivLength, k, i == subdivWidth - 1 ? 0
 						: .25));
-		nextList = next->getRope()->getParticles();
+		nextList = *next->getRope()->getParticles();
 
 		list<Particle *>::iterator nextItr = nextList.begin();
 		list<Particle *>::iterator prevItr = prevList.begin();

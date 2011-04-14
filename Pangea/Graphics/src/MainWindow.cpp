@@ -25,7 +25,7 @@ int MainWindow::Refresh(int delay) {
 	SDL_GL_SwapBuffers();
 
 	// Set background color
-	glClearColor(35 / 255.0f, 35 / 255.0f, 35 / 255.0f, 1);
+	glClearColor(35 / 255.0f, 35 / 255.0f, 50 / 255.0f, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Set 2D view
