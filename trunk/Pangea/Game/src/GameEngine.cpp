@@ -5,15 +5,16 @@
  *      Author: mariano
  */
 
+#include "../include/UI/Console.h"
 #include "../include/GameEngine.h"
 
 GameEngine::GameEngine() {
 
 	srand(time(NULL));
-	world = new ParticleWorld(.01);
+	world = new ParticleWorld(.1);
 
 	ballGroup = ParticleGroupPtr(new ParticleGroup(Vector3(), true));
-	ballGroup->addField(new ConstantForce(100, Vector3(0, -1, 0)));
+	ballGroup->addField(new ConstantForce(5, Vector3(0, -1, 0)));
 	world->addParticleGroup(ballGroup);
 
 	RigidBody * rg1 = new RigidBody(ShapePtr(new FinitePlane(500, 500)));
@@ -31,16 +32,10 @@ GameEngine::GameEngine() {
 
 	mainCamera = gEngine.get3DLayer()->getCamera();
 
-
-
 	// Now add a console
-
-
 	UIOverlay * ui = gEngine.getUIOverlay();
-	ui->addUIComponent(new Console(Vector3(10,480,0), 300, 100, Color(100,100,100,150)));
-
-
-
+	ui->addUIComponent(new Console(Vector3(10, 480, 0), 300, 100, Color(100,
+			100, 100, 150)));
 
 	mainLoop();
 }
@@ -56,7 +51,6 @@ void GameEngine::mainLoop() {
 			(*g)->process();
 
 		world->runPhysics();
-
 		gEngine.render();
 
 	}

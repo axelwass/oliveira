@@ -5,6 +5,7 @@
  *      Author: mmerchan
  */
 
+#include "../../include/collision/CollisionManager.h".h"
 #include "../../include/particle/ParticleGroup.h"
 
 ParticleGroup::ParticleGroup(const Vector3& emptyPosition, bool selfCollisions) {
@@ -13,13 +14,14 @@ ParticleGroup::ParticleGroup(const Vector3& emptyPosition, bool selfCollisions) 
 
 	// threshold more than 2 to prevent possible infinite partition due to equal vectors
 	octree = OctreePtr(new Octree<Particle> (Vector3(), 10, 2, true));
+	cManager = new CollisionManager(this);
 
 	boundingShape = SpherePtr(new Sphere(1));
 	boundingShape->setPosition(emptyPosition);
 }
 
-list<Particle *>& ParticleGroup::getParticles() {
-	return particles;
+list<Particle *> * ParticleGroup::getParticles() {
+	return &particles;
 }
 
 int ParticleGroup::getParticleCount() {
@@ -101,17 +103,17 @@ void ParticleGroup::integrate(real h) {
 	centerOfMass = Vector3();
 
 	// If this step is final integration, speculate collisions
-	if (selfCollisions && RK4::getStep() == RK4::getMaxSteps())
-		speculateInternalCollisions();
+	if (selfCollisions && RK4::getStep() == RK4::getMaxSteps()) {
+		cManager->speculate(step);
+	} else {
+		for (itr = particles.begin(); itr != particles.end(); itr++) {
+			(*itr)->integrate(h);
 
-	// Apply step
-	for (itr = particles.begin(); itr != particles.end(); itr++) {
-		(*itr)->integrate(h);
-
-		// If particle is finite, calculate center of mass
-		real inverseMass = (*itr)->getData().getInverseMass();
-		if (inverseMass)
-			centerOfMass += (*itr)->getPosition() * (1.0 / inverseMass);
+			// If particle is finite, calculate center of mass
+			real inverseMass = (*itr)->getData().getInverseMass();
+			if (inverseMass)
+				centerOfMass += (*itr)->getPosition() * (1.0 / inverseMass);
+		}
 	}
 
 	centerOfMass *= (1.0 / particles.size());
@@ -126,100 +128,6 @@ void ParticleGroup::integrate(real h) {
 	}
 
 	boundingShape->setRadius(maxRadius + EPSILON);
-}
-
-void ParticleGroup::speculateContact(Particle * p1, Particle * p2) {
-
-	// Note on context: we _are_ on final integration step!
-
-	// We get the initial integration data, reposition shapes, recollide, and speculate
-	Vector3 initialPosition =
-			p1->getIntegrator()->getInitialData()->getPosition();
-	ShapePtr s1 = p1->getCollisionShape();
-	s1->setPosition(initialPosition);
-	IntersectionData data = s1->intersection(p2->getCollisionShape().get());
-
-	// Geometrical data
-	Vector3 normal = data.getNormal();
-	Vector3 distance = normal * data.getDistance();
-
-	// Integrator related data
-	Vector3 velocity = p1->getIntegrator()->getIntegrationSlope(step)->dx;
-	real rkStep = p1->getIntegrator()->getSlopeStep(step);
-
-	real projected = (-1.0) * velocity.scalarProduct(normal);
-
-	if (projected * rkStep >= distance.magnitude()) {
-
-		printf("NEAR COLLISION\n");
-		printf("p: %g\n", projected * rkStep);
-		printf("d: %g\n", distance.magnitude());
-
-		Vector3 remove = distance;
-		remove.normalize();
-		remove *= projected - distance.magnitude() * (1.0 / rkStep);
-		velocity += remove;
-
-		printf("Remove: %g\n", remove.magnitude() * rkStep);
-		printf("post p: %g\n\n", velocity.getY() * rkStep);
-
-		p1->getIntegrator()->getIntegrationSlope(step)->dx = velocity;
-	}
-}
-
-// TODO: Note that closest elements is not entirely accurate right now
-void ParticleGroup::speculateInternalCollisions() {
-
-	octree->update();
-
-	list<Particle *>::iterator p;
-	for (p = particles.begin(); p != particles.end(); p++) {
-
-		list<Positionable<Particle> *>
-				closestElements = octree->getIntersectionElements(
-						(*p)->getCollisionShape().get());
-
-		list<Positionable<Particle> *>::iterator closeP;
-		for (closeP = closestElements.begin(); closeP != closestElements.end(); closeP++) {
-			Particle * other = (*closeP)->getThis();
-			if (other != (*p))
-				speculateContact(*p, other);
-		}
-	}
-}
-
-//Note: we can consider positions being accurate, since it is RK step 1, so data = initialStepData
-void ParticleGroup::resolveInternalCollisions() {
-
-	octree->update();
-
-	list<Particle *>::iterator p;
-	for (p = particles.begin(); p != particles.end(); p++)
-		(*p)->resetCollided();
-
-	for (p = particles.begin(); p != particles.end(); p++) {
-
-		list<Positionable<Particle> *>
-				closestElements = octree->getIntersectionElements(
-						(*p)->getCollisionShape().get());
-
-		list<Positionable<Particle> *>::iterator closeP;
-		for (closeP = closestElements.begin(); closeP != closestElements.end(); closeP++) {
-
-			Particle * other = (*closeP)->getThis();
-			if (other != (*p) && !(*p)->hasCollided(other)
-					&& !other->hasCollided(*p)) {
-				IntersectionData data = (*p)->checkCollision(*other);
-				if (data.hasIntersected()) {
-					printf("COLLISIONNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN   %d\n",
-							RK4::getStep());
-					(*p)->resolveCollision(*other, data);
-					(*p)->addCollided(other);
-					other->addCollided(*p);
-				}
-			}
-		}
-	}
 }
 
 // HUGE TODO!!!

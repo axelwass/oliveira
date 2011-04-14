@@ -50,11 +50,12 @@ void GLMeshRenderer::render() {
 
 	r.normalize();
 
-	renderTransform(p, 5);
+	glPushMatrix();
 
-	//      Sets color to red
 	glTranslatef(p.getX(), p.getY(), p.getZ());
 	glRotatef(angle, r.getX(), r.getY(), r.getZ());
+
+	renderTransform(p, 5);
 
 	if (texture)
 		texture->BindTexture();
@@ -92,7 +93,6 @@ void GLMeshRenderer::render() {
 	if (texture)
 		texture->UnbindTexture();
 
-	glTranslatef(-p.getX(), -p.getY(), -p.getZ());
-	glRotatef(-angle, r.getX(), r.getY(), r.getZ());
+	glPopMatrix();
 
 }
