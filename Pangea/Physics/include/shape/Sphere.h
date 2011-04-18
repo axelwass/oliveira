@@ -54,7 +54,6 @@ public:
 	}
 
 	IntersectionData intersection(const Sphere * s) {
-
 		Vector3 distance = s->position - this->position;
 		Vector3 normal = distance;
 		normal.normalize();
