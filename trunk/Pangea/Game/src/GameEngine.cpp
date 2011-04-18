@@ -16,7 +16,6 @@ GameEngine::GameEngine() {
 	ballGroup = ParticleGroupPtr(new ParticleGroup(Vector3(), true));
 	ballGroup->addField(new ConstantForce(5, Vector3(0, -1, 0)));
 	world->addParticleGroup(ballGroup);
-/*
 	Particle * p2 = ballGroup->addParticle(1, Vector3(0, 20, 0), Vector3(0, 1,
 			0));
 	// GRAPHICS CONTEXT
@@ -38,10 +37,9 @@ GameEngine::GameEngine() {
 	// AND CONSTRUCT GAME OBJECT
 	GameObject * ballObject1 = new StaticObject(ball1, p1);
 	objects.push_back(ballObject1);
-*/
+
 	RigidBody * rg1 = new RigidBody(ShapePtr(new FinitePlane(500, 500)));
 	ballGroup->addParticle(rg1);
-
 	// GRAPHICS CONTEXT
 	Mesh * plane1 = new MeshPlane();
 	plane1->getTransform()->setScale(Vector3(500, 500, 500));

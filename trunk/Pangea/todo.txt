@@ -8,6 +8,9 @@ y la esfera, cambia mucho si las particulas del plano tienen 2 o 5 subdivisiones
 URGENTE / ME QUEDE EN:
 - Colisionador especulativo. Falta arreglar las cuentas pero el algoritmo esta. Creo que es una cuestion de direccion. Por ahora no anda del todo bien.
 	Averiguar porque tienen un comportamiento extraño, y porque a veces se superponen y otras se ¿swapean?
+	Porque el plano se cae? Porque se intersectan con el plano? no deberia ni pasar eso!! Odio al svn, estaba casi andadno antes... damn.
+	Porque cuando chocan parecen hacer algo raro? Analizar con tiempo cada caso.
+	No anda bien con el plano. INVESTIGAR CARAJO!
 
 
 

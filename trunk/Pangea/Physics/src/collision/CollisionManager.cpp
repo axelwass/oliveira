@@ -47,11 +47,11 @@ void CollisionManager::speculate(real h) {
 void CollisionManager::speculateContact(Particle * p1, Particle * p2, real h) {
 
 	// Note on context: we _are_ on final integration step!
-
 	// We get the initial integration data, reposition shapes, intersect, and speculate
 	Vector3 initial1 = p1->getIntegrator()->getInitialData()->getPosition();
 	ShapePtr s1 = p1->getCollisionShape();
 	s1->setPosition(initial1);
+
 	Vector3 initial2 = p2->getIntegrator()->getInitialData()->getPosition();
 	ShapePtr s2 = p2->getCollisionShape();
 	s2->setPosition(initial2);
@@ -77,8 +77,10 @@ void CollisionManager::speculateContact(Particle * p1, Particle * p2, real h) {
 
 		Vector3 remove = distance;
 		remove.normalize();
-		remove *= projected - distance.magnitude() * (1.0 / rkStep);
-		velocity += remove;
+		remove *= projected - distanceMag * (1.0 / rkStep);
+
+		if (remove.magnitude() <= velocity.magnitude())
+			velocity += remove;
 
 		p1->getIntegrator()->getIntegrationSlope(h)->dx = velocity;
 
@@ -95,25 +97,18 @@ void CollisionManager::add(CollisionEventPtr c) {
 			printf("YA EXISTE\n");
 			return;
 		}
-
 	collided.push_back(c);
 }
 
 void CollisionManager::resolve() {
-
 	list<CollisionEventPtr>::iterator itr;
 	for (itr = collided.begin(); itr != collided.end(); itr++) {
-
 		Particle * p1 = (*itr)->p1;
 		Particle * p2 = (*itr)->p2;
 		IntersectionData data = p1->checkCollision(*p2);
-
 		if (data.hasIntersected())
 			p1->resolveCollision(*p2, data);
 	}
-
 	collided.clear();
-
 	octree->update();
-
 }
