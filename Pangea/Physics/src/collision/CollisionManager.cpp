@@ -24,14 +24,6 @@ void CollisionManager::speculate(real h) {
 				closestElements = octree->getIntersectionElements(
 						(*p)->getCollisionShape().get());
 
-		// Save future kinetic energy
-		Vector3 velocity = (*p)->getIntegrator()->getIntegrationSlope(h)->dv;
-		velocity *= (*p)->getIntegrator()->getSlopeStep(h);
-		velocity += (*p)->getData().getVelocity();
-		real prevMagnitude = velocity.magnitude();
-
-		printf("prev: %g\n", prevMagnitude);
-
 		// Check possible collisions and speculate
 		list<Positionable<Particle> *>::iterator closeP;
 		for (closeP = closestElements.begin(); closeP != closestElements.end(); closeP++) {
@@ -42,25 +34,6 @@ void CollisionManager::speculate(real h) {
 
 		// Update this particle's final state
 		(*p)->integrate(h);
-
-		// And restore its kinetic energy
-		ParticleData data = (*p)->getData();
-		Vector3 v = data.getVelocity();
-
-		printf("post: %g\n", v.magnitude());
-
-		v.normalize();
-		v *= prevMagnitude;
-		data.setVelocity(v);
-		(*p)->setData(data);
-
-
-
-
-		real ek = .5 * (*p)->getData().getMass() * pow((*p)->getData().getVelocity().magnitude(),2);
-		real ep = (*p)->getData().getMass() * 5 * (*p)->getData().getPosition().getY();
-
-		//printf("E: %g\n",ek+ep);
 
 	}
 
@@ -85,30 +58,27 @@ void CollisionManager::speculateContact(Particle * p1, Particle * p2, real h) {
 
 	IntersectionData data = s1->intersection(s2.get());
 
-	// Geometric data
+	// Normal on p1's surface!
 	Vector3 normal = data.getNormal();
 	Vector3 distance = normal * data.getDistance();
 
 	// Integrator related data
 	Vector3 velocity = p1->getIntegrator()->getIntegrationSlope(h)->dx;
+	Vector3 velocityOther = p2->getIntegrator()->getIntegrationSlope(h)->dx;
 	real rkStep = p1->getIntegrator()->getSlopeStep(h);
 
-	real projected = (-1.0) * velocity.scalarProduct(normal);
+	real projectedOther = (-1) * velocityOther.scalarProduct(normal);
+	real projected = velocity.scalarProduct(normal);
+
+	real distanceMag = distance.magnitude() - projectedOther * rkStep;
 
 	// If next step's position is greater than distance, collision occurs!
-	if (projected * rkStep >= distance.magnitude()) {
-
-		//	printf("NEAR COLLISION\n");
-		//	printf("p: %g\n", projected * rkStep);
-		//	printf("d: %g\n", distance.magnitude());
+	if (projected * rkStep - distanceMag + EPSILON >= 0) {
 
 		Vector3 remove = distance;
 		remove.normalize();
 		remove *= projected - distance.magnitude() * (1.0 / rkStep);
 		velocity += remove;
-
-	//	printf("Remove: %g\n", remove.magnitude());
-		//	printf("post p: %g\n\n", velocity.getY() * rkStep);
 
 		p1->getIntegrator()->getIntegrationSlope(h)->dx = velocity;
 
@@ -121,8 +91,8 @@ void CollisionManager::speculateContact(Particle * p1, Particle * p2, real h) {
 void CollisionManager::add(CollisionEventPtr c) {
 	list<CollisionEventPtr>::iterator itr;
 	for (itr = collided.begin(); itr != collided.end(); itr++)
-		if ((*itr) == c) {
-
+		if (*(*itr) == *c) {
+			printf("YA EXISTE\n");
 			return;
 		}
 
@@ -137,12 +107,12 @@ void CollisionManager::resolve() {
 		Particle * p1 = (*itr)->p1;
 		Particle * p2 = (*itr)->p2;
 		IntersectionData data = p1->checkCollision(*p2);
-		p1->resolveCollision(*p2, data);
 
-		// Delete this event
-		itr = collided.erase(itr);
-		itr--;
+		if (data.hasIntersected())
+			p1->resolveCollision(*p2, data);
 	}
+
+	collided.clear();
 
 	octree->update();
 

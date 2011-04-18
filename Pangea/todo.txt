@@ -5,26 +5,19 @@ que mucho del rendering es jodidamente INEFICIENTE, por lo que no hay que asusta
 hay cosas que andan muy lentas, con bajar la cantidad de complejidad grafica va a mejorar mucho. Por ej, con el ejemplo del plano deformable
 y la esfera, cambia mucho si las particulas del plano tienen 2 o 5 subdivisiones (se pierden muchos fps)
 
+URGENTE / ME QUEDE EN:
+- Colisionador especulativo. Falta arreglar las cuentas pero el algoritmo esta. Creo que es una cuestion de direccion. Por ahora no anda del todo bien.
+	Averiguar porque tienen un comportamiento extraño, y porque a veces se superponen y otras se ¿swapean?
+
+
+
 SEMI URGENTE:
 - unificar los headers, sacar YA a glut, y empezar a usar glew+sdl desde el vamos.
-- Ver capacidades del integrador de ir atras en el tiempo.
 - Realmente, cada particula tiene que tener un integrador? lo veo mas como que el world tiene que tener un integrador...
-
-Nota acerca de las colisiones:
-Andar anda, pero el step tiene que ser __chico__. El problema es que la deteccion se hace tarde.
-Esto evidentemente no esta bueno, asi que hay dos o tres opciones:
-- usar un algoritmo de sweeping sobre el tiempo. 
-	- analitico. Contra: no sirve mucho para cuerpos complejos (incluso usando bounding boxes).
-	- numerico. Contra: hay que viajar en el tiempo, y el rk4 es muy pesado para viajar.
-- en el momento de una colision, viajar directamente a la ultima posicion valida. Contra: puedo perder colisiones. (y ademas no me anduvo ajjajja)
-- hacerlo previsivo o como se diga; ir un paso adelante, checkear colisiones, volver en el tiempo, aplicar, intentar de nuevo.. Contra: puede haber recursividad, y es pesado
-A todo esto, hay que ver como jode las cosas con el octree....
- 
 
 BUGS ACTUALES:
 - si roto un plano, no colisiona. WTF?
 - put del octree. Si se pasa del treshold pero hay elementos con misma posicion, dejarla pasar e incrementar el treshold del nodo. 
-Nota: por lo del repositioning no anda bien el plano-esfera, porque la esfera choca recursivamente hasta que se pasa por error numerico, es aleatorio si rebota o no.
 
 
 ********************************************
