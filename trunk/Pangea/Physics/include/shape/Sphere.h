@@ -56,17 +56,19 @@ public:
 	IntersectionData intersection(const Sphere * s) {
 
 		Vector3 distance = s->position - this->position;
+		Vector3 normal = distance;
+		normal.normalize();
 
 		if (distance.magnitude() - (this->radius * scale.getX()) - (s->radius
-				* s->scale.getX()) < 0) {
-			Vector3 n = distance;
-			n.normalize();
+				* s->scale.getX()) <= 0) {
 			// Return distance normalized... normal of collision
-			return IntersectionData(this->position + (n * this->radius
-					* scale.getX()), n, distance.magnitude());
+			return IntersectionData(this->position + (normal * this->radius
+					* scale.getX()), normal, distance.magnitude() - (s->radius
+							* s->scale.getX()) - (radius * scale.getX()));
 		} else
-			return IntersectionData(distance.magnitude() - (radius
-					* scale.getX()), distance);
+			// Not collided, return distance to collision
+			return IntersectionData(distance.magnitude() - (s->radius
+					* s->scale.getX()) - (radius * scale.getX()), normal);
 	}
 };
 

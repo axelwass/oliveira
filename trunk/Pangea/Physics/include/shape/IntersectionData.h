@@ -15,7 +15,7 @@ class IntersectionData {
 private:
 	Vector3 point;
 	Vector3 normal;
-	real distance; // between elements, for repositioning
+	real distance; // closest distance between elements
 
 	bool intersected;
 

@@ -54,7 +54,6 @@ void Particle::clearForces() {
 }
 
 void Particle::evaluate(real t, real h) {
-	//this->path.push_back(this->data.getPosition());
 	integrator->evaluate(this->forceAccum, &this->data, t, h);
 }
 
